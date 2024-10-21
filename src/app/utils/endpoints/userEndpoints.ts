@@ -1,3 +1,4 @@
 export const userEndpoints = {
-    createUser : "/user/signup"
+    createUser : "/user/signup",
+    verifyOtp : "/user/verifyOtp"
 }

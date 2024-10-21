@@ -1,0 +1,103 @@
+"use client"
+
+import { useEffect, useState } from "react";
+import Layout from "../header/layout";
+import { verifyUserOtp } from "@/app/lib/api/userApi";
+import { useRouter } from "next/navigation";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+
+
+
+export default function Otp() {
+    const [timer, setTimer] = useState(30);
+    const [otp , setOtp] = useState(new Array(6).fill(""));
+    const router = useRouter();
+
+    const handleChange = (ele:any , index:number) => {
+
+        setOtp([...otp.map((data , idx) => (idx === index ? ele.value :data))]);
+
+        if (ele.nextSibling) {
+            ele.nextSibling.focus();
+        }
+
+
+    }
+
+    const verifyOtp = async() =>{ 
+        const tempOtp = otp.join('');
+        setOtp(new Array(6).fill(""));
+        console.log("tempOtp" , tempOtp);
+        const token = localStorage.getItem('otpToken');
+        console.log("local" ,token);
+
+        const res = await verifyUserOtp(tempOtp , token);
+        if(res?.data?.success === true) {
+            router.push('/user/home');
+        }else{
+            toast.error(res?.data?.message);
+        }
+    }
+
+    const handleResendOtp = () => {
+
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(timer > 0) {
+                setTimer(timer - 1);
+            }
+        },1000)
+
+        return () => clearInterval(interval);
+    },[timer]);
+    return (
+        <>
+        <ToastContainer/>
+       <Layout>
+
+       <div className="flex flex-col items-center justify-center min-h-[80vh]  ">
+            <div className="bg-white p-6 rounded shadow-md max-w-md w-full text-center">
+                <h2 className="text-xl font-bold mb-4">Enter OTP</h2>
+                <p className="text-gray-500 text-sm mb-4">Time remaining: {timer}</p>
+                <div className="flex justify-center space-x-2 mb-4 mt-8">
+                   
+                    {otp.map((data , index) => (
+                        <input
+                            key={index}
+                            type="text"
+                            value={data}
+                            maxLength={1} 
+                            minLength={1} 
+                            onChange={(e) => handleChange(e.target , index)}
+                            className="w-10 h-10 border border-gray-300 text-center rounded focus:outline-none focus:border-blue-500"
+                        />
+                    ))}
+                </div>
+                {/* Timer */}
+                
+                
+               
+
+                {/* Verify OTP Button */}
+                <button
+                    className="w-full py-2 px-4 bg-green-500 text-white rounded font-semibold hover:bg-green-600 transition-colors mt-8"
+                    onClick={verifyOtp}
+                >
+                    Verify OTP
+                </button>
+                <button
+                    className={`text-blue-500 text-sm cursor-pointer mt-2 ${timer > 0 ? 'opacity-50' : ''}`}
+                    onClick={timer === 0 ? handleResendOtp : undefined} // Only allow click if timer is 0
+                >
+                    Resend OTP
+                </button>
+            </div>
+        </div>
+
+       </Layout>
+        </>
+    )
+}

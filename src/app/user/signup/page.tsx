@@ -29,7 +29,7 @@ export default function UserSignup() {
         const {name , email , mobile , password} = data;
         const res = await signup(name , email , mobile , password);
         if(res?.success === true){
-            router.push('/user/signup');
+            router.push('/user/otp');
         }else{
             toast.error("email Id already exists")
         }

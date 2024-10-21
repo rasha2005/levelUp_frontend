@@ -19,3 +19,16 @@ export const signup = async(name:string , email:string , mobile:string , passwor
     }
 
 }
+
+export const verifyUserOtp = async(userOtp:string , token:string | null) => {
+    try{
+
+        console.log("otppp" , userOtp);
+        console.log("token" , token);
+
+        const response = await Api.post(userEndpoints.verifyOtp , {userOtp , token});
+        return response
+    }catch(err) {
+        console.log(err);
+    }
+}
