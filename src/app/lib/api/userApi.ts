@@ -32,3 +32,12 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
         console.log(err);
     }
 }
+
+export const login = async(email:string , password:string) => {
+    try {
+        const response = await Api.post(userEndpoints.verifyLogin , {email , password});
+        return response
+    }catch(err) {
+        console.log(err);
+    }
+}

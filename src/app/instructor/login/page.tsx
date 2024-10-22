@@ -1,37 +1,35 @@
 "use client"
 
-import Layout from "@/app/components/header/layout"
-import { login } from "@/app/lib/api/userApi";
-import Image from 'next/image';
-import Link from 'next/link'
+import Layout from "@/app/components/header/layout";
+import { login } from "@/app/lib/api/instructorApi";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-
-interface userData  {
+interface instructorData {
     email:string,
     password:string
 }
-export default function UserLogin() {
-    const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<userData>()
+export default function InstructorLogin() {
+    const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<instructorData>();
     const router = useRouter();
 
-    const onSubmit = async(data:userData) => {
-       const {email , password} = data
+    const onSubmit = async(data:instructorData) => {
+        const {email , password} = data;
         const res = await login(email , password);
-        console.log("reskl" , res);
-        if(res?.data?.response?.success === true){
-            router.push('/user/home');
+        if(res.data.response.success === true) {
+            router.push('/instructor/dashboard');
         }else{
-            toast.error(res?.data?.response?.message)
+            toast.error(res.data.response.message);
         }
-
     }
+
     return (
-        <>
-        <ToastContainer />
+    <>
+    <ToastContainer />
         <Layout>
   <header className=" py-4 mt-11"> 
             <div className="container mx-auto px-4">

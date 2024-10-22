@@ -1,24 +1,26 @@
 "use client"
 
-import Layout from "../components/header/layout";
+import Image from "next/image"
+import Layout from "../components/header/layout"
 import { motion } from "framer-motion";
-import Image from 'next/image';
-import Link from 'next/link';
+import Link from "next/link";
 
-export default function Signup() {
+export default function Login() {
+    
     return (
-        <Layout>
+        <>
+         <Layout>
             <motion.p
                 className="text-center text-lg sm:text-xl md:text-2xl font-bold mb-4 p-4"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                How would you like to engage with this app?
+                Which one is you?
             </motion.p>
             <div className="flex justify-center p-8">
                 <div className="flex flex-col sm:flex-row justify-center sm:gap-4 max-w-4xl w-full mx-auto">
-                    <Link href="/instructor/signup" className="block w-full sm:w-1/2"> {/* Add block and width classes here */}
+                    <Link href="/instructor/login" className="block w-full sm:w-1/2"> {/* Add block and width classes here */}
                         <motion.div
                             className="w-full p-6 bg-blue-200 rounded-lg shadow-md mb-4 sm:mb-0 hover:rotate-2 hover:shadow-2xl transition-all duration-300"
                             initial={{ opacity: 0, y: 50 }}
@@ -35,13 +37,13 @@ export default function Signup() {
                                 />
                             </div>
                             <p className="text-gray-700 text-black text-center mt-2 text-lg font-bold">
-                                Be an instructor and <br /> help others grow
+                             Instructor 
                             </p>
                         </motion.div>
                     </Link>
 
                     <div className="w-full sm:w-1/2">
-                        <Link href="/user/signup" className="block w-full">
+                        <Link href="/user/login" className="block w-full">
                             <motion.div
                                 className="p-6 bg-blue-200 rounded-lg shadow-md hover:rotate-2 hover:shadow-2xl transition-all duration-300"
                                 initial={{ opacity: 0, y: 50 }}
@@ -58,7 +60,7 @@ export default function Signup() {
                                     />
                                 </div>
                                 <p className="text-gray-700 text-center text-black text-lg font-bold">
-                                    Be a student and level <br /> up your career
+                                  Student 
                                 </p>
                             </motion.div>
                         </Link>
@@ -66,5 +68,6 @@ export default function Signup() {
                 </div>
             </div>
         </Layout>
+        </>
     )
 }
