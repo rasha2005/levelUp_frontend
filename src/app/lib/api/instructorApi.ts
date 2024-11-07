@@ -17,10 +17,18 @@ export const signup  = async(name:string , email:string , mobile:string , passwo
 export const verifyInsructor = async(instructorOtp:string , token:string|null) => {
     const response = await Api.post(instructorEndPoint.verifyOtp , {instructorOtp , token});
     console.log("response" ,response );
+    if(response.data.response?.authToken){
+        localStorage.setItem('authToken' , response.data.response?.authToken);
+        localStorage.removeItem("otpToken");
+    }
     return response;
 }
 
 export const login =  async(email:string , password:string) => {
     const res = await Api.post(instructorEndPoint.verifyLogin , {email , password});
+    
+    if(res.data.response?.authToken){
+        localStorage.setItem('authToken' , res.data.response?.authToken);
+    }
     return res
 }

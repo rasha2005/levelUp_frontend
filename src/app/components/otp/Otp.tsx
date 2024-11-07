@@ -3,13 +3,17 @@
 import { useEffect, useState } from "react";
 import Layout from "../header/layout";
 import { verifyUserOtp } from "@/app/lib/api/userApi";
+import { verifyInsructor } from "@/app/lib/api/instructorApi";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 
 
+interface OtpProps {
+    role: 'user' | 'instructor'; 
+  }
 
-export default function Otp() {
+  const Otp: React.FC<OtpProps> = ({ role }) => {
     const [timer, setTimer] = useState(30);
     const [otp , setOtp] = useState(new Array(6).fill(""));
     const router = useRouter();
@@ -31,12 +35,21 @@ export default function Otp() {
         console.log("tempOtp" , tempOtp);
         const token = localStorage.getItem('otpToken');
         console.log("local" ,token);
-
-        const res = await verifyUserOtp(tempOtp , token);
-        if(res?.data?.success === true) {
-            router.push('/user/home');
+        if(role === "user") {
+            const res = await verifyUserOtp(tempOtp , token);
+            if(res?.data?.success === true) {
+                router.push('/user/home');
+            }else{
+                toast.error(res?.data?.message);
+            }
         }else{
-            toast.error(res?.data?.message);
+            const res = await verifyInsructor(tempOtp , token);
+        console.log("rewwww",res);
+        if(res.data.response.success === true) {
+            router.push('/instructor/dashboard')
+        }else{
+            toast.error(res.data.response.message);
+        }
         }
     }
 
@@ -101,3 +114,4 @@ export default function Otp() {
         </>
     )
 }
+export default Otp;

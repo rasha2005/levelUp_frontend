@@ -14,7 +14,7 @@ interface userData  {
     email:string,
     password:string
 }
-export default function UserLogin() {
+ function UserLogin() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<userData>()
     const router = useRouter();
 
@@ -116,3 +116,5 @@ export default function UserLogin() {
         </>
     )
 }
+
+export default UserLogin;

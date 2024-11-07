@@ -1,7 +1,11 @@
-export default function Dashboard() {
+"use client"
+
+ function instructorDashboard() {
     return (
         <>
-        Dashboard
+        <h1>this is instructor</h1>
         </>
     )
 }
+
+export default instructorDashboard;

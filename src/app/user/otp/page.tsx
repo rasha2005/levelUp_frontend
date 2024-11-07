@@ -1,11 +1,10 @@
-import Layout from "@/app/components/otp/layout";
+import Otp from "@/app/components/otp/Otp";
+
 
 export default function UserOtp() {
     return (
         <>
-        <Layout>
-            
-        </Layout>
+        <Otp role="user"/>
         </>
     )
 } 

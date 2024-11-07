@@ -28,6 +28,7 @@ export default function UserSignup() {
         console.log("hehe",data);
         const {name , email , mobile , password} = data;
         const res = await signup(name , email , mobile , password);
+        console.log("kkkk",res);
         if(res?.success === true){
             router.push('/user/otp');
         }else{
@@ -114,11 +115,31 @@ export default function UserSignup() {
                                               value: 6, 
                                               message: 'Password must be at least 6 characters long' 
                                             } ,
-                                            validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
+                                            validate: (value) => {
+                                                // Check for at least one uppercase letter, one lowercase letter, one number, and one special character
+                                                const hasUpperCase = /[A-Z]/.test(value);
+                                                const hasLowerCase = /[a-z]/.test(value);
+                                                const hasNumber = /\d/.test(value);
+                                                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                                        
+                                                if (!hasUpperCase) {
+                                                  return 'Password must contain at least one uppercase letter';
+                                                }
+                                                if (!hasLowerCase) {
+                                                  return 'Password must contain at least one lowercase letter';
+                                                }
+                                                if (!hasNumber) {
+                                                  return 'Password must contain at least one number';
+                                                }
+                                                if (!hasSpecialChar) {
+                                                  return 'Password must contain at least one special character';
+                                                }
+                                                return true; 
+                                              }
                                           })}                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
                                         required
                                     />
-                                            {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
+                                             {errors.password && <span className="text-red-600">{errors.password.message || 'Password is not strong enough'}</span>}
 
                                 </div>
                                 <button
