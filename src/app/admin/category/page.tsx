@@ -17,6 +17,8 @@ import {
   } from "@/components/ui/alert-dialog"
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
+import Navbar from "@/components/admin/Navbar";
+import Sidebar from "@/components/admin/Sidebar";
 
 interface CategoryData {
     id?:string;
@@ -64,6 +66,16 @@ function Category() {
     return (
         <>
         <ToastContainer />
+        <div className="h-screen ">
+            <div className="w-full">
+                <Navbar />
+            </div>
+            <div className="flex">
+                <div className="w-[250px]">
+                    <Sidebar />
+                </div>
+
+                <div className="flex-1 p-10">
         <div className='mt-10'>
             <div className="flex justify-between items-center mx-auto max-w-[900px] mt-10 px-7">
     <h3 className="text-2xl font-semibold">Categories</h3>
@@ -139,6 +151,9 @@ function Category() {
                 </TableBody>
             </Table>
         </div>
+    </div>
+    </div>
+    </div>
     </div>
     </>
     )

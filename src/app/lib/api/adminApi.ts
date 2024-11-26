@@ -57,3 +57,26 @@ export const blockUser = async(id:any) => {
 
      return res;   
 }
+
+
+export const getInstructorById = async(id:any) => {
+    console.log("o" , id);
+    const res = await Api.get(`${adminEndpoints.getInstructor}?id=${id}`);
+    return res
+}
+
+export const approveInstructor = async(id:any) => {
+    const res = await Api.post(adminEndpoints.adminApprovel , {id});
+    return res;
+}
+
+export const cancelApprovel = async(id:any) => {
+    const res = await Api.post(adminEndpoints.cancelAdminApprovel, {id});
+    return res;
+}
+
+export const getUserById = async(id:any) => {
+    console.log("o" , id);
+    const res = await Api.get(`${adminEndpoints.getUser}?id=${id}`);
+    return res
+}

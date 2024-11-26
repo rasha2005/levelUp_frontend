@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Layout from "../header/layout";
-import { verifyUserOtp } from "@/app/lib/api/userApi";
-import { verifyInsructor } from "@/app/lib/api/instructorApi";
+import { resendOtpUser, verifyUserOtp } from "@/app/lib/api/userApi";
+import { resendOtpInsructor, verifyInsructor } from "@/app/lib/api/instructorApi";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -46,15 +46,33 @@ interface OtpProps {
             const res = await verifyInsructor(tempOtp , token);
         console.log("rewwww",res);
         if(res.data.response.success === true) {
-            router.push('/instructor/dashboard')
+            router.push('/instructor/validation')
         }else{
             toast.error(res.data.response.message);
         }
         }
     }
 
-    const handleResendOtp = () => {
-
+    const handleResendOtp = async() => {
+        setTimer(30);
+        const token = localStorage.getItem('otpToken');
+        console.log("local" ,token);
+        if(role === "user") {
+            const res = await resendOtpUser(token);
+            if(res?.data?.response?.success === true) {
+               toast.success(res.data.response.message)
+            }else{
+                toast.error(res.data.response.message);
+            }
+        }else{
+            const res = await resendOtpInsructor(token);
+        console.log("rewwww",res);
+        if(res.data.response.success === true) {
+            toast.success(res.data.response.message);
+        }else{
+            toast.error(res.data.response.message);
+        }
+        }
     }
 
     useEffect(() => {
@@ -65,7 +83,7 @@ interface OtpProps {
         },1000)
 
         return () => clearInterval(interval);
-    },[timer]);
+    },[timer ]);
     return (
         <>
         <ToastContainer/>

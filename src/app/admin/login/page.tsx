@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Header from "@/app/components/header/Header";
+import Header from "@/components/header/Header";
+import { useState } from "react";
 
 interface adminData {
     email: string,
@@ -14,7 +15,14 @@ interface adminData {
 
 export default function AdminLogin() {
     const { register, handleSubmit, formState: { errors }, watch } = useForm<adminData>();
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
     const router = useRouter();
+
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
+    }
 
     const onSubmit = async (data: adminData) => {
         const { email, password } = data;
@@ -46,7 +54,7 @@ export default function AdminLogin() {
                                 id="email"
                                 {...register('email', { required: true, pattern: /^[^@\s]+@gmail\.com$/ })}
                                 className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                required
+                                
                             />
                             {errors.email && <span className="text-red-600">Enter a valid email address</span>}
                         </div>
@@ -55,18 +63,28 @@ export default function AdminLogin() {
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 Password
                             </label>
-                            <input
-                                type="password"
-                                id="password"
-                                {...register('password', {
-                                    required: true,
-                                    minLength: { value: 6, message: 'Password must be at least 6 characters long' },
-                                    validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
-                                })}
-                                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                required
-                            />
+                            <div className="relative">
+                                <input
+                                    type={passwordVisible ? 'text' : 'password'}
+                                    id="password"
+                                    {...register('password', {
+                                        required: true,
+                                        minLength: { value: 6, message: 'Password must be at least 6 characters long' },
+                                        validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
+                                    })}
+                                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
+                                    
+                                />
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-3 top-3 text-gray-500"
+                                >
+                                    {passwordVisible ? 'hide' : 'show'}
+                                </button>
+                            </div>
                             {errors.password && <span className="text-red-600">{errors.password.message}</span>}
+
                         </div>
 
                         <div>

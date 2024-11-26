@@ -1,6 +1,6 @@
 "use client"
 
-import Layout from "../components/header/layout";
+import Layout from "../../components/header/layout";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import Link from 'next/link';

@@ -62,7 +62,7 @@ export const login = async(email:string , password:string) => {
 export const getCategoryData = async() => {
     try{
         const response = await Api.get(userEndpoints.getCategory);
-        console.log(response);
+        return response; 
     }catch(error) {
         console.log(error);
     }
@@ -78,9 +78,9 @@ export const getUser = async() => {
     }
 }
 
-export const updateUser = async( id:any ,name:string , email:string , mobile:string) =>  {
+export const updateUser = async( id:any ,name:string  , mobile:string) =>  {
     try{
-        const response  = await Api.post(userEndpoints.editUserDetails , {id ,name , email , mobile});
+        const response  = await Api.post(userEndpoints.editUserDetails , {id ,name , mobile});
         return response
 
     }catch(err) {
@@ -88,3 +88,56 @@ export const updateUser = async( id:any ,name:string , email:string , mobile:str
     }
 }
 
+export const getInstructorDetails = async(page:number , limit:number , searchTerm:String | null , category : any) => {
+    try{
+        const response = await Api.get(userEndpoints.getInstructorDetails, {
+            params: { page, limit , searchTerm , category}
+          });
+
+          return response;
+
+    }catch(err) {
+        console.log(err);
+    }
+}
+
+export const resendOtpUser = async(token:any) => {
+    const res = await Api.post(userEndpoints.resendOtp , {token});
+    return res;
+}
+
+export const changePasswordUser = async(current:string , confirm:string) => {
+    const res = await Api.post(userEndpoints.changePassword , {current , confirm});
+    return res;
+}
+
+export const getInstructorById = async(id:any) => {
+    
+    const res = await Api.get(`${userEndpoints.getInstructor}?id=${id}`, {
+        withCredentials: true 
+    });
+    return res;
+}
+
+export const payement = async(headers:any , body:any) => {
+    const res = await Api.post(userEndpoints.payement , body, { headers });
+    return res;
+}
+
+export const getBookedSession = async(token:any) => {
+    console.log("lll" , token);
+    const res = await Api.get(userEndpoints.getSlots , {
+        params:{token}
+    })
+    return res;
+}
+
+export const upateUserProfile = async(img:string) => {
+    const res = await Api.post(userEndpoints.setImg , {img});
+    return res
+}
+
+export const getImg = async() => {
+    const res = await Api.get(userEndpoints.getImg)
+    return res
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import Layout from "@/app/components/header/layout";
+import Layout from "@/components/header/layout";
 import { signup } from "@/app/lib/api/instructorApi";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
 
 
 interface instructorData {
@@ -20,7 +21,12 @@ interface instructorData {
 
 export default function InstructorSignup() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<instructorData>();
+    const [passwordVisible , setPasswordVisible] = useState(false);
     const router = useRouter();
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
+    }
 
     const onSubmit = async(data:instructorData) => {
        const { name , email , mobile , password } = data;
@@ -70,7 +76,7 @@ export default function InstructorSignup() {
                                         id="name"
                                         {...register('name', {required: true, validate: {notEmpty: value => value.trim() !== '' || 'Name cannot be just spaces'}})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                      {errors.name && <span className="text-red-600">This field is required</span>}
                                 </div>
@@ -83,7 +89,7 @@ export default function InstructorSignup() {
                                         id="email"
                                         {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                      {errors.email && <span className="text-red-600">Enter a valid email address</span>}
                                 </div>
@@ -96,7 +102,7 @@ export default function InstructorSignup() {
                                         id="mobile"
                                         {...register('mobile', {required: true, pattern: /^[0-9]{10}$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                     {errors.mobile && <span className="text-red-600">Enter a valid 10-digit mobile number</span>}
                                 </div>
@@ -104,8 +110,9 @@ export default function InstructorSignup() {
                                     <label className="block text-sm font-medium text-gray-700" htmlFor="password">
                                         Password
                                     </label>
+                                    <div className="relative">
                                     <input
-                                        type="password"
+                                       type={passwordVisible ? 'text' : 'password'}
                                         id="password"
                                         {...register('password', { 
                                             required: true, 
@@ -113,10 +120,38 @@ export default function InstructorSignup() {
                                               value: 6, 
                                               message: 'Password must be at least 6 characters long' 
                                             } ,
-                                            validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
+                                            validate: (value) => {
+                                                // Check for at least one uppercase letter, one lowercase letter, one number, and one special character
+                                                const hasUpperCase = /[A-Z]/.test(value);
+                                                const hasLowerCase = /[a-z]/.test(value);
+                                                const hasNumber = /\d/.test(value);
+                                                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                                        
+                                                if (!hasUpperCase) {
+                                                  return 'Password must contain at least one uppercase letter';
+                                                }
+                                                if (!hasLowerCase) {
+                                                  return 'Password must contain at least one lowercase letter';
+                                                }
+                                                if (!hasNumber) {
+                                                  return 'Password must contain at least one number';
+                                                }
+                                                if (!hasSpecialChar) {
+                                                  return 'Password must contain at least one special character';
+                                                }
+                                                return true; 
+                                              }
                                           })}                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
+                                     <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-3 top-3 text-gray-500"
+                                >
+                                    {passwordVisible ? 'hide' : 'show'}
+                                </button>
+                                    </div>
                                             {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
 
                                 </div>

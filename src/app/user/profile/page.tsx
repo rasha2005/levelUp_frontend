@@ -1,6 +1,6 @@
 "use client"
 
-import UserHeader from "@/app/components/user/userHeader";
+import UserHeader from "@/components/user/userHeader";
 import { getUser, updateUser } from "@/app/lib/api/userApi";
 import { Avatar , AvatarFallback ,AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import PasswordForm from "@/components/common/passwordForm";
+import ProfileImg from "@/components/common/profileImg";
 
 interface User {
     name:string;
@@ -18,6 +20,7 @@ interface User {
 function UserProfile() {
 
     const { register, handleSubmit, setValue ,formState:{errors , isValid},watch} = useForm<User>();
+    
     const [userId , setUserId] = useState();
     
     const getUserData = async() => {
@@ -34,13 +37,15 @@ function UserProfile() {
     }
 
     const onUserEdit = async(data:User) => {
-        const {name , email , mobile} = data
-        const res = await updateUser( userId ,name , email , mobile);
+        const {name , mobile} = data
+        const res = await updateUser( userId ,name , mobile);
+        
         if (res?.data?.response?.user) {
             setValue("name", res.data.response.user.name);
-            setValue("email", res.data.response.user.email);
             setValue("mobile", res.data.response.user.mobile);
-            toast.success( res.data.response.message)
+            toast.success( res?.data.response.message)
+        }else{
+            toast.error( res?.data.response.message)
         }
 
     }
@@ -72,16 +77,7 @@ function UserProfile() {
 
                             {/* Profile Tab Content */}
                             <TabsContent value="account">
-                                <div className="flex justify-center -mt-1">
-                                    <Avatar className="bg-white p-1  shadow-lg h-20 w-20" >
-                                        <AvatarImage 
-                                            src="/images/defaultProfile.jpg" 
-                                            alt="Profile picture" 
-                                            
-                                        />
-                                        <AvatarFallback>U</AvatarFallback>
-                                    </Avatar>
-                                </div>
+                               <ProfileImg role="user" />
                                 <form  onSubmit={handleSubmit(onUserEdit)} className="mt-4">
                                 <div className="mb-4">
                                     <label 
@@ -99,22 +95,7 @@ function UserProfile() {
                                     />
                                      {errors.name && <span className="text-red-600">This field is required</span>}
                                 </div>
-                                <div className="mb-4">
-                                    <label 
-                                        className="block text-sm font-medium text-gray-700 mr-25" 
-                                        htmlFor="name"
-                                    >
-                                        email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
-                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
-                                    />
-                                    {errors.email && <span className="text-red-600">Enter a valid email address</span>}
-                                </div>
+                                
                                 <div className="mb-4">
                                     <label 
                                         className="block text-sm font-medium text-gray-700 mr-25" 
@@ -144,43 +125,7 @@ function UserProfile() {
                             
                             {/* Password Tab Content */}
                             <TabsContent value="password">
-                            <form className="mt-4">
-                                <div className="mb-4">
-                                    <label 
-                                        className="block text-sm font-medium text-gray-700 mr-25" 
-                                        htmlFor="name"
-                                    >
-                                        current password
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label 
-                                        className="block text-sm font-medium text-gray-700 mr-25" 
-                                        htmlFor="name"
-                                    >
-                                        confirm password
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
-                                    />
-                                </div>
-                              
-                                <button 
-                                        type="submit"
-                                        className="mt-4 bg-sky-900 text-white px-4 py-2 rounded-full shadow hover:bg-sky-950"
-                                    >
-                                        change password
-                                    </button>
-                                    </form>
+                                <PasswordForm role={"user"} />
                             </TabsContent>
                         </Tabs>
                     </div>

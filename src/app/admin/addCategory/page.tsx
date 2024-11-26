@@ -14,6 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Navbar from "@/components/admin/Navbar";
+import Sidebar from "@/components/admin/Sidebar";
 
  
  
@@ -46,6 +48,16 @@ import { useEffect } from "react";
     return (  
         <>
         <ToastContainer/>
+        <div className="h-screen ">
+            <div className="w-full">
+                <Navbar />
+            </div>
+            <div className="flex">
+                <div className="w-[250px]">
+                    <Sidebar />
+                </div>
+
+                <div className="flex-1 p-10">
         <div className="mt-10 mx-auto max-w-md"> 
         <Card className="w-[350px]">
           <CardHeader>
@@ -78,6 +90,9 @@ import { useEffect } from "react";
           </form>
           </CardContent>
         </Card>
+      </div>
+      </div>
+      </div>
       </div>
       </>
      

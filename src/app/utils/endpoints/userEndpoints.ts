@@ -4,6 +4,14 @@ export const userEndpoints = {
     verifyLogin : "/user/login",
     getCategory:'/user/home',
     getUserDetails:'/user/userDetails',
-    editUserDetails:'/user/updateUser'
-    
+    editUserDetails:'/user/updateUser',
+    getInstructorDetails:'/user/getInstructor',
+    resendOtp:'/user/resendOtp',
+    changePassword:'/user/changePassword',
+    getInstructor:'/user/getInstructorData',
+    payement:'/user/create-checkout-session',
+    getSlots:'/user/getSlots',
+    setImg:'/user/setImg',
+    getImg:'/user/getImg'
+   
 }

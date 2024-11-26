@@ -1,4 +1,4 @@
-import Otp from "@/app/components/otp/Otp";
+import Otp from "@/components/common/Otp";
 
 
 export default function UserOtp() {

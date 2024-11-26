@@ -6,5 +6,9 @@ export const adminEndpoints = {
     getCategoryData:'/admin/getCategory',
     editCategoryData:'/admin/editCategory',
     deleteCategoryData:'/admin/deleteCategory',
-    blockUser:'/admin/blockUser'
+    blockUser:'/admin/blockUser',
+    getInstructor:'/admin/getInstructorById',
+    adminApprovel:'/admin/approveInstructor',
+    cancelAdminApprovel:'/admin/cancelApprovel',
+    getUser:'/admin/getUser'
 }

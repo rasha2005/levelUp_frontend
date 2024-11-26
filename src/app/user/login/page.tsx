@@ -1,6 +1,6 @@
 "use client"
 
-import Layout from "@/app/components/header/layout"
+import Layout from "@/components/header/layout"
 import { login } from "@/app/lib/api/userApi";
 import Image from 'next/image';
 import Link from 'next/link'
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
 
 
 interface userData  {
@@ -16,7 +17,13 @@ interface userData  {
 }
  function UserLogin() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<userData>()
+    const [passwordVisible , setPasswordVisible] = useState(false);
     const router = useRouter();
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
+    }
+
 
     const onSubmit = async(data:userData) => {
        const {email , password} = data
@@ -66,7 +73,7 @@ interface userData  {
                                         id="email"
                                         {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                     {errors.email && <span className="text-red-600">Enter a valid email address</span>}
                                 </div>
@@ -75,20 +82,26 @@ interface userData  {
                                     <label className="block text-sm font-medium text-gray-700" htmlFor="password">
                                         Password
                                     </label>
-                                    <input
-                                        type="password"
-                                        id="password"
-                                        {...register('password', { 
-                                            required: true, 
-                                            minLength: { 
-                                              value: 6, 
-                                              message: 'Password must be at least 6 characters long' 
-                                            } ,
-                                            validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
-                                          })}       
-                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
-                                    />
+                                    <div className="relative">
+                                <input
+                                    type={passwordVisible ? 'text' : 'password'}
+                                    id="password"
+                                    {...register('password', {
+                                        required: true,
+                                        minLength: { value: 6, message: 'Password must be at least 6 characters long' },
+                                        validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
+                                    })}
+                                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
+                                    
+                                />
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-3 top-3 text-gray-500"
+                                >
+                                    {passwordVisible ? 'hide' : 'show'}
+                                </button>
+                            </div>
                                    
                                    {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
                                 </div>

@@ -4,6 +4,8 @@ import { getInstructor } from '@/app/lib/api/adminApi';
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Navbar from "@/components/admin/Navbar";
+import Sidebar from "@/components/admin/Sidebar";
 
 
 interface InstructorData {
@@ -53,11 +55,21 @@ function InstructorMangement()  {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     
     return ( 
+      <div className="h-screen ">
+            <div className="w-full">
+                <Navbar />
+            </div>
+            <div className="flex">
+                <div className="w-[250px]">
+                    <Sidebar />
+                </div>
+
+                <div className="flex-1 p-10">  
         <div className='mt-10'>
         <h3 className='text-2xl ml-7 mb-4 font-semibold'>Instructor Management</h3>
         
         <div className="mt-1 max-w-[900px] mx-auto">
-        <div className="mb-4 ml-7 ">
+        <div className="mb-4  ">
        
            
             
@@ -86,8 +98,8 @@ function InstructorMangement()  {
                     <TableCell className="text-center">{instructor.name}</TableCell>
                     <TableCell className="text-center">{instructor.email}</TableCell>
                     <TableCell className="text-center">{instructor.mobile}</TableCell>
-                    <TableCell className="text-center">
-                    <Link href={`/user/${instructor.id}`}>View</Link>
+                    <TableCell className="text-center text-blue-700">
+                    <Link href={`/admin/instructorDetailpage/${instructor.id}`}>View</Link>
                     </TableCell>
                 </TableRow>
               ))
@@ -128,6 +140,9 @@ function InstructorMangement()  {
             Next
           </button>
         </div>
+    </div>
+    </div>
+    </div>
     </div>
     </div>
      );

@@ -7,10 +7,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+import LogoutButton from "../common/logout";
 
 const Navbar = () => {
     return ( 
-        <div className="bg-primary dark:bg-slate-700 text-white py-4 px-10 flex justify-between" >
+        <div className="bg-primary dark:bg-slate-700 text-white py-4 px-10 flex justify-between w-full " >
             LevelUp
             <DropdownMenu>
   <DropdownMenuTrigger className="focus:outline-none">
@@ -22,7 +23,7 @@ const Navbar = () => {
     <DropdownMenuLabel>My Account</DropdownMenuLabel>
     <DropdownMenuSeparator />
    
-    <DropdownMenuItem>Logout</DropdownMenuItem>
+    <DropdownMenuItem><LogoutButton role="admin"/></DropdownMenuItem>
    
   </DropdownMenuContent>
 </DropdownMenu>

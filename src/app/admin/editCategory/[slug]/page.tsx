@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 import { editCatData } from "@/app/lib/api/adminApi";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
+import Navbar from "@/components/admin/Navbar";
+import Sidebar from "@/components/admin/Sidebar";
 
 interface CatData {
     categoryName:string
@@ -45,6 +47,16 @@ function EditCategory() {
     return (
         <>
         <ToastContainer/>
+        <div className="h-screen ">
+            <div className="w-full">
+                <Navbar />
+            </div>
+            <div className="flex">
+                <div className="w-[250px]">
+                    <Sidebar />
+                </div>
+
+                <div className="flex-1 p-10">
         <div className="mt-10 mx-auto max-w-md"> 
         <Card className="w-[350px]">
           <CardHeader>
@@ -79,12 +91,15 @@ function EditCategory() {
             
           
             <button className="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-800 mt-8">
-              Create
+              Edit
             </button>
           
           </form>
           </CardContent>
         </Card>
+      </div>
+      </div>
+      </div>
       </div>
       </>
     )

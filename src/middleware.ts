@@ -11,7 +11,8 @@ const publicPaths = [
     '/login',
     '/instructor/otp',
     '/user/otp',
-    '/admin/login'
+    '/admin/login',
+    '/'
   ];
  
 export function middleware(request: NextRequest) {
@@ -30,10 +31,11 @@ export function middleware(request: NextRequest) {
         console.log("decodedToekn.role" , decodedToken.role);
         if(decodedToken.role === "User"){
             return NextResponse.redirect(new URL('/user/home', request.url));
-        }else if(decodedToken.role === "instructor"){
-            return NextResponse.redirect(new URL('/instructor/dashboard', request.url));
+        }else if(decodedToken.role === "Instructor"){
+          console.log("krrr");
+            return NextResponse.redirect(new URL('/instructor', request.url));
         }else if(decodedToken.role === "Admin") {
-          return NextResponse.redirect(new URL('/admin/dashboard' , request.url));
+          return NextResponse.redirect(new URL('/admin' , request.url));
         }
     }catch(err) {
         console.log(err)
@@ -49,8 +51,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
 }
 
-  if (!isPublicPath && !token ) {
-    console.log("kkkkk");
+  if (!isPublicPath && !token && path !== "/user/paymentSuccess") {
+    console.log("kkkkk" , token);
     return NextResponse.redirect(new URL('/login', request.url));
 }
 
@@ -59,8 +61,7 @@ export function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/instructor/login',
-    '/instructor/otp',
+    '/instructor/:path*',
     '/instructor/signup',
     '/signup',
     '/login',

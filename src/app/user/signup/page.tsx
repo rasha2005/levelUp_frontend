@@ -1,7 +1,7 @@
 "use client"
 
 
-import Layout from "@/app/components/header/layout"
+import Layout from "@/components/header/layout"
 import { signup } from "@/app/lib/api/userApi";
 import axios from "axios";
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import { useForm , SubmitHandler} from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
 
 
 interface userData  {
@@ -22,7 +23,12 @@ interface userData  {
 export default function UserSignup() {
 
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<userData>();
+    const [passwordVisible , setPasswordVisible] = useState(false);
     const router = useRouter();
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(prevState => !prevState);
+    }
 
     const onSubmit:SubmitHandler<userData> = async(data) => {
         console.log("hehe",data);
@@ -72,7 +78,7 @@ export default function UserSignup() {
                                         id="name"
                                         {...register('name', {required: true, validate: {notEmpty: value => value.trim() !== '' || 'Name cannot be just spaces'}})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                      {errors.name && <span className="text-red-600">This field is required</span>}
                                 </div>
@@ -85,7 +91,7 @@ export default function UserSignup() {
                                         id="email"
                                         {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                      {errors.email && <span className="text-red-600">Enter a valid email address</span>}
                                 </div>
@@ -98,7 +104,7 @@ export default function UserSignup() {
                                         id="mobile"
                                         {...register('mobile', {required: true, pattern: /^[0-9]{10}$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
                                     {errors.mobile && <span className="text-red-600">Enter a valid 10-digit mobile number</span>}
                                 </div>
@@ -106,8 +112,9 @@ export default function UserSignup() {
                                     <label className="block text-sm font-medium text-gray-700" htmlFor="password">
                                         Password
                                     </label>
+                                    <div className="relative">
                                     <input
-                                        type="password"
+                                       type={passwordVisible ? 'text' : 'password'}
                                         id="password"
                                         {...register('password', { 
                                             required: true, 
@@ -137,8 +144,16 @@ export default function UserSignup() {
                                                 return true; 
                                               }
                                           })}                                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        
                                     />
+                                     <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-3 top-3 text-gray-500"
+                                >
+                                    {passwordVisible ? 'hide' : 'show'}
+                                </button>
+                                    </div>
                                              {errors.password && <span className="text-red-600">{errors.password.message || 'Password is not strong enough'}</span>}
 
                                 </div>

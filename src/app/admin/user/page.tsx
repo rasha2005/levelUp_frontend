@@ -2,6 +2,8 @@
 
 
 import { blockUser, getUsers } from '@/app/lib/api/adminApi';
+import Navbar from "@/components/admin/Navbar";
+import Sidebar from "@/components/admin/Sidebar";
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow ,TableFooter} from '@/components/ui/table'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -97,11 +99,21 @@ function UserManagement() {
     return (
       <>
       <ToastContainer/>
+      <div className="h-screen ">
+            <div className="w-full">
+                <Navbar />
+            </div>
+            <div className="flex">
+                <div className="w-[250px]">
+                    <Sidebar />
+                </div>
+
+                <div className="flex-1 p-10">  
        <div className='mt-10'>
         <h3 className='text-2xl ml-7 mb-4 font-semibold'>User Management</h3>
         
         <div className="mt-1 max-w-[900px] mx-auto">
-        <div className="mb-4 ml-7 ">
+        <div className="mb-4  ">
        
            
             
@@ -119,24 +131,26 @@ function UserManagement() {
     <Table className="w-full border border-gray-200"> 
       <TableHeader>
         <TableRow>
-          <TableHead className="text-center">Name</TableHead>
-          <TableHead className="text-center">Email</TableHead>
-          <TableHead className="text-center">Mobile</TableHead>
-          <TableHead className="text-center">Action</TableHead>
+          <TableHead >Name</TableHead>
+          <TableHead >Email</TableHead>
+          <TableHead >Mobile</TableHead>
+          <TableHead >Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
             {isData && currentData.length > 0 ? (
               currentData.map((user) => (
                 <TableRow key={user.id}>
-                    <TableCell className="text-center">{user.name}</TableCell>
-                    <TableCell className="text-center">{user.email}</TableCell>
-                    <TableCell className="text-center">{user.mobile}</TableCell>
-                    <TableCell className="text-center">
+                    <TableCell >{user.name}</TableCell>
+                    <TableCell >{user.email}</TableCell>
+                    <TableCell >{user.mobile}</TableCell>
+                    
+
+                    <TableCell className='flex ' >
                     <AlertDialog open={isOpen && blockUserId === user.id} onOpenChange={setIsOpen}>
                                     <AlertDialogTrigger asChild>
                                         <button
-                                            className={`text-red-500 ${!user.isBlocked ? "bg-red-100 rounded-full px-4 py-2 hover:bg-red-200 hover:underline" : ""}`}
+                                            className={`text-red-500 ${!user.isBlocked ? "bg-red-100 rounded-full px-4 py-2 hover:bg-red-200 hover:underline" : "px-2 "}`}
                                             onClick={!user.isBlocked ? () => handleBlockClick(user.id) : undefined}
                                             disabled={user.isBlocked} >
                                                 {user.isBlocked ? "blocked" : "block"}
@@ -168,7 +182,12 @@ function UserManagement() {
                                     </AlertDialogContent>
                                 
                                 </AlertDialog>
-                    </TableCell>
+                                <Link  className="text-blue-500 px-4 py-2 " href={`/admin/userDetails/${user.id}`} passHref>
+             
+                View
+              
+            </Link>                    </TableCell>
+                    
                 </TableRow>
               ))
             ) : (
@@ -212,6 +231,9 @@ function UserManagement() {
         </div>
         </div>
       </div>
+      </div>
+        </div>
+        </div>
       </>
   
     )

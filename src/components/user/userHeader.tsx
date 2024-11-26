@@ -1,3 +1,5 @@
+"use client"
+
 import { Avatar , AvatarFallback ,AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -8,8 +10,24 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import Link from "next/link";
+import LogoutButton from "../common/logout";
+
+import { getImg } from "@/app/lib/api/userApi";
+import { useEffect, useState } from "react";
 
 function UserHeader() {
+  const [img , setImg] = useState('');
+
+ const getUserProfile = async() => {
+   const img = await getImg();
+  if(img.data.response.success) {
+    setImg(img.data.response.image);
+  }
+ }
+
+ useEffect(() => {
+  getUserProfile();
+ },[])
     return (
 
         <>
@@ -21,14 +39,15 @@ function UserHeader() {
             <DropdownMenu>
   <DropdownMenuTrigger className="focus:outline-none">
             <Avatar>
-                <AvatarImage src="/images/defaultProfile.jpg" alt="@shadcn"/>
+                <AvatarImage src={img} alt="@shadcn"/>
             </Avatar>
             </DropdownMenuTrigger>
   <DropdownMenuContent>
    
     <Link href={'/user/profile'}><DropdownMenuItem>My Account</DropdownMenuItem></Link>
+    <Link href={'/user/sessions'}><DropdownMenuItem>Sessions</DropdownMenuItem></Link>
     <DropdownMenuSeparator />
-    <DropdownMenuLabel>Logout</DropdownMenuLabel>
+    <DropdownMenuLabel ><LogoutButton role="user"/></DropdownMenuLabel>
    
   </DropdownMenuContent>
 </DropdownMenu>
