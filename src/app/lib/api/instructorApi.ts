@@ -114,4 +114,11 @@ export const getWallet = async(token:any) => {
 export const getImg = async() => {
        const res = await Api.get(instructorEndPoint.getImg);
        return res
-    }       
+    }  
+    
+export const verifyInstructorRoomId = async(roomId:any , instructorId:any) => {
+    const res = await Api.get(instructorEndPoint.verifyRoom , {
+        params:{roomId , instructorId}
+    })
+    return res;
+}

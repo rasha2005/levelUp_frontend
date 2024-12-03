@@ -6,6 +6,7 @@ import UserHeader from "@/components/user/userHeader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Avatar , AvatarFallback ,AvatarImage } from "@/components/ui/avatar";
+import { FaStar } from "react-icons/fa";
 
 
 interface InstructorData {
@@ -14,6 +15,7 @@ interface InstructorData {
   name:string;
   email:string;
   mobile:string;
+  rating:any;
   description?:string;
   experience?:string;
   resume?:string;
@@ -123,6 +125,26 @@ export default function Home() {
      <div>
         <h3 className="text-lg font-semibold text-gray-700">{coach.name}</h3>
         <p className="text-gray-500 mt-1">{coach.category}</p> 
+        <div className="flex">
+              {[...Array(5)].map((_, index) => {
+            const currentRate = index + 1;
+  
+            return (
+              <label key={currentRate}>
+                <FaStar
+                  size={12}
+                  color={
+                    currentRate <= Math.ceil(coach.rating / 10) ? "yellow" : "gray"
+                  }
+                  // className="cursor-pointer"
+                  // These handlers are not needed since it's readonly
+                  // onMouseEnter={() => setHover(currentRate)}
+                  // onMouseLeave={() => setHover(null)}
+                />
+              </label>
+            );
+          })}
+              </div>
       </div>
       </div>
       <Link href={`/user/instructorDetail/${coach.id}`} ><div className="text-gray-600 cursor-pointer mr-3">view</div></Link>

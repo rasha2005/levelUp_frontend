@@ -11,6 +11,7 @@ function SlotList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const itemsPerPage = 7;
+    const date = new Date()
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -62,6 +63,7 @@ function SlotList() {
           <TableHead className="text-center">Date</TableHead>
           <TableHead className="text-center">Time</TableHead>
           <TableHead className="text-center">Action</TableHead>
+          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -81,10 +83,18 @@ function SlotList() {
               minute: '2-digit',
               hour12: true,
             })}</TableCell>
-              <TableCell className="text-center">join</TableCell>
+
+              <TableCell className="text-center">
+              {new Date(slot.endTime) > new Date() ? (
+    <Link href={`/instructor/room/${slot.roomId}`}>join</Link>
+  ) : (
+    <span>Ended</span>
+  )}
+                </TableCell>
+            
 
                     <TableCell className="text-center text-blue-700">
-                    
+                    <span>Rate this session</span>
                     </TableCell>
                 </TableRow>
               ))

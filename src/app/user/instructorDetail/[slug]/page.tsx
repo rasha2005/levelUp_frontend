@@ -2,6 +2,7 @@
 import { getInstructorById } from "@/app/lib/api/userApi";
 import SessionSlot from "@/components/header/sessionSlot";
 import UserHeader from "@/components/user/userHeader";
+import { FaStar } from "react-icons/fa";
 // import Link from "next/navigation";
 // impot {Link}
 
@@ -39,6 +40,26 @@ return (
               <h2 className="text-xl font-bold">{instructor.name}</h2>
               <p className="text-gray-500">{instructor.category} Coach</p>
               <p className="text-gray-500">{instructor.description} </p>
+              <div className="flex">
+              {[...Array(5)].map((_, index) => {
+            const currentRate = index + 1;
+  
+            return (
+              <label key={currentRate}>
+                <FaStar
+                  size={18}
+                  color={
+                    currentRate <= Math.ceil(instructor.rating / 10) ? "yellow" : "gray"
+                  }
+                  // className="cursor-pointer"
+                  // These handlers are not needed since it's readonly
+                  // onMouseEnter={() => setHover(currentRate)}
+                  // onMouseLeave={() => setHover(null)}
+                />
+              </label>
+            );
+          })}
+              </div>
               <div className="flex space-x-3 mt-2">
                 <a href="#" className="text-gray-400 hover:text-black">
                   <i className="fab fa-instagram"></i>

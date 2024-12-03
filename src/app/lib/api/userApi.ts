@@ -141,3 +141,15 @@ export const getImg = async() => {
     const res = await Api.get(userEndpoints.getImg)
     return res
 }
+
+export const verifyRoomId = async(roomId:any , userId:any) => {
+    const res = await Api.get(userEndpoints.verifyRoom ,{
+        params:{roomId , userId}
+    })
+    return res;
+}
+
+export const updateRating = async(rating:any , id:any) => {
+    const res = await Api.post(userEndpoints.rating , {rating , id});
+    return res
+}

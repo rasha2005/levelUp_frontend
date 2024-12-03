@@ -12,6 +12,8 @@ export const userEndpoints = {
     payement:'/user/create-checkout-session',
     getSlots:'/user/getSlots',
     setImg:'/user/setImg',
-    getImg:'/user/getImg'
+    getImg:'/user/getImg',
+    verifyRoom:'/user/verifyRoom',
+    rating:'/user/rating'
    
 }

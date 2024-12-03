@@ -33,6 +33,18 @@ import { deleteEvent, getSessionData, sessionUpdate } from "@/app/lib/api/instru
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
+interface InstructorData {
+  id?:string;
+  name:string;
+  email:string;
+  mobile:string;
+  description?:string;
+  experience?:string;
+  resume?:string;
+  category?:string;
+  isApproved?:boolean;
+
+}
 
 function CalenderEvent() {
   const {
@@ -47,7 +59,8 @@ function CalenderEvent() {
   const [newEventPrice , setNewEventPrice] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-const [eventToDelete, setEventToDelete] = useState<EventApi | null>(null);
+  const [eventToDelete, setEventToDelete] = useState<EventApi | null>(null);
+  const [instructor , setInstructor] = useState<InstructorData>()
 const router = useRouter()
 
 
@@ -55,6 +68,7 @@ const router = useRouter()
 const getEvents = async()=> {
   const data = await getSessionData();
   console.log("data" , data);
+   setInstructor(data.data.response?.instructor);
   if(data.data.response?.events?.events){
 
     const transformedEvents: EventInput[] = data.data.response.events.events.map((event: EventApi) => ({
@@ -138,8 +152,11 @@ const getEvents = async()=> {
   }
     return (
         <>
+        {
+          instructor?.isApproved ? (
        <div  className="flex w-full h-full">
         <div className="flex-1 bg-[#f9f8f6] rounded-md shadow-md p-4"> 
+
             <FullCalendar 
             height={"85vh"}
             plugins={[dayGridPlugin , timeGridPlugin , interactionPlugin]}
@@ -169,6 +186,10 @@ const getEvents = async()=> {
             />
         </div>
        </div>
+          ):(
+            <p>you are not approved by the admin</p>
+          )
+        }
 
        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
   <DialogContent>

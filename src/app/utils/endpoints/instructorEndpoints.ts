@@ -14,5 +14,6 @@ export const instructorEndPoint = {
     deleteEventData:'/instructor/deleteEventData',
     getSlot:'/instructor/getSlot',
     getWallet:'/instructor/getWallet',
-    getImg:'/instructor/getImg'
+    getImg:'/instructor/getImg',
+    verifyRoom:'/instructor/verifyRoom'
 }
