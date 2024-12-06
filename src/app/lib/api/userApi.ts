@@ -1,6 +1,7 @@
 import { Api } from "@/app/utils/apiconfig";
 import { userEndpoints } from "@/app/utils/endpoints/userEndpoints";
 import Cookies from "js-cookie"
+import { NextResponse } from "next/server";
 
 export const signup = async(name:string , email:string , mobile:string , password:string) => {
     try {
@@ -152,4 +153,30 @@ export const verifyRoomId = async(roomId:any , userId:any) => {
 export const updateRating = async(rating:any , id:any) => {
     const res = await Api.post(userEndpoints.rating , {rating , id});
     return res
+}
+
+export const googleAuthCallback = async(email:any , name:any , img:any) => {
+    console.log("hereee", email, name, img);
+
+    const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
+    console.log("ressssa", res.data?.response?.authToken);
+
+  const authToken = res.data?.response?.authToken;
+  
+  
+
+    if (authToken) {
+        return new Response(null, {
+            headers: {
+                'Set-Cookie': `authToken=${authToken};  Path=/; SameSite=Lax; `, 
+                Location: '/',
+            },
+            status: 302, // Redirect to home
+        });
+    }
+
+    
+
+    // Handle case where token is not received
+    return NextResponse.json({ error: 'Token not received' }, { status: 400 });
 }

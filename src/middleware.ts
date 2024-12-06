@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtDecode } from 'jwt-decode';
+import { cookies } from 'next/headers';
 
 const publicPaths = [
     '/user/login',
@@ -15,15 +16,19 @@ const publicPaths = [
     '/'
   ];
  
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   console.log("path" , path);
 
   const isPublicPath = publicPaths.includes(path);
   console.log("ispublicpath" , isPublicPath);
 
-  const token = request.cookies.get('authToken')?.value || '';
-  console.log("token" , token);
+  const cookieStore = cookies();
+  const authToken = (await cookieStore).get('authToken')?.value;
+  console.log("pppp" , authToken);
+
+  const token = request.cookies.get('authToken')?.value || request.cookies.get('next-auth.session-token')?.value || '';
+  console.log("token" , request.cookies);
 
   if(isPublicPath && token) {
     try{

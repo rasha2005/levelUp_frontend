@@ -3,6 +3,8 @@ import { getInstructorById } from "@/app/lib/api/userApi";
 import SessionSlot from "@/components/header/sessionSlot";
 import UserHeader from "@/components/user/userHeader";
 import { FaStar } from "react-icons/fa";
+import { MessageCircle } from "lucide-react";
+import MessageBtn from "@/components/chat/button";
 // import Link from "next/navigation";
 // impot {Link}
 
@@ -21,6 +23,8 @@ const event = {
   event:events,
   instructorId:instructor.id
 }
+
+
  
 
 return (
@@ -47,7 +51,7 @@ return (
             return (
               <label key={currentRate}>
                 <FaStar
-                  size={18}
+                  size={13}
                   color={
                     currentRate <= Math.ceil(instructor.rating / 10) ? "yellow" : "gray"
                   }
@@ -60,6 +64,8 @@ return (
             );
           })}
               </div>
+              <MessageBtn id={instructor.id} />
+             
               <div className="flex space-x-3 mt-2">
                 <a href="#" className="text-gray-400 hover:text-black">
                   <i className="fab fa-instagram"></i>

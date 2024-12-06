@@ -14,6 +14,7 @@ export const userEndpoints = {
     setImg:'/user/setImg',
     getImg:'/user/getImg',
     verifyRoom:'/user/verifyRoom',
-    rating:'/user/rating'
+    rating:'/user/rating',
+    googleAuth:'/user/googleAuth'
    
 }
