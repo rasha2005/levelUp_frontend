@@ -51,15 +51,8 @@ const  Sidebar = () => {
             </CommandItem>
             
           </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Other">
-            <CommandItem>
-                {/* <Boxes  className="mr-2 h-4 w-4" />
-                <Link href={'/admin/category'}>Category</Link>  */}
-            </CommandItem>
-            <CommandItem></CommandItem>
-            <CommandItem></CommandItem>
-          </CommandGroup>
+          
+          
         </CommandList>
       </Command>
       

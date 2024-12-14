@@ -1,8 +1,11 @@
 import Image from "next/image";
 import {signIn} from "next-auth/react"
+import { googleAuthCallback } from "@/app/lib/api/userApi";
+import Cookies from "js-cookie";
 
 function GoogleAuth() {
-    const handleGoogleSignIn = () => {
+    const handleGoogleSignIn = async() => {
+        
         signIn("google" )
     }
     return (

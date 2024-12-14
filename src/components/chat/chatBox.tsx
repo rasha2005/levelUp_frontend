@@ -1,10 +1,11 @@
 "use client"
 
 import { createMessage, fetchChats, fetchMessages } from "@/app/lib/api/chatApi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Socket, io } from 'socket.io-client'
 import { jwtDecode } from 'jwt-decode';
 import Link from "next/link";
+import { Home } from "lucide-react";
 
 
 const ENDPOINT = process.env.NEXT_PUBLIC_BASE_URL_BACKEND as string;
@@ -18,12 +19,14 @@ function ChatBox({ chatId , id}:any) {
     console.log("id" , userData)
    
     const [isChatId , setIsChatId] = useState(false);
-    const [chats , setChats] = useState([]);
+    const [chats , setChats] = useState<any>([]);
     const [newMessage , setNewMessage] = useState("");
     const [message , setMessage] = useState<any>([]);
     const [user , setUser] = useState("");
     const [chatRoom , setChatRoom] = useState<any>({})
     const [socketConnected , setSocketConnected] = useState(false)
+    const [searchTerm, setSearchTerm] = useState("");
+    const ref = useRef<HTMLDivElement | null>(null);
     
     
 
@@ -87,35 +90,39 @@ function ChatBox({ chatId , id}:any) {
         }
     }, [chatId]);  
 
+    
+  
+      // Filter chats based on the search term (instructor's or user's name)
+      const filtered = chats.filter(
+        (chat: any) =>
+          chat?.instructor?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          chat?.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+    useEffect(() => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    },[message])
    
    
     return (
         <>
       <div className="flex">
     {/* Navbar */}
-    <div className="w-16 bg-blue-600 h-screen flex flex-col items-center py-4 space-y-6">
+    <div className="w-16 bg-slate-600 h-screen flex flex-col items-center py-4 space-y-6">
         {/* Home Icon */}
+        
+      <Link href={userData.role === "User" ? '/user/home' : '/instructor'}>
         <button
         
             // onClick={() => window.location.href = '/user/home'}
-            className="p-3 bg-blue-900 rounded-full text-white hover:bg-blue-700"
+            className="p-3 bg-slate-900 rounded-full text-white hover:bg-slate-700"
             aria-label="Go to Home"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 12l9-9m0 0l9 9m-9-9v18"
-                />
-            </svg>
+           <Home />
         </button>
+        </Link>
        
         {/* Add More Icons */}
     </div>
@@ -124,12 +131,14 @@ function ChatBox({ chatId , id}:any) {
     <div className="w-1/1 bg-gray-200 p-4">
         <input
             type="text"
+            value={searchTerm} // Controlled input
+            onChange={(e) => setSearchTerm(e.target.value)} 
             placeholder="Search chats..."
-            className="w-full p-2 rounded mb-4"
+            className="w-full p-3 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 mb-4"
         />
         <div className="space-y-2">
             {/* Mapping over filtered chats */}
-            {chats.map((chat: any) => (
+            {filtered.map((chat: any) => (
               <div key={chat.id}  className={` p-2  w-full rounded ${
                 chat.id === chatId ? "bg-gray-300 " : "bg-gray-200 "
               }`} >
@@ -137,12 +146,12 @@ function ChatBox({ chatId , id}:any) {
                     <div className="flex items-center space-x-4">
 
                     <img
-                        src={chat?.instructor?.img || chat?.user?.img}
+                        src={chat?.instructor?.img || chat?.user?.img || '/images/defaultProfile.jpg'}
                         alt="Coach Profile"
-                        className="rounded-full w-10 h-10"
+                        className="rounded-full w-7 h-7"
                         />
                     <div>
-                        <h2 className="text-xl font-bold">{chat?.instructor?.name || chat?.user?.name}</h2>
+                        <h6 className="text-base font-bold">{chat?.instructor?.name || chat?.user?.name}</h6>
                     </div>
                         </div>
                 </Link>
@@ -161,7 +170,7 @@ function ChatBox({ chatId , id}:any) {
       chatRoom?.userId === user ?(
         <div className="p-3 ml-2 flex items-center space-x-3">
 <img
-      src={chatRoom?.instructor?.img}
+      src={chatRoom?.instructor?.img || '/images/defaultProfile.jpg'}
       alt="User"
       className="rounded-full w-8 h-8"
     />
@@ -170,7 +179,7 @@ function ChatBox({ chatId , id}:any) {
         ):(
           <div className="p-3 ml-2 flex items-center space-x-3">
   <img
-    src={chatRoom?.user?.img}
+    src={chatRoom?.user?.img || '/images/defaultProfile.jpg'}
     alt="User"
     className="rounded-full w-8 h-8"
   />
@@ -218,6 +227,7 @@ function ChatBox({ chatId , id}:any) {
           ? "bg-green-100 text-green-900"  // Background for the user
           : "bg-blue-100 text-blue-900"   // Background for others
       }`}>{m.content}</p>
+      <div ref={ref}></div>
               {/* <p className="text-sm">Hello! How are you?</p> */}
             </div>
           </div>

@@ -167,12 +167,13 @@ const getEvents = async()=> {
             selectMirror={true}
             dayMaxEvents={true}
             select={(info) => {
-              const today = new Date(); // Current date and time
-              const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // Midnight of today
+              const now = new Date(); // Current date and time
               const selectedDate = new Date(info.start); // Selected date from the calendar
         
               // Check if the selected date is before the current date
-              if (selectedDate < startOfToday) {
+              if (selectedDate < now) {
+                const calendarApi = info.view.calendar;
+                calendarApi.unselect(); // Explicitly unselect invalid selections
                 return;
               }
         

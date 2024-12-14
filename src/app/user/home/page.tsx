@@ -39,7 +39,9 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1)
   const [limit, setLimit] = useState(5); 
 
-
+  useEffect(() => {
+    console.log("workinng")
+  },[])
 
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {

@@ -6,7 +6,7 @@ async function Wallet() {
     const cookieStore = cookies();
     const authToken = (await cookieStore).get('authToken')?.value;
     const data = await getWallet(authToken);
-    const wallet =  data.data.response.slot;
+    const wallet =  data.data.response.Wallet;
     return (
        
         <>

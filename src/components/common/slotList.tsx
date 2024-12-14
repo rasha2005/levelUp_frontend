@@ -63,7 +63,6 @@ function SlotList() {
           <TableHead className="text-center">Date</TableHead>
           <TableHead className="text-center">Time</TableHead>
           <TableHead className="text-center">Action</TableHead>
-          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -86,16 +85,17 @@ function SlotList() {
 
               <TableCell className="text-center">
               {new Date(slot.endTime) > new Date() ? (
-    <Link href={`/instructor/room/${slot.roomId}`}>join</Link>
+    <Link href={`/instructor/room/${slot.roomId}`}> <span className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full">
+    join
+  </span></Link>
   ) : (
-    <span>Ended</span>
+    <span className="inline-block px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-full">
+    Ended
+  </span>
   )}
                 </TableCell>
             
 
-                    <TableCell className="text-center text-blue-700">
-                    <span>Rate this session</span>
-                    </TableCell>
                 </TableRow>
               ))
             ) : (

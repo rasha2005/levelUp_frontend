@@ -10,5 +10,7 @@ export const adminEndpoints = {
     getInstructor:'/admin/getInstructorById',
     adminApprovel:'/admin/approveInstructor',
     cancelAdminApprovel:'/admin/cancelApprovel',
-    getUser:'/admin/getUser'
+    getUser:'/admin/getUser',
+    fetchDetails:'/admin/fetchDetails',
+    fetchTransaction:'/admin/fetchTransaction' 
 }

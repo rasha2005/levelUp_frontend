@@ -112,10 +112,11 @@ export const changePasswordUser = async(current:string , confirm:string) => {
     return res;
 }
 
-export const getInstructorById = async(id:any) => {
+export const getInstructorById = async(id:any , token:any) => {
     
     const res = await Api.get(`${userEndpoints.getInstructor}?id=${id}`, {
-        withCredentials: true 
+        withCredentials: true ,
+        params:{token}
     });
     return res;
 }
@@ -159,24 +160,23 @@ export const googleAuthCallback = async(email:any , name:any , img:any) => {
     console.log("hereee", email, name, img);
 
     const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
+    console.log("priyaa" , res);
     console.log("ressssa", res.data?.response?.authToken);
-
-  const authToken = res.data?.response?.authToken;
-  
-  
-
-    if (authToken) {
-        return new Response(null, {
-            headers: {
-                'Set-Cookie': `authToken=${authToken};  Path=/; SameSite=Lax; `, 
-                Location: '/',
-            },
-            status: 302, // Redirect to home
-        });
-    }
 
     
 
-    // Handle case where token is not received
-    return NextResponse.json({ error: 'Token not received' }, { status: 400 });
+    return res
+  
+
+   
+
+    
+
+   
+    
+}
+
+export const addReview = async(instructorId:any , value:string) => {
+    const res = await Api.post(userEndpoints.addReview , {instructorId , value})
+    return res;
 }

@@ -4,6 +4,7 @@ import { payement } from "@/app/lib/api/userApi";
 import {loadStripe} from "@stripe/stripe-js"
  
 function SessionSlot({events}:any) {
+  console.log("llll" ,events);
     // console.log("yt" , id);
     const handlePayement = async(data:any) => {
       console.log("payement" , data);
@@ -14,7 +15,7 @@ console.log("process.env.STRIPE_PUBLISHABLE_KEY")
       throw new Error("Stripe could not be initialized");
     }
 
-    console.log("llll");
+    
     // Prepare the request payload
     const body = {
       session: data,
@@ -68,7 +69,7 @@ console.log("process.env.STRIPE_PUBLISHABLE_KEY")
     </tr>
   </thead>
   <tbody>
-    {events && events.event.length > 0 ? (
+    {events && events?.event?.length > 0 ? (
       events.event.map((event:any) => (
         <tr className="hover:bg-gray-100" key={event.id}>
           <td className="py-2 px-4">

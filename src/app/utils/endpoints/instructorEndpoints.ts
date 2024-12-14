@@ -15,5 +15,6 @@ export const instructorEndPoint = {
     getSlot:'/instructor/getSlot',
     getWallet:'/instructor/getWallet',
     getImg:'/instructor/getImg',
-    verifyRoom:'/instructor/verifyRoom'
+    verifyRoom:'/instructor/verifyRoom',
+    getEvent:'/'
 }

@@ -80,3 +80,13 @@ export const getUserById = async(id:any) => {
     const res = await Api.get(`${adminEndpoints.getUser}?id=${id}`);
     return res
 }
+
+export const fetchDetails = async() => {
+    const res = await Api.get(adminEndpoints.fetchDetails)
+    return res
+}
+
+export const getTransaction = async() => {
+    const res = await Api.get(adminEndpoints.fetchTransaction);
+    return res
+}
