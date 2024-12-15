@@ -6,7 +6,7 @@ import { userEndpoints } from "./endpoints/userEndpoints";
 
 
 export const Api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI || 'http://localhost:4000/api',
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI ,
     withCredentials: true
 });
 
