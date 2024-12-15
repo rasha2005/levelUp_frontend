@@ -2,12 +2,11 @@
 
 
 import { googleAuthCallback } from '@/app/lib/api/userApi';
-import { JWT } from 'next-auth/jwt';
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google'
 
 
-export const authOptions:AuthOptions = {
+ const authOptions:AuthOptions = {
     providers: [
         
         GoogleProvider({
@@ -19,12 +18,12 @@ export const authOptions:AuthOptions = {
         strategy: 'jwt', 
       },
       callbacks: {
-        async jwt({ token, account, user }:any) {
+        async jwt({ token, account, user }:{token:any , account:any , user:any}) {
                     
                         if (account && user) {
                             try{
                           
-                           let  res =  await googleAuthCallback(user.email, user.name, user.image);
+                           const res =  await googleAuthCallback(user.email, user.name, user.image);
                            console.log("ress" , res.data.response.authToken);
 
                             if (res && res.data.response.authToken) {
@@ -41,7 +40,7 @@ export const authOptions:AuthOptions = {
                         return token; 
                         
                     },
-                    async session({ session, token }: any) {
+                    async session({ session, token }: {session:any , token:any}) {
                        
                         if (token.authToken) {
                           session.authToken = token.authToken;
@@ -51,11 +50,11 @@ export const authOptions:AuthOptions = {
                       },
                     },
                     jwt: {
-                      encode: async ({ token, secret }: any) => {
+                      encode: async ({ token } :any) => {
                         
-                        return token.authToken || "";
+                        return token?.authToken || "";
                       },
-                      decode: async ({ token, secret }: any) => {
+                      decode: async ({ token }:any) => {
                        
                         return { authToken: token };
                       },

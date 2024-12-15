@@ -6,7 +6,7 @@ import { approveInstructor, cancelApprovel, getInstructorById } from "@/app/lib/
 import Navbar from "@/components/admin/Navbar"
 import Sidebar from "@/components/admin/Sidebar"
 import Link from "next/link";
-import { useParams  , useRouter} from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -26,7 +26,6 @@ interface InstructorData {
 
 function InstructorDetailpage() {
     const [instructor , setInstructor] = useState<InstructorData>()
-    const router = useRouter();
     const params = useParams();
     const id = params.slug;
 

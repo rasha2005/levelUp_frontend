@@ -7,6 +7,7 @@ import {  useEffect, useState } from "react";
 import { getWallet } from "../lib/api/instructorApi";
 import InstructorBar from "@/components/instructor/instructorBar";
 import Graph from "@/components/instructor/graph";
+import Cookies from "js-cookie";
 
 
  function instructorDashboard() {
@@ -14,11 +15,8 @@ import Graph from "@/components/instructor/graph";
     const [balance , setBalance] = useState();
     const [transactions , setTransactions] = useState<any>([])
     const [totalSlots , setTotalSlots] = useState<any>([])
-    const cookies = document.cookie;
-    const authToken = cookies
-      .split("; ")
-      .find((row) => row.startsWith("authToken="))
-      ?.split("=")[1];
+    const authToken = Cookies.get('authToken');
+   
 
     console.log("authdd", authToken);
     

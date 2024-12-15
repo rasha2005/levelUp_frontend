@@ -6,8 +6,6 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react';
 import {
     AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
@@ -21,7 +19,7 @@ import Navbar from "@/components/admin/Navbar";
 import Sidebar from "@/components/admin/Sidebar";
 
 interface CategoryData {
-    id?:string;
+    id:string | undefined;
     catName:string;
 }
 
@@ -30,7 +28,7 @@ function Category() {
     const [categoryData , setCategoryData] = useState<CategoryData[]>([]);
     const [isData , setIsData] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+    const [deleteCategoryId, setDeleteCategoryId] = useState<string | undefined>(undefined);
 
     const getCategoryData = async() => {
         const res = await getCatData();
@@ -41,7 +39,8 @@ function Category() {
         }
         
     }
-    const handleDeleteClick = (id:any) => {
+    const handleDeleteClick = (id:string | undefined) => {
+        
         setDeleteCategoryId(id);
         setIsOpen(true); 
     };
@@ -54,7 +53,7 @@ function Category() {
                 toast.success(res.data.response.message);
             }
             setIsOpen(false);
-            setDeleteCategoryId(null); 
+            setDeleteCategoryId(undefined); 
             getCategoryData();
         }
     };

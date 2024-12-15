@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Header from "@/components/header/Header";
 import { useState } from "react";
 
 interface adminData {
@@ -14,7 +13,7 @@ interface adminData {
 }
 
 export default function AdminLogin() {
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<adminData>();
+    const { register, handleSubmit, formState: { errors } } = useForm<adminData>();
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const router = useRouter();

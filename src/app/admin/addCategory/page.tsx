@@ -5,15 +5,13 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
-import { createCategory, getCatData } from "@/app/lib/api/adminApi";
+import { createCategory } from "@/app/lib/api/adminApi";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Navbar from "@/components/admin/Navbar";
 import Sidebar from "@/components/admin/Sidebar";
 
@@ -25,7 +23,7 @@ import Sidebar from "@/components/admin/Sidebar";
   }
 
  function AddCategory() {
-    const {register , handleSubmit , formState:{errors , isValid},watch , reset} = useForm<Category>();
+    const {register , handleSubmit , formState:{errors } , reset} = useForm<Category>();
     const router = useRouter();
 
     const onSubmit = async(data:Category) => {

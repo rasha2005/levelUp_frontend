@@ -4,14 +4,12 @@
 import { blockUser, getUsers } from '@/app/lib/api/adminApi';
 import Navbar from "@/components/admin/Navbar";
 import Sidebar from "@/components/admin/Sidebar";
-import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow ,TableFooter} from '@/components/ui/table'
+import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {Search} from "lucide-react"
+
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -36,7 +34,7 @@ function UserManagement() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 7; 
     const [isOpen, setIsOpen] = useState(false);
-    const [blockUserId, setBlockUserId] = useState(null);
+    const [blockUserId, setBlockUserId] = useState<string | undefined | null>(null);
     const [searchTerm , setSearchTerm] = useState('');
     
 
@@ -56,7 +54,7 @@ function UserManagement() {
         }
     }
 
-    const handleBlockClick = (id:any) => {
+    const handleBlockClick = (id:string | undefined) => {
           setBlockUserId(id);
           setIsOpen(true);
     }
