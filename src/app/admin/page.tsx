@@ -1,16 +1,31 @@
+"use client"
+
 import Navbar from "@/components/admin/Navbar";
 import Sidebar from "@/components/admin/Sidebar";
 import { fetchDetails, getInstructor, getUsers } from "../lib/api/adminApi";
 import PieChartComp from "@/components/admin/pie";
 import BarComponent from "@/components/admin/bar";
+import { useEffect, useState } from "react";
 
-const AdminHome = async() => {
-const res  =  await fetchDetails();
-const wallet = res.data.response.wallet.walletBalance
-const user = await getUsers();
-const totalUsers =  user.data.response.userData.length
-const instructor = await getInstructor();
-const totalInstructor =  instructor.data.response.instructorData.length;
+const AdminHome = () => {
+  const [wallet, setWallet] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalInstructor, setTotalInstructor] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetchDetails();
+      setWallet(res.data.response.wallet.walletBalance);
+
+      const user = await getUsers();
+      setTotalUsers(user.data.response.userData.length);
+
+      const instructor = await getInstructor();
+      setTotalInstructor(instructor.data.response.instructorData.length);
+    };
+
+    fetchData();
+  }, []);
 
 
     return ( 

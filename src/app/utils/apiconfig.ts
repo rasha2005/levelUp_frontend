@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { userEndpoints } from "./endpoints/userEndpoints";
 
-
+console.log("ddsd",process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI);
 
 export const Api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI ,
