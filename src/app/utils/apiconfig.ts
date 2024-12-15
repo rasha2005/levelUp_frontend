@@ -4,8 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { userEndpoints } from "./endpoints/userEndpoints";
 
 
+
 export const Api = axios.create({
-    baseURL: process.env.BASE_URL_BACKEND || 'http://localhost:4000/api',
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI || 'http://localhost:4000/api',
     withCredentials: true
 });
 
