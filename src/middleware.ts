@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtDecode } from 'jwt-decode';
-import { cookies } from 'next/headers';
 
 const publicPaths = [
     '/user/login',
@@ -24,19 +23,13 @@ export async function middleware(request: NextRequest) {
   const isPublicPath = publicPaths.includes(path);
   console.log("ispublicpath" , isPublicPath);
 
-  // if (isHomePage) {
-  //   return NextResponse.next();
-  // }
-  // console.log("pppp" , authToken);
+  
 
   const token = request.cookies.get('authToken')?.value || '';
   console.log("token" , request.cookies)
-  // const nextAuth = request.cookies.get('next-auth.session-token')?.value || '';
+ 
   
-// if(nextAuth && !token) {
-//   console.log("keke")
-//   return NextResponse.redirect(new URL('/user/home', request.url));
-// }
+
 
 if(isPublicPath && token ) {
     try{
@@ -54,10 +47,7 @@ if(isPublicPath && token ) {
         console.log(err)
       }
   }
-  // if(!token) {
-  //   console.log("kkkkkkkk")
-  //   return NextResponse.redirect(new URL('/signup', request.url));
-  // }
+  
   if (path.startsWith('/admin') && !isPublicPath && !token) {
     console.log("nooooooooooooooo");
     console.log("Redirecting to /admin/login");
@@ -71,7 +61,7 @@ if(isPublicPath && token ) {
 
 }
  
-// See "Matching Paths" below to learn more
+
 export const config = {
   matcher: [
     '/instructor/:path*',

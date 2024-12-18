@@ -14,9 +14,9 @@ let selectedChatCompare: any;
 
 
 function ChatBox({ chatId , id}:any) {
-    console.log("ddd" , chatId);
+    
     const userData = jwtDecode<{email :string ; role:string}>(id);
-    console.log("id" , userData)
+    
    
     const [isChatId , setIsChatId] = useState(false);
     const [chats , setChats] = useState<any>([]);
@@ -92,7 +92,7 @@ function ChatBox({ chatId , id}:any) {
 
     
   
-      // Filter chats based on the search term (instructor's or user's name)
+     
       const filtered = chats.filter(
         (chat: any) =>
           chat?.instructor?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -187,8 +187,7 @@ function ChatBox({ chatId , id}:any) {
 </div>
         )
       }
-      {/* Uncomment if needed: */}
-      {/* <button className="text-sm text-blue-500 hover:text-blue-700">Leave Chat</button> */}
+     
     </div>
   </header>
 
@@ -197,43 +196,48 @@ function ChatBox({ chatId , id}:any) {
     )
   }
   
-  {/* Conditional Rendering for Chat ID */}
+  
   {isChatId ? (
     <>
-      {/* Chat Messages (Scrollable) */}
-      <div className="flex-1 overflow-y-auto p-4 bg-white">
-        {/* Chat messages and content */}
-        <div className="space-y-4">
-          {/* Example chat messages */}
-            {
-              message.map((m:any , i:any) => (
-                
-          <div key={i} className={`flex items-center space-x-4 ${
-            m.senderId === user ? "justify-end" : ""
-          }`}>
-            {m.senderId !== user && (
-              
-               
-                <img
-                  src={chatRoom?.userId === user ? chatRoom?.instructor?.img : chatRoom?.user?.img}
-                  alt="User"
-                  className="rounded-full w-7 h-7"
-                />
+     
+      <div
+  className="flex-1 overflow-y-auto p-4 bg-white custom-scroll"
+>
+  
+  <div className="space-y-4">
+   
+    {message.map((m: any, i: any) => (
+      <div
+        key={i}
+        className={`flex items-center space-x-4 ${
+          m.senderId === user ? "justify-end" : ""
+        }`}
+      >
+        {m.senderId !== user && (
+          <img
+            src={
+              chatRoom?.userId === user
+                ? chatRoom?.instructor?.img
+                : chatRoom?.user?.img
+            }
+            alt="User"
+            className="rounded-full w-7 h-7"
+          />
               
   )}
             <div >
               <p  className={`font-semibold px-4 py-2 rounded-lg shadow-sm ${
         m.senderId === user 
-          ? "bg-green-100 text-green-900"  // Background for the user
-          : "bg-blue-100 text-blue-900"   // Background for others
+          ? "bg-green-100 text-green-900"  
+          : "bg-blue-100 text-blue-900"   
       }`}>{m.content}</p>
       <div ref={ref}></div>
-              {/* <p className="text-sm">Hello! How are you?</p> */}
+            
             </div>
           </div>
               ))
             }
-          {/* Add more chat messages as needed */}
+         
         </div>
       </div>
 

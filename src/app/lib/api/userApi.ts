@@ -30,7 +30,7 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
         const response = await Api.post(userEndpoints.verifyOtp , {userOtp , token});
        if(response.data?.authToken){
         Cookies.set('authToken' , response.data.authToken,{
-            path: '/', 
+            path: '/axen.cloud', 
             secure: true, 
             sameSite: 'Strict' 
         });
@@ -49,7 +49,7 @@ export const login = async(email:string , password:string) => {
         console.log("respo" , response )
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
-                path: '/', 
+                path: '/axen.cloud', 
                 secure: true, 
                 sameSite: 'Strict' 
             });
@@ -162,18 +162,7 @@ export const googleAuthCallback = async(email:any , name:any , img:any) => {
     const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
     console.log("priyaa" , res);
     console.log("ressssa", res.data?.response?.authToken);
-
-    
-
-    return res
-  
-
-   
-
-    
-
-   
-    
+    return res  
 }
 
 export const addReview = async(instructorId:any , value:string) => {

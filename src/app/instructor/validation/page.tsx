@@ -43,13 +43,13 @@ export default function Validation() {
   }
 
   const onsubmit = async(data:any) => {
-    console.log("data" , data);
+   
     const updatedData = {
       ...data,
       experienceCertificate:eCertificate,
       resume:resumeFile
     }
-    console.log("ud" , updatedData);
+    
     const {description , experienceCategory ,experienceCertificate , resume} = updatedData;
     const res = await updateInstructor(description , experienceCategory ,experienceCertificate , resume);
     if(res.data.response.success === true) {
