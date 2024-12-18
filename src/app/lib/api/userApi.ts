@@ -32,7 +32,7 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
        if(response.data?.authToken){
         Cookies.set('authToken' , response.data.authToken,{
             path: '/', 
-            domain:'axen.cloud',
+            domain:process.env.COOKIE_DOMAIN,
             secure: true, 
             sameSite: isProduction ?'none' : 'lax'
         });
@@ -51,12 +51,12 @@ export const login = async(email:string , password:string) => {
         const response = await Api.post(userEndpoints.verifyLogin , {email , password});
         console.log("respo" , response );
         
-        console.log('process.env.NODE_ENV',process.env.COOKIE_DOMAIN)
+        console.log('process.env.NODE_ENV',process.env.NODE_ENV)
         const isProduction:boolean = process.env.NODE_ENV === "production"
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
                 path: '/', 
-                domain:'axen.cloud',
+                domain:process.env.COOKIE_DOMAIN,
                 secure: true, 
                 sameSite: isProduction ?'none' : 'lax'
             });
