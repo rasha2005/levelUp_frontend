@@ -1,3 +1,5 @@
+"use client"
+
 import Navbar from "@/components/instructor/Navbar";
 import Sidebar from "@/components/instructor/Sidebar";
 import CalenderEvent from "@/components/instructor/calender";
