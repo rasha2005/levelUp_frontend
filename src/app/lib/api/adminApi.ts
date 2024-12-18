@@ -8,7 +8,7 @@ export const verifyLogin = async(email:string , password:string) => {
     if(res.data.response.success === true) {
         const token = res.data.response?.token;
         Cookies.set('authToken' , token , {
-            path: '/axen.cloud', 
+            path: 'axen.cloud', 
             secure: true, 
             sameSite: 'Strict' 
         });

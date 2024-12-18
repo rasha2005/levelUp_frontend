@@ -21,7 +21,7 @@ export const verifyInsructor = async(instructorOtp:string , token:string|null) =
     console.log("response" ,response );
     if(response.data.response?.authToken){
         Cookies.set('authToken' , response.data.response?.authToken,{
-            path: '/axen.cloud', 
+            path: 'axen.cloud', 
             secure: true, 
             sameSite: 'Strict' 
         });
@@ -35,7 +35,7 @@ export const login  =  async(email:string , password:string) => {
     
     if(res.data.response?.authToken){
         Cookies.set('authToken' , res.data.response?.authToken,{
-            path: '/axen.cloud', 
+            path: 'axen.cloud', 
             secure: true, 
             sameSite: 'Strict' 
         });
