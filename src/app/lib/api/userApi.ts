@@ -30,7 +30,7 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
         const response = await Api.post(userEndpoints.verifyOtp , {userOtp , token});
        if(response.data?.authToken){
         Cookies.set('authToken' , response.data.authToken,{
-            path: '/axen.cloud', 
+            path: 'axen.cloud', 
             secure: true, 
             sameSite: 'Strict' 
         });
@@ -45,13 +45,14 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
 
 export const login = async(email:string , password:string) => {
     try {
+        
         const response = await Api.post(userEndpoints.verifyLogin , {email , password});
         console.log("respo" , response )
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
-                path: '/axen.cloud', 
+                path: 'axen.cloud', 
                 secure: true, 
-                sameSite: 'Strict' 
+                sameSite: 'none'
             });
         }
         return response
