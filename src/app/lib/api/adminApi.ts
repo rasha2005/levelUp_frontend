@@ -5,13 +5,16 @@ import Cookies from "js-cookie"
 
 export const verifyLogin = async(email:string , password:string) => {
     const res = await Api.post(adminEndpoints.verifyLogin , { email , password} );
+    const isProduction:boolean = process.env.NODE_ENV === "production"
     if(res.data.response.success === true) {
         const token = res.data.response?.token;
         Cookies.set('authToken' , token , {
-            path: 'axen.cloud', 
+            path: '/', 
+            domain:process.env.COOKIE_DOMAIN,
             secure: true, 
-            sameSite: 'Strict' 
+            sameSite: isProduction ?'none' : 'lax'
         });
+       
     }
     return res
 }

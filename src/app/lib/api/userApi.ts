@@ -28,11 +28,13 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
         console.log("token" , token);
 
         const response = await Api.post(userEndpoints.verifyOtp , {userOtp , token});
+        const isProduction:boolean = process.env.NODE_ENV === "production"
        if(response.data?.authToken){
         Cookies.set('authToken' , response.data.authToken,{
-            path: 'axen.cloud', 
+            path: '/', 
+            domain:process.env.COOKIE_DOMAIN,
             secure: true, 
-            sameSite: 'Strict' 
+            sameSite: isProduction ?'none' : 'lax'
         });
         localStorage.removeItem('otpToken');
        }
@@ -47,13 +49,16 @@ export const login = async(email:string , password:string) => {
     try {
         
         const response = await Api.post(userEndpoints.verifyLogin , {email , password});
-        console.log("respo" , response )
+        console.log("respo" , response );
+        
+        console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+        const isProduction:boolean = process.env.NODE_ENV === "production"
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
                 path: '/', 
-                domain:'axen.cloud',
+                domain:process.env.COOKIE_DOMAIN,
                 secure: true, 
-                sameSite: 'none'
+                sameSite: isProduction ?'none' : 'lax'
             });
         }
         return response

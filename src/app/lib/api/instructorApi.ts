@@ -19,12 +19,16 @@ export const signup  = async(name:string , email:string , mobile:string , passwo
 export const verifyInsructor = async(instructorOtp:string , token:string|null) => {
     const response = await Api.post(instructorEndPoint.verifyOtp , {instructorOtp , token});
     console.log("response" ,response );
+    const isProduction:boolean = process.env.NODE_ENV === "production"
+
     if(response.data.response?.authToken){
         Cookies.set('authToken' , response.data.response?.authToken,{
-            path: 'axen.cloud', 
+            path: '/', 
+            domain:process.env.COOKIE_DOMAIN,
             secure: true, 
-            sameSite: 'Strict' 
+            sameSite: isProduction ?'none' : 'lax'
         });
+      
         localStorage.removeItem('otpToken');
     }
     return response;
@@ -32,12 +36,14 @@ export const verifyInsructor = async(instructorOtp:string , token:string|null) =
 
 export const login  =  async(email:string , password:string) => {
     const res = await Api.post(instructorEndPoint.verifyLogin , {email , password});
-    
+    const isProduction:boolean = process.env.NODE_ENV === "production"
+
     if(res.data.response?.authToken){
         Cookies.set('authToken' , res.data.response?.authToken,{
-            path: 'axen.cloud', 
+            path: '/', 
+            domain:process.env.COOKIE_DOMAIN,
             secure: true, 
-            sameSite: 'Strict' 
+            sameSite: isProduction ?'none' : 'lax'
         });
     }
     return res
