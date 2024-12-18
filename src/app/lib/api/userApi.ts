@@ -50,7 +50,8 @@ export const login = async(email:string , password:string) => {
         console.log("respo" , response )
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
-                path: 'axen.cloud', 
+                path: '/', 
+                domain:'axen.cloud',
                 secure: true, 
                 sameSite: 'none'
             });
