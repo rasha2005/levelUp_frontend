@@ -37,7 +37,8 @@ export const verifyInsructor = async(instructorOtp:string , token:string|null) =
 export const login  =  async(email:string , password:string) => {
     const res = await Api.post(instructorEndPoint.verifyLogin , {email , password});
     const isProduction:boolean = process.env.NODE_ENV === "production"
-
+console.log("node_env" ,  process.env.NODE_ENV);
+console.log("cookiedomain" , process.env.COOKIE_DOMAIN);
     if(res.data.response?.authToken){
         Cookies.set('authToken' , res.data.response?.authToken,{
             path: '/', 
@@ -92,6 +93,7 @@ export const sessionUpdate = async(event:any) => {
 }
 
 export const getSessionData = async() => {
+    console.log("ggg");
     const res = await Api.get(instructorEndPoint.getEvents);
     return res
 } 
