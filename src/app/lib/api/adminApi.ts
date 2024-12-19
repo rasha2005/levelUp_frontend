@@ -10,7 +10,7 @@ export const verifyLogin = async(email:string , password:string) => {
         const token = res.data.response?.token;
         Cookies.set('authToken' , token , {
             path: '/', 
-            domain:process.env.COOKIE_DOMAIN,
+            domain:'axen.cloud',
             secure: true, 
             sameSite: isProduction ?'none' : 'lax'
         });

@@ -32,7 +32,7 @@ export const verifyUserOtp = async(userOtp:string , token:string | null) => {
        if(response.data?.authToken){
         Cookies.set('authToken' , response.data.authToken,{
             path: '/', 
-            domain:process.env.COOKIE_DOMAIN,
+            domain:'axen.cloud',
             secure: true, 
             sameSite: isProduction ?'none' : 'lax'
         });
@@ -57,7 +57,7 @@ export const login = async(email:string , password:string) => {
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
                 path: '/', 
-                domain:process.env.COOKIE_DOMAIN,
+                domain:'axen.cloud',
                 secure: true, 
                 sameSite: isProduction ?'none' : 'lax'
             });

@@ -24,7 +24,7 @@ export const verifyInsructor = async(instructorOtp:string , token:string|null) =
     if(response.data.response?.authToken){
         Cookies.set('authToken' , response.data.response?.authToken,{
             path: '/', 
-            domain:process.env.COOKIE_DOMAIN,
+            domain:'axen.cloud',
             secure: true, 
             sameSite: isProduction ?'none' : 'lax'
         });
@@ -42,7 +42,7 @@ console.log("cookiedomain" , process.env.COOKIE_DOMAIN);
     if(res.data.response?.authToken){
         Cookies.set('authToken' , res.data.response?.authToken,{
             path: '/', 
-            domain:process.env.COOKIE_DOMAIN,
+            domain:'axen.cloud',
             secure: true, 
             sameSite: isProduction ?'none' : 'lax'
         });
