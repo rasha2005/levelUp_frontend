@@ -53,6 +53,7 @@ export const login = async(email:string , password:string) => {
         
         console.log('process.env.NODE_ENV',process.env.NODE_ENV)
         const isProduction:boolean = process.env.NODE_ENV === "production"
+        console.log("cookiedomain" , process.env.COOKIE_DOMAIN);
         if(response.data.response.authToken){
             Cookies.set('authToken' , response.data.response.authToken,{
                 path: '/', 
