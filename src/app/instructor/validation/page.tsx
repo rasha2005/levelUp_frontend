@@ -31,6 +31,7 @@ export default function Validation() {
 
   const getCatData = async() => {
     try{
+      console.log("is it here")
       const res = await getCategoryData();
       console.log("res" , res);
       if(res){
@@ -121,6 +122,7 @@ export default function Validation() {
   }
 
     useEffect(() => {
+      console.log("in the useEffect??");
       getCatData();
     },[])
     return (

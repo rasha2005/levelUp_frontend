@@ -51,6 +51,7 @@ console.log("cookiedomain" , process.env.COOKIE_DOMAIN);
 }
 
 export const getCategoryData = async() => {
+    console.log("in the api");
     const res = await Api.get(instructorEndPoint.getCategory);
     return res
 }
