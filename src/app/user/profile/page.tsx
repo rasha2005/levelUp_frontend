@@ -22,6 +22,7 @@ function UserProfile() {
     const { register, handleSubmit, setValue ,formState:{errors , isValid},watch} = useForm<User>();
     
     const [userId , setUserId] = useState();
+    const [isChanged , setIsChanged] = useState<boolean>(false);
     
     const getUserData = async() => {
         const res = await getUser();
@@ -36,17 +37,29 @@ function UserProfile() {
         
     }
 
+    const handleNameChange = (e:any) => {
+        setIsChanged(true);
+    }
+
+    const handleMobileChange = (e:any) => {
+        setIsChanged(true);
+    }
+
     const onUserEdit = async(data:User) => {
         const {name , mobile} = data
+        if(isChanged) {
+            console.log("profile")
         const res = await updateUser( userId ,name , mobile);
         
         if (res?.data?.response?.user) {
             setValue("name", res.data.response.user.name);
             setValue("mobile", res.data.response.user.mobile);
+            setIsChanged(false);
             toast.success( res?.data.response.message)
         }else{
             toast.error( res?.data.response.message)
         }
+    }
 
     }
     useEffect(() => {
@@ -91,7 +104,8 @@ function UserProfile() {
                                         id="name"
                                         {...register('name', {required: true, validate: {notEmpty: value => value.trim() !== '' || 'Name cannot be just spaces'}})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        onChange={handleNameChange}
+                                        
                                     />
                                      {errors.name && <span className="text-red-600">This field is required</span>}
                                 </div>
@@ -108,7 +122,7 @@ function UserProfile() {
                                         id="mobile"
                                         {...register('mobile', {required: true, pattern: /^[0-9]{10}$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                        required
+                                        onChange={handleMobileChange}
                                     />
                                       {errors.mobile && <span className="text-red-600">Enter a valid 10-digit mobile number</span>}
                                 </div>
