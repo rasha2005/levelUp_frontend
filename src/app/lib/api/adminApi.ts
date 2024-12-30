@@ -1,20 +1,13 @@
 import { Api } from "@/app/utils/apiconfig"
 import { adminEndpoints } from "@/app/utils/endpoints/adminEndpoints"
-import Cookies from "js-cookie"
+import setToken from "../server/token";
 
 
 export const verifyLogin = async(email:string , password:string) => {
     const res = await Api.post(adminEndpoints.verifyLogin , { email , password} );
-    const isProduction:boolean = process.env.NODE_ENV === "production"
     if(res.data.response.success === true) {
         const token = res.data.response?.token;
-        Cookies.set('authToken' , token , {
-            path: '/', 
-            domain:'axen.cloud',
-            secure: true, 
-            sameSite: isProduction ?'none' : 'lax'
-        });
-       
+        setToken(token);
     }
     return res
 }
@@ -30,13 +23,13 @@ export const getInstructor = async() => {
 }
 
 export const createCategory = async(data:string) => {
-    console.log("ll" , data);
+    
     const res = await Api.post(adminEndpoints.createCategories , {data});
     return res;
 }
 
 export const getCatData = async() => {
-    console.log("kkkkkkkk");
+    
     const res = await Api.get(adminEndpoints.getCategoryData);
     return res;
 }
@@ -47,14 +40,14 @@ export const editCatData = async(catName:string , id:any) => {
 }
 
 export const deleteCatData = async(id:any) => {
-    console.log("iddd" , id);
+    
     const res = await Api.delete(adminEndpoints.deleteCategoryData, {
         data: { id },});
         return res;
 }
 
 export const blockUser = async(id:any) => {
-    console.log("oo" , id);
+    
     const res = await Api.post(adminEndpoints.blockUser ,{
         data: { id },});
 
@@ -63,7 +56,7 @@ export const blockUser = async(id:any) => {
 
 
 export const getInstructorById = async(id:any) => {
-    console.log("o" , id);
+  
     const res = await Api.get(`${adminEndpoints.getInstructor}?id=${id}`);
     return res
 }
@@ -79,7 +72,7 @@ export const cancelApprovel = async(id:any) => {
 }
 
 export const getUserById = async(id:any) => {
-    console.log("o" , id);
+    
     const res = await Api.get(`${adminEndpoints.getUser}?id=${id}`);
     return res
 }

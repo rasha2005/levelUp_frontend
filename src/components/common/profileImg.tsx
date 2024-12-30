@@ -22,31 +22,31 @@ function ProfileImg({role}:Role) {
     const updateProfile = async() => {
         try{
             if(role === "instructor") {
-                console.log("profilImg" , profilImg);
+                
                 const res = await upateInstructoProfile(profilImg);
-                console.log("res",res)
+                
                 if (res && res.data && res.data.response) {
-                   console.log("kkk")
+                   
                     if (res.data.response.success === true) {
                             setUpdateImg(res.data.response.res.img);
                             
                         if(isUpdated) {
-                            // toast.success(res.data.response.message); 
+                           
                             setIsUpdated(false);
                         }
                     } else {
-                    //   toast.error(res.data.response.message); 
+                   
                     }
                   } 
             }else{
-                console.log("profilImg" , profilImg);
+               
                 const res = await upateUserProfile(profilImg);
-                console.log("resgg",res);  
+               
                 if(res.data.response.success === true) {
                     setUpdateImg(res.data.response.image);
                             
                     if(isUpdated) {
-                        // toast.success(res.data.response.message); 
+                        
                         setIsUpdated(false);
                     }
                 }     

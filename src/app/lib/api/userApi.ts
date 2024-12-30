@@ -1,14 +1,12 @@
 import { Api } from "@/app/utils/apiconfig";
 import { userEndpoints } from "@/app/utils/endpoints/userEndpoints";
-import Cookies from "js-cookie"
-import { NextResponse } from "next/server";
+import setToken from "../server/token";
 
 export const signup = async(name:string , email:string , mobile:string , password:string) => {
     try {
         const response = await Api.post(userEndpoints.createUser, {name, email, mobile, password});
         if(response.data.success === true){
             const token = response.data?.token;
-            console.log("jjjjj",token);
             localStorage.setItem("otpToken",token)
             return {success:true}
         }else{
@@ -23,18 +21,9 @@ export const signup = async(name:string , email:string , mobile:string , passwor
 
 export const verifyUserOtp = async(userOtp:string , token:string | null) => {
     try{
-        console.log("otppp" , userOtp);
-        console.log("token" , token);
-
         const response = await Api.post(userEndpoints.verifyOtp , {userOtp , token});
-        const isProduction:boolean = process.env.NODE_ENV === "production"
        if(response.data?.authToken){
-        Cookies.set('authToken' , response.data.authToken,{
-            path: '/', 
-            domain:'axen.cloud',
-            secure: true, 
-            sameSite: isProduction ?'none' : 'lax'
-        });
+        setToken(response.data.authToken);
         localStorage.removeItem('otpToken');
        }
 
@@ -48,18 +37,8 @@ export const login = async(email:string , password:string) => {
     try {
         
         const response = await Api.post(userEndpoints.verifyLogin , {email , password});
-        console.log("respo" , response );
-        
-        console.log('process.env.NODE_ENV',process.env.NODE_ENV)
-        const isProduction:boolean = process.env.NODE_ENV === "production"
-        console.log("cookiedomain" , process.env.COOKIE_DOMAIN);
         if(response.data.response.authToken){
-            Cookies.set('authToken' , response.data.response.authToken,{
-                path: '/', 
-                domain:'axen.cloud',
-                secure: true, 
-                sameSite: isProduction ?'none' : 'lax'
-            });
+            setToken(response.data.response.authToken);
         }
         return response
     }catch(err) {
@@ -134,7 +113,6 @@ export const payement = async(headers:any , body:any) => {
 }
 
 export const getBookedSession = async(token:any) => {
-    console.log("lll" , token);
     const res = await Api.get(userEndpoints.getSlots , {
         params:{token}
     })
@@ -164,11 +142,8 @@ export const updateRating = async(rating:any , id:any) => {
 }
 
 export const googleAuthCallback = async(email:any , name:any , img:any) => {
-    console.log("hereee", email, name, img);
 
     const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
-    console.log("priyaa" , res);
-    console.log("ressssa", res.data?.response?.authToken);
     return res  
 }
 

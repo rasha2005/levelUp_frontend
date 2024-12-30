@@ -2,8 +2,9 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { userEndpoints } from "./endpoints/userEndpoints";
+import setToken from "../lib/server/token";
 
-console.log("ddsd",process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI);
+
 
 export const Api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BASE_URL_BACKENDAPI ,
@@ -20,18 +21,19 @@ Api.interceptors.response.use(
             try {
                
                 const refreshResponse = await Api.post(userEndpoints.refreshToken); 
-                const newAccessToken = refreshResponse.data.authToken;
-
+                const newAccessToken = refreshResponse.data?.response?.authToken;
                 
-                document.cookie = `authToken=${newAccessToken}; path=/;`;
+                if (newAccessToken) {
+                    setToken(newAccessToken); 
+                    error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    return Api.request(error.config); 
+                }
                 
-                // Retry the failed request with the new token
-                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                return Api.request(error.config);
+               
             } catch (refreshError) {
                 console.error("Refresh token failed:", refreshError);
 
-                // If refreshing fails, log out the user
+               
                 toast.error("Session expired. Please log in again.", {
                     position: "top-center",
                     autoClose: 5000,
@@ -42,7 +44,6 @@ Api.interceptors.response.use(
             }
         }
         if (error.response && error.response.status === 403) {
-            console.log("kkkkkkkkkkk");
             toast.error("Your account has been blocked. You have been logged out.", {
                 position: "top-center",
                 autoClose: 5000, 

@@ -16,11 +16,8 @@ function SlotList() {
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
       };
-    //   const filteredData = slots.filter(
-    //     (slot) =>
-    //     slot.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //     slot.email.toLowerCase().includes(searchTerm.toLowerCase()) 
-    // );
+   
+    
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = slots.slice(startIndex, startIndex + itemsPerPage);
@@ -28,7 +25,7 @@ function SlotList() {
 
     const getSlots = async() => {
         const res = await getSlotList();
-        console.log("res" , res)
+        
         if(res.data.response.success) {
           setSlots(res.data.response.slot)
         }

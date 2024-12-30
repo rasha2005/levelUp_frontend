@@ -173,13 +173,13 @@ export default function UserSignup() {
                                     </Link>
                                     </p>
                             </form>
-                                    <div className="mt-4 text-sm text-gray-600 flex items-center justify-center">
+                                    {/* <div className="mt-4 text-sm text-gray-600 flex items-center justify-center">
 
                                     <hr className="flex-grow border-t border-gray-300" />
                                     <span className="mx-4 text-gray-500">or</span>
                                     <hr className="flex-grow border-t border-gray-300" />
                                     </div><br />
-                    <GoogleAuth />
+                    <GoogleAuth /> */}
                         </div>
                     </div>
                 </div>
