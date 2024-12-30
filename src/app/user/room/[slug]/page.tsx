@@ -1,3 +1,5 @@
+"use client"
+
 import CallRoom from "@/components/common/callRoom";
 
 
