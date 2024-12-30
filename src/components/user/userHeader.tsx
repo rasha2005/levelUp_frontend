@@ -32,9 +32,11 @@ function UserHeader() {
 
         <>
          <header className="flex flex-wrap justify-between items-center p-4 bg-blue-100">
+          <Link href={'/user/home'}>
          <div className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0 w-full sm:w-auto text-center sm:text-left text-grey-600 ml-6">
                  LevelUp
             </div>
+          </Link>
             <div className="flex justify-center sm:justify-end w-full sm:w-auto mr-7">
            
             <DropdownMenu>
