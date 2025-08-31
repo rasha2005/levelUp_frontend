@@ -27,7 +27,7 @@ interface sumbitData {
 }
 
 export default function Validation() {
-  const {register , handleSubmit , formState:{errors , isValid},watch} = useForm();
+  const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<sumbitData>();
   const [catData , setCatData] = useState<catData[]>([]);
   const [eCertificate , setECertificate] = useState('');
   const [resumeFile , setResumeFile] = useState('');
