@@ -10,7 +10,7 @@ interface ChatRoomProps {
 
 async function ChatRoom({ params }:ChatRoomProps) {
     
-    const { slug } = await params;
+    const { slug } =  params;
     
    
     const cookieStore = cookies();
