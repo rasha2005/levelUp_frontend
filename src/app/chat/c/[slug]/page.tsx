@@ -7,15 +7,13 @@ interface ChatRoomProps {
         slug: string;
     };
 }
-
-async function ChatRoom({ params }:ChatRoomProps) {
+export default async function ChatRoom({ params }:ChatRoomProps) {
     
     const { slug } =  params;
     
    
-    const cookieStore = cookies();
-    const authToken = (await cookieStore).get("authToken")?.value; 
-    
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get("authToken")?.value || null;
     
     return(
         <>
@@ -27,5 +25,4 @@ async function ChatRoom({ params }:ChatRoomProps) {
         </>
         
     )
-}
-export default ChatRoom;
+ };
