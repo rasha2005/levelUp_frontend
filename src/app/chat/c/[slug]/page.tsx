@@ -8,7 +8,7 @@ interface ChatRoomProps {
     };
 }
 
-async function ChatRoom({ params }:any) {
+async function ChatRoom({ params }:ChatRoomProps) {
     
     const { slug } = await params;
     

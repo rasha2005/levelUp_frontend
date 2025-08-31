@@ -25,17 +25,18 @@ function CallRoom() {
     const authToken = cookies.split('; ').find(row => row.startsWith('authToken='));
 
     
-      const token = authToken?.split('=')[1] || ""; // Extract the token value
-     const decodedToken = jwtDecode<JwtPayload>(token); // Decode the JWT token
+      const token = authToken?.split('=')[1] || ""; 
+     const decodedToken = jwtDecode<JwtPayload>(token); 
       
    
     console.log("userId" , decodedToken);
     const containerRef = useRef(null);
 
-    // Verify the room ID
     const verifyId = async () => {
+        console.log("dfdfdf" , decodedToken)
         if (decodedToken?.role === "User") {
             const res = await verifyRoomId(params.slug, decodedToken.id);
+            console.log("sux" , res);
             setIsVerified(res.data.response.success);
         }else if(decodedToken?.role === "Instructor") {
             console.log("decodedToken" , decodedToken.id);
@@ -88,7 +89,9 @@ function CallRoom() {
     }, [params.slug, isVerified]);
 
     return (
-        <div ref={containerRef} />
+        <div ref={containerRef}
+        className="w-[1315px] h-[650px] bg-gray-100"
+        />
     )
 }
 

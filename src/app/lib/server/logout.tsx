@@ -13,7 +13,7 @@ export async function logoutUser() {
     cookieStore.delete({
       name : cookie.name,  
       path: '/', 
-      domain:'axen.cloud',
+      domain:'app.levelup.icu',
       secure: true, 
       sameSite: isProduction ?'none' : 'lax'
   });

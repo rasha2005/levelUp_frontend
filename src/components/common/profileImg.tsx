@@ -24,6 +24,7 @@ function ProfileImg({role}:Role) {
             if(role === "instructor") {
                 
                 const res = await upateInstructoProfile(profilImg);
+                console.log("ressss" , res)
                 
                 if (res && res.data && res.data.response) {
                    

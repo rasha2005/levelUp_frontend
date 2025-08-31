@@ -17,22 +17,25 @@ const publicPaths = [
  
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  console.log("path" , path);
+
   const isHomePage = request.nextUrl.pathname === "/user/home";
 
   const isPublicPath = publicPaths.includes(path);
-  console.log("ispublicpath" , isPublicPath);
+
 
   
 
-  const token = request.cookies.get('authToken')?.value || '';
-  console.log("token" , request.cookies)
+  const token = request.cookies.get('authToken')?.value ||
+  request.cookies.get('refreshToken')?.value ||
+  '';
+
  
   
 
-
+   console.log("token" , token);
 if(isPublicPath && token ) {
     try{
+      console.log("hehe")
         const decodedToken = jwtDecode<{email :string ; role:string}>(token);
         console.log("decodedToekn.role" , decodedToken.role);
         if(decodedToken.role === "User"){

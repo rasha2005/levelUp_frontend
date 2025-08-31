@@ -12,6 +12,7 @@ export const Api = axios.create({
 });
 
 
+
 // toast.configure();
 Api.interceptors.response.use(
     (response) => response,
@@ -24,6 +25,7 @@ Api.interceptors.response.use(
                 const newAccessToken = refreshResponse.data?.response?.authToken;
                 
                 if (newAccessToken) {
+                    console.log("set new acess token",newAccessToken);
                     setToken(newAccessToken); 
                     error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return Api.request(error.config); 
@@ -51,6 +53,9 @@ Api.interceptors.response.use(
             setTimeout(() => {
                 window.location.href = '/user/login'; 
             }, 5000); 
+        }
+        if(error.response && error.response.status === 401 && error.response.data.message === 'Unauthorized access'){
+            console.log("authToken not provided");
         }
         return Promise.reject(error);
     }

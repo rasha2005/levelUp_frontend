@@ -4,17 +4,24 @@ import Navbar from "@/components/instructor/Navbar";
 import Sidebar from "@/components/instructor/Sidebar";
 import { useRouter } from "next/navigation";
 import {  useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { getWallet } from "../lib/api/instructorApi";
-import InstructorBar from "@/components/instructor/instructorBar";
-import Graph from "@/components/instructor/graph";
 import Cookies from "js-cookie";
+
+const Graph = dynamic(() => import("@/components/instructor/graph"), {
+  ssr: false,
+})
+
+const InstructorChart = dynamic(() => import("@/components/instructor/instructorBar"), {
+  ssr: false,
+})
 
 
  function instructorDashboard() {
     const router = useRouter();
     const [balance , setBalance] = useState();
-    const [transactions , setTransactions] = useState<any>([])
-    const [totalSlots , setTotalSlots] = useState<any>([])
+    const [transactions , setTransactions] = useState([])
+    const [totalSlots , setTotalSlots] = useState([])
     const authToken = Cookies.get('authToken');
    
 
@@ -88,14 +95,13 @@ import Cookies from "js-cookie";
             
             
 
-            {/* Bar Section */}
+         
             <div className="mt-9">
   <div className="flex ">
   <h3 className="text-lg font-bold mb-4">Session</h3>
     <div className="flex-1">
-      <InstructorBar />
+     <InstructorChart/>
     </div>
-    {/* <h3 className="text-lg font-bold mb-4">transaction</h3> */}
     <div className="flex-1">
       <Graph transactions={transactions} />
     </div>

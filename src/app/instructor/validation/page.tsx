@@ -19,7 +19,12 @@ interface catData {
   id?:string;
   catName:string;
 }
-
+interface sumbitData {
+  description : string;
+  experienceCategory :string;
+  experienceCertificate :string;
+  resume:string;
+}
 
 export default function Validation() {
   const {register , handleSubmit , formState:{errors , isValid},watch} = useForm();
@@ -43,8 +48,8 @@ export default function Validation() {
     }
   }
 
-  const onsubmit = async(data:any) => {
-   
+  const onsubmit = async(data:sumbitData) => {
+   console.log("data",data);
     const updatedData = {
       ...data,
       experienceCertificate:eCertificate,
