@@ -1,20 +1,31 @@
 import ChatBox from "@/components/chat/chatBox"
-import { cookies } from "next/headers"
+import UserHeader from "@/components/user/userHeader"
+import { cookies } from 'next/headers';
 
 interface ChatRoomProps {
-  params: {
-    slug: string
-  }
+    params: {
+        slug: string;
+    };
 }
 
-export default function ChatRoom({ params }: ChatRoomProps) {
-  const { slug } = params
-  const cookieStore:any = cookies()
-  const authToken = cookieStore.get("authToken") ?? null
-
-  return (
-    <div className="flex h-screen">
-      <ChatBox chatId={slug} id={authToken} />
-    </div>
-  )
+async function ChatRoom({ params }:any) {
+    
+    const { slug } = await params;
+    
+   
+    const cookieStore = cookies();
+    const authToken = (await cookieStore).get("authToken")?.value; 
+    
+    
+    return(
+        <>
+       
+       <div className="flex h-screen">
+            
+                <ChatBox chatId={slug} id={authToken }/>
+            </div>
+        </>
+        
+    )
 }
+export default ChatRoom;
