@@ -1,7 +1,5 @@
-"use client"
-
 import ChatBox from "@/components/chat/chatBox"
-import Cookies from "js-cookie"
+import { cookies } from "next/headers"
 
 interface ChatRoomProps {
   params: {
@@ -11,8 +9,8 @@ interface ChatRoomProps {
 
 export default function ChatRoom({ params }: ChatRoomProps) {
   const { slug } = params
-  
-  const authToken = Cookies.get("authToken") ?? null
+  const cookieStore:any = cookies()
+  const authToken = cookieStore.get("authToken") ?? null
 
   return (
     <div className="flex h-screen">
