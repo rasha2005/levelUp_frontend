@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { userEndpoints } from "./endpoints/userEndpoints";
 import setToken from "../lib/server/token";
+import { logoutUser } from "../lib/server/logout";
 
 
 
@@ -46,6 +47,7 @@ Api.interceptors.response.use(
             }
         }
         if (error.response && error.response.status === 403) {
+            await logoutUser()
             toast.error("Your account has been blocked. You have been logged out.", {
                 position: "top-center",
                 autoClose: 5000, 
