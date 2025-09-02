@@ -34,6 +34,7 @@ function EditCategory() {
 
       const onSubmit = async(data:CatData) => {
         const {categoryName} = data;
+        console.log("id" , typeof id);
         const res = await editCatData(categoryName , id);
         if(res.data.response.success === true) {
             router.push('/admin/category')

@@ -34,7 +34,7 @@ export const getCatData = async() => {
     return res;
 }
 
-export const editCatData = async(catName:string , id:string) => {
+export const editCatData = async(catName:string , id:string | string[] | undefined) => {
     const res = await Api.post(adminEndpoints.editCategoryData , {catName , id});
     return res;
 }
