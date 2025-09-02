@@ -34,19 +34,19 @@ export const getCatData = async() => {
     return res;
 }
 
-export const editCatData = async(catName:string , id:any) => {
+export const editCatData = async(catName:string , id:string) => {
     const res = await Api.post(adminEndpoints.editCategoryData , {catName , id});
     return res;
 }
 
-export const deleteCatData = async(id:any) => {
+export const deleteCatData = async(id:string) => {
     
     const res = await Api.delete(adminEndpoints.deleteCategoryData, {
         data: { id },});
         return res;
 }
 
-export const blockUser = async(id:any) => {
+export const blockUser = async(id:string) => {
     
     const res = await Api.post(adminEndpoints.blockUser ,{
         data: { id },});
@@ -55,23 +55,23 @@ export const blockUser = async(id:any) => {
 }
 
 
-export const getInstructorById = async(id:any) => {
+export const getInstructorById = async(id:string) => {
   
     const res = await Api.get(`${adminEndpoints.getInstructor}?id=${id}`);
     return res
 }
 
-export const approveInstructor = async(id:any) => {
+export const approveInstructor = async(id:string) => {
     const res = await Api.post(adminEndpoints.adminApprovel , {id});
     return res;
 }
 
-export const cancelApprovel = async(id:any) => {
+export const cancelApprovel = async(id:string) => {
     const res = await Api.post(adminEndpoints.cancelAdminApprovel, {id});
     return res;
 }
 
-export const getUserById = async(id:any) => {
+export const getUserById = async(id:string) => {
     
     const res = await Api.get(`${adminEndpoints.getUser}?id=${id}`);
     return res

@@ -5,9 +5,6 @@ import { googleAuthCallback } from '@/app/lib/api/userApi';
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google'
 
-console.log("process.env.GOOGLE_CLIENT_ID",process.env.GOOGLE_CLIENT_ID);
-console.log("process.env.GOOGLE_CLIENT_SECRET",process.env.GOOGLE_CLIENT_SECRET);
-
  const authOptions:AuthOptions = {
     providers: [
         
@@ -24,14 +21,11 @@ console.log("process.env.GOOGLE_CLIENT_SECRET",process.env.GOOGLE_CLIENT_SECRET)
                     
                         if (account && user) {
                             try{
-                          console.log("it in the provider");
                            const res =  await googleAuthCallback(user.email, user.name, user.image);
-                           console.log("ress" , res.data.response.authToken);
 
                             if (res && res.data.response.authToken) {
                                
                                 token.authToken = res.data.response.authToken;
-                                console.log("kkkkk" , token)
                                 
                             }
                         }catch (error) {
@@ -47,7 +41,6 @@ console.log("process.env.GOOGLE_CLIENT_SECRET",process.env.GOOGLE_CLIENT_SECRET)
                         if (token.authToken) {
                           session.authToken = token.authToken;
                         }
-                        console.log("session" , session.authToken)
                         return session;
                       },
                     },

@@ -8,14 +8,33 @@
     CarouselPrevious,
   } from "@/components/ui/carousel"
 
-function ReviewCarousel({review}:any) {
+  interface Review {
+    id: string;
+    value: string;
+    createdAt: string;      
+    instructorId: string;
+    userId: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      mobile: string;
+      img: string | null;
+    };
+  }
+  interface ReviewCarouselProps {
+    review: Review[];
+  }
+  
+
+function ReviewCarousel({review}:ReviewCarouselProps) {
    
     return (
         <div className="w-[800px] mx-auto flex justify-center mt-6">
         {review?.length > 0 ? (
           <Carousel>
             <CarouselContent>
-              {review.map((item: any) => (
+              {review.map((item: Review) => (
                 <CarouselItem key={item.id} className={`w-[280px] ${
                     review.length < 3 ? "flex-grow flex-shrink-0" : "basis-1/3"
                   }`}>

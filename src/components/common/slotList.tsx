@@ -4,9 +4,29 @@ import { getSlotList } from '@/app/lib/api/instructorApi';
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
 import Link from 'next/link';
 import { useDebugValue, useEffect, useState } from 'react';
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  img: string | null;
+  mobile: string | null;
+}
+
+export interface ISlot {
+  id: string;
+  instructorId: string;
+  userId: string;
+  roomId: string;
+  title: string;
+  startTime: string;   
+  endTime: string;     
+  createdAt: string;  
+  isRated: boolean;
+  user: IUser;         
+}
 
 function SlotList() {
-    const [slots , setSlots] = useState<any>([]);
+    const [slots , setSlots] = useState<ISlot[]>([]);
     const [isData , setIsData] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +45,7 @@ function SlotList() {
 
     const getSlots = async() => {
         const res = await getSlotList();
-        
+        console.log("res slot",res.data.response.slot)
         if(res.data.response.success) {
           setSlots(res.data.response.slot)
         }
@@ -64,7 +84,7 @@ function SlotList() {
       </TableHeader>
       <TableBody>
       {currentData.length > 0 ? (
-              currentData.map((slot:any) => (
+              currentData.map((slot:ISlot) => (
                 <TableRow key={slot?.id}>
                     <TableCell className="text-center">{slot.user.name}</TableCell>
                     <TableCell className="text-center">{slot.user.email}</TableCell>

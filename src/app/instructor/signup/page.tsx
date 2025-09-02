@@ -32,7 +32,6 @@ export default function InstructorSignup() {
        const { name , email , mobile , password } = data;
 
        const res = await signup(name , email , mobile , password);
-       console.log("resstttttttttt" , res);
        if(res?.success === true){
         router.push('/instructor/otp');
     }else{

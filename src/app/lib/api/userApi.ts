@@ -65,7 +65,7 @@ export const getUser = async() => {
     }
 }
 
-export const updateUser = async( id:any ,name:string  , mobile:string) =>  {
+export const updateUser = async( id:string | undefined ,name:string  , mobile:string) =>  {
     try{
         const response  = await Api.post(userEndpoints.editUserDetails , {id ,name , mobile});
         return response
@@ -75,7 +75,7 @@ export const updateUser = async( id:any ,name:string  , mobile:string) =>  {
     }
 }
 
-export const getInstructorDetails = async(page:number , limit:number , searchTerm:String | null , category : any) => {
+export const getInstructorDetails = async(page:number , limit:number , searchTerm:String | null , category : string) => {
     try{
         const response = await Api.get(userEndpoints.getInstructorDetails, {
             params: { page, limit , searchTerm , category}
@@ -88,7 +88,7 @@ export const getInstructorDetails = async(page:number , limit:number , searchTer
     }
 }
 
-export const resendOtpUser = async(token:any) => {
+export const resendOtpUser = async(token:string | null) => {
     const res = await Api.post(userEndpoints.resendOtp , {token});
     return res;
 }
@@ -98,7 +98,7 @@ export const changePasswordUser = async(current:string , confirm:string) => {
     return res;
 }
 
-export const getInstructorById = async(id:any , token:any) => {
+export const getInstructorById = async(id:string , token:string | undefined) => {
     
     const res = await Api.get(`${userEndpoints.getInstructor}?id=${id}`, {
         withCredentials: true ,
@@ -112,7 +112,7 @@ export const payement = async(headers:any , body:any) => {
     return res;
 }
 
-export const getBookedSession = async(token:any) => {
+export const getBookedSession = async(token:string | undefined) => {
     const res = await Api.get(userEndpoints.getSlots , {
         params:{token}
     })
@@ -129,25 +129,25 @@ export const getImg = async() => {
     return res
 }
 
-export const verifyRoomId = async(roomId:any , userId:any) => {
+export const verifyRoomId = async(roomId:string , userId:string) => {
     const res = await Api.get(userEndpoints.verifyRoom ,{
         params:{roomId , userId}
     })
     return res;
 }
 
-export const updateRating = async(rating:any , id:any) => {
+export const updateRating = async(rating:number|null , id:string) => {
     const res = await Api.post(userEndpoints.rating , {rating , id});
     return res
 }
 
-export const googleAuthCallback = async(email:any , name:any , img:any) => {
+export const googleAuthCallback = async(email:string , name:string , img:string) => {
 
     const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
     return res  
 }
 
-export const addReview = async(instructorId:any , value:string) => {
+export const addReview = async(instructorId:string , value:string) => {
     const res = await Api.post(userEndpoints.addReview , {instructorId , value})
     return res;
 }

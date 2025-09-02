@@ -24,7 +24,6 @@ function ProfileImg({role}:Role) {
             if(role === "instructor") {
                 
                 const res = await upateInstructoProfile(profilImg);
-                console.log("ressss" , res)
                 
                 if (res && res.data && res.data.response) {
                    
@@ -63,7 +62,7 @@ function ProfileImg({role}:Role) {
         }
     };
 
-    const handleFileChange = (file:any) => {
+    const handleFileChange = (file:File) => {
         const data = new FormData();
         data.append("file" , file);
         data.append("upload_preset" , "levelup-full");
@@ -74,7 +73,6 @@ function ProfileImg({role}:Role) {
           body:data,
         }).then((res) => res.json())
         .then(data => {
-          console.log("haha",data);
           setProfileImg(data.url);
           setIsUpdated(true);
          

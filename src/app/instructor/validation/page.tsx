@@ -36,9 +36,7 @@ export default function Validation() {
 
   const getCatData = async() => {
     try{
-      console.log("is it here")
       const res = await getCategoryData();
-      console.log("res" , res);
       if(res){
         setCatData(res.data.response.res);
       }
@@ -49,7 +47,6 @@ export default function Validation() {
   }
 
   const onsubmit = async(data:sumbitData) => {
-   console.log("data",data);
     const updatedData = {
       ...data,
       experienceCertificate:eCertificate,
@@ -64,10 +61,8 @@ export default function Validation() {
 
   }
 
-  const postEcertificate = (file:any) => {
-    console.log("file1" , file)
+  const postEcertificate = (file:File) => {
      if(file === undefined) {
-      console.log("undefined")
       return;
      }
 
@@ -82,7 +77,6 @@ export default function Validation() {
         body:data,
       }).then((res) => res.json())
       .then(data => {
-        console.log("haha");
         setECertificate(data.url.toString());
       })
       .catch((err) => {
@@ -90,15 +84,11 @@ export default function Validation() {
       } );
 
       
-         }else{
-          console.log()
          }
   }
 
-  const postResume = (file:any) => {
-    console.log("file" , file)
+  const postResume = (file:File) => {
     if(file === undefined) {
-      console.log("undefined")
       return;
     }
 
@@ -113,7 +103,6 @@ export default function Validation() {
         body:data,
       }).then((res) => res.json())
       .then(data => {
-        console.log("haha");
         setResumeFile(data.url.toString());
       })
       .catch((err) => {
@@ -121,13 +110,10 @@ export default function Validation() {
       } );
 
       
-         }else{
-          console.log()
          }
   }
 
     useEffect(() => {
-      console.log("in the useEffect??");
       getCatData();
     },[])
     return (

@@ -3,12 +3,27 @@
 import { getWallet } from "@/app/lib/api/instructorApi";
 import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+interface Transaction {
+  id: string;
+  walletId: string;
+  amount: number;
+  type: "credit" | "debit"; 
+  createdAt: string;         
+}
+interface TransactionProps {
+  transactions: Transaction[];
+}
 
+interface TransactionSummary {
+  date: string;
+  totalAmount: number;
+}
 
-function Graph({transactions}:any) {
-    console.log("tr" , transactions);
-    const formattedData = transactions.reduce((acc:any, txn:any) => {
-        const date = new Date(txn.createdAt).toISOString().split("T")[0]; // Extract date
+function Graph({transactions}:TransactionProps) {
+  console.log("transactions",transactions);
+    const formattedData = transactions.reduce<Record<string, TransactionSummary>>(
+      (acc, txn: Transaction) => {
+        const date = new Date(txn.createdAt).toISOString().split("T")[0]; 
         if (!acc[date]) {
           acc[date] = { date, totalAmount: 0 };
         }
@@ -16,7 +31,7 @@ function Graph({transactions}:any) {
         return acc;
       }, {});
       
-      // Step 2: Convert to Array for Graph Libraries
+      
       const graphData = Object.values(formattedData);
    
 

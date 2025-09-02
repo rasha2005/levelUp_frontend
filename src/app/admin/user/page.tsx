@@ -43,7 +43,6 @@ function UserManagement() {
     const getUserData = async() => {
         try{
             const res = await getUsers();
-            console.log(res);
             if(res.data.response.success === true) {
                 setUserData(res.data.response?.userData || []);
                 setIsData(true);
@@ -61,7 +60,6 @@ function UserManagement() {
 
     const handleBlock = async() => {
           if(blockUserId) {
-            console.log("blockUserId",blockUserId);
             const res = await blockUser(blockUserId)
            if(res.data.response.success === true) {
             toast.success(res.data.response.message);

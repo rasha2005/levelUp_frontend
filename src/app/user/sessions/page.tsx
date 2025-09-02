@@ -7,10 +7,8 @@ import { cookies } from 'next/headers';
 async function Sessions() {
     const cookieStore = cookies();
     const authToken = (await cookieStore).get('authToken')?.value;
-    console.log("uuuuu");
-    console.log("auth" , authToken);
+  
     const data = await getBookedSession(authToken);
-    console.log("data" ,data.data.response.slot);
     const sessions =  data.data.response.slot.slots;
     return (
         <>

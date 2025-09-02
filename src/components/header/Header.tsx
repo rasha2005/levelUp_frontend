@@ -1,4 +1,6 @@
-
+interface HeaderProps {
+  isLogin: boolean;
+}
 
 export default function Header({isLogin}:any) {
     return (

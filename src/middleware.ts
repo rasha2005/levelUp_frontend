@@ -32,16 +32,12 @@ export async function middleware(request: NextRequest) {
  
   
 
-   console.log("token" , token);
 if(isPublicPath && token ) {
     try{
-      console.log("hehe")
         const decodedToken = jwtDecode<{email :string ; role:string}>(token);
-        console.log("decodedToekn.role" , decodedToken.role);
         if(decodedToken.role === "User"){
             return NextResponse.redirect(new URL('/user/home', request.url));
         }else if(decodedToken.role === "Instructor"){
-          console.log("krrr");
             return NextResponse.redirect(new URL('/instructor', request.url));
         }else if(decodedToken.role === "Admin") {
           return NextResponse.redirect(new URL('/admin' , request.url));
@@ -52,13 +48,11 @@ if(isPublicPath && token ) {
   }
   
   if (path.startsWith('/admin') && !isPublicPath && !token) {
-    console.log("nooooooooooooooo");
     console.log("Redirecting to /admin/login");
     return NextResponse.redirect(new URL('/admin/login', request.url));
 }
 
   if (!isPublicPath && !token && path !== "/user/paymentSuccess") {
-    console.log("kkkkk" , token);
     return NextResponse.redirect(new URL('/login', request.url));
 }
 

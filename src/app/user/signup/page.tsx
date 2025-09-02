@@ -32,10 +32,8 @@ export default function UserSignup() {
     }
 
     const onSubmit:SubmitHandler<userData> = async(data) => {
-        console.log("hehe",data);
         const {name , email , mobile , password} = data;
         const res = await signup(name , email , mobile , password);
-        console.log("kkkk",res);
         if(res?.success === true){
             router.push('/user/otp');
         }else{

@@ -24,9 +24,7 @@ function InstructorMangement()  {
 
     const getInstructorData = async() => {
         try{
-            console.log("uuuuu");
             const res = await getInstructor();
-            console.log("ress",res);
             if(res.data.response.success === true){
                 setInstructorData(res.data.response.instructorData || null);
                 setIsData(true);

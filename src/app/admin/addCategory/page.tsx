@@ -30,9 +30,7 @@ import Sidebar from "@/components/admin/Sidebar";
         const {name} = data;
         reset();
         const res = await createCategory(name);
-        console.log("res" , res);
         if(res.data.response.success === true) {
-            console.log("ehhe");
             router.push('/admin/category')
         }else{
             toast.error(res.data.response.message);

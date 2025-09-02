@@ -15,7 +15,7 @@ interface InstructorData {
   name:string;
   email:string;
   mobile:string;
-  rating:any;
+  rating:number;
   description?:string;
   experience?:string;
   resume?:string;
@@ -40,7 +40,6 @@ export default function Home() {
   const [limit, setLimit] = useState(5); 
 
   useEffect(() => {
-    console.log("workinng")
   },[])
 
   useEffect(() => {
@@ -54,20 +53,16 @@ export default function Home() {
 
 
   const handlePageChange = (newPage:number) => {
-    console.log("total" , totalPages);
       setPage(newPage)
   }
 
   const getInstructorData = async() => {
-    console.log("selectedCategory",selectedCategory)
       const res = await getInstructorDetails(page , limit , searchTerm  , selectedCategory);
-      console.log("res" , res);
       setCoaches(res?.data.response.instructor);
       setTotalPages(Math.ceil(res?.data.response.total / limit));
   }
   const getCatData = async() => {
     const res = await getCategoryData();
-    console.log("reffs" , res)
     setCategory(res?.data.response.category);
 
   }

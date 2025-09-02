@@ -3,11 +3,21 @@
 import { getUsers } from "@/app/lib/api/adminApi";
 import { useEffect, useState } from "react";
 import { BarChart, Bar, ResponsiveContainer, LabelList, XAxis, YAxis, Tooltip } from 'recharts';
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    mobile: string;
+    img: string | null;
+    isBlocked: boolean;
+    isGoogleAuth: boolean;
+  }
 
 function BarComponent() {
-    const [user, setUser] = useState<any>([]);
-    const [blockedUser, setBlockedUser] = useState<any>([]);
-    const [activeUser, setActiveUser] = useState<any>([]);
+    const [user, setUser] = useState<User[]>([]);
+    const [blockedUser, setBlockedUser] = useState<User[]>([]);
+    const [activeUser, setActiveUser] = useState<User[]>([]);
 
     const fetchUser = async () => {
         const res = await getUsers();
@@ -20,10 +30,11 @@ function BarComponent() {
 
     useEffect(() => {
         if (user.length > 0) {
-            const blocked: any = [];
-            const active: any = [];
+            const blocked: User[] = [];
+            const active: User[] = [];
 
-            user.forEach((ele: any) => {
+            user.forEach((ele: User) => {
+               
                 if (ele.isBlocked) {
                     blocked.push(ele);
                 } else {

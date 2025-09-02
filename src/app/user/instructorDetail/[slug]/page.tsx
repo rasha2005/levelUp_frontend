@@ -3,42 +3,27 @@ import { getInstructorById } from "@/app/lib/api/userApi";
 import SessionSlot from "@/components/header/sessionSlot";
 import UserHeader from "@/components/user/userHeader";
 import { FaStar } from "react-icons/fa";
-import { MessageCircle } from "lucide-react";
 import MessageBtn from "@/components/chat/button";
 import ReviewBtn from "@/components/user/reviewBtn";
 import ReviewCarousel from "@/components/user/carousel";
 import { cookies } from 'next/headers';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-// import Link from "next/navigation";
-// impot {Link}
+
 
 
 async function InstructorDetail({params}:any) {
-    
     const {slug} = params
-    console.log("if" , slug);
     const cookieStore = cookies();
     const authToken = (await cookieStore).get('authToken')?.value;
     const data = await getInstructorById(slug , authToken);
-    console.log("data" , data.data);
     const instructor =  data.data.response.instructor;
     const review = data.data.response.review;
     const isReview = data.data.response.isReview;
    const events =  data.data.response.instructor.scheduledSession?.events;
-   console.log("events" , events);
    
 const event = {
   event:events,
   instructorId:instructor.id
 }
-
 
  
 

@@ -13,9 +13,11 @@ import {
   } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+interface ReviewBtnProps {
+    id: string;
+  }
 
-function ReviewBtn({id}:any) {
-    console.log("idkk", id)
+function ReviewBtn({id}:ReviewBtnProps) {
     const router = useRouter();
     const [isOpen , setIsOpen] = useState(false)
     const [value , setValue] = useState("");
@@ -24,9 +26,7 @@ function ReviewBtn({id}:any) {
     }
 
     const handleSumbit = async() => {
-        console.log("hereee");
         const res = await addReview( id ,value);
-        console.log(res);
         router.refresh();
     }
     return (

@@ -67,7 +67,6 @@ const router = useRouter()
 
 const getEvents = async()=> {
   const data = await getSessionData();
-  console.log("data" , data);
    setInstructor(data.data.response?.instructor);
   if(data.data.response?.events?.events){
 
@@ -97,9 +96,9 @@ const getEvents = async()=> {
    setIsDeleteDialogOpen(true)
   }
 
-  const handleDeleteEvent = async(event:any) => {
-    console.log("idd" , event)
-    const id = event._def.publicId;
+  const handleDeleteEvent = async(event:EventApi | null) => {
+    if (!event) return;
+    const id = event.id
     const res = await deleteEvent(id);
     if(res.data.response.success) {
       setIsDeleteDialogOpen(false);
@@ -122,19 +121,16 @@ const getEvents = async()=> {
         start: selectedDate.start.toISOString(),
         end: selectedDate.end?.toISOString(),
         allDay: selectedDate?.allDay,
-        // You can add other FullCalendar properties if needed
+        
       };
-      console.log("event" , newEvent)
   
       try {
         const res = await sessionUpdate(newEvent);
-        console.log("res", res);
   
-        // Add the new event using the FullCalendar `addEvent` method
         calenderApi.addEvent(newEvent);
         
        
-        // setCurrentEvents((prevEvents) => [...prevEvents, newEvent]);
+        
   
       } catch (err) {
         console.log(err);
@@ -147,7 +143,6 @@ const getEvents = async()=> {
     setIsDialogOpen(false);
     setNewEventTitle('');
     setNewEventPrice('');
-    console.log("llll");
     router.refresh()
   }
     return (

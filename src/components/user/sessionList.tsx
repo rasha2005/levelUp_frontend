@@ -17,9 +17,33 @@ import { updateRating } from "@/app/lib/api/userApi";
 import { useRouter } from "next/navigation";
 import { ArrowRight , ArrowLeft } from "lucide-react";
 
-
-function SessionList({sessions}:any) {
-    const [selectedSession, setSelectedSession] = useState<any>(null);
+ interface SessionSlot {
+  id?: string;
+  instructorId: string;
+  userId: string;
+  roomId: string;
+  title: string;
+  isRated: boolean;
+  createdAt: string;   
+  startTime: string;   
+  endTime: string;    
+}
+interface Session {
+  id: string;
+  title: string;
+  startTime: string;  
+  endTime: string;    
+  isRated: boolean;
+  roomId: string;
+  userId: string;
+  instructorId: string;
+  createdAt: string;  
+}
+interface SessionListProps {
+  sessions: Session[];
+}
+function SessionList({sessions}:SessionListProps) {
+    const [selectedSession, setSelectedSession] = useState<SessionSlot[]|null>(null);
     const [rating, setRating] = useState<number | null>(null);
     const [hover, setHover] = useState<number | null>(null); 
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,13 +56,13 @@ function SessionList({sessions}:any) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentSessions = sessions.slice(startIndex, startIndex + itemsPerPage);
 
-    const handleOpenDialog = (session: any) => {
+    const handleOpenDialog = (session: SessionSlot[]) => {
         setSelectedSession(session);
       };
 
      
 
-      const handleRateSubmit = async(id:any) => {
+      const handleRateSubmit = async(id:string) => {
        const res = await updateRating(rating , id);
        if(res.data.response.success){
         router.refresh()
@@ -72,7 +96,7 @@ function SessionList({sessions}:any) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {currentSessions.map((slot: any, index: any) => (
+              {currentSessions.map((slot: Session, index: number) => (
                 <tr
                   key={slot.id || index}
                   className="hover:bg-blue-50 transition-colors duration-200"

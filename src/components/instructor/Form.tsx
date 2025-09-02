@@ -20,13 +20,17 @@ interface InstructorData {
   interface FormProps {
     showToast: (message: string, type?: "success" | "error") => void;
 }
+interface FormData {
+    name:string;
+    mobile:string;
+
+}
 function Form({showToast}:FormProps) {
-    const { register, handleSubmit, setValue ,formState:{errors , isValid},watch} = useForm();
+    const { register, handleSubmit, setValue ,formState:{errors , isValid},watch} = useForm<FormData>();
     // const [instructorId , setInstructorI] = useState<InstructorData>();
 
     const getData = async() => {
         const res = await getInstructorDetails();
-        console.log("k",res)
         if (res?.data?.response?.res) {
             // setUserId(res.data.response.user.id);
             setValue("name", res.data.response.res.name);
@@ -35,10 +39,10 @@ function Form({showToast}:FormProps) {
         }
     }
 
-    const onEdit = async(data:any) => {
+    const onEdit = async(data:FormData) => {
+        console.log("data",data);
         const {name , mobile} = data;
         const res = await editInstructorDetails(name , mobile);
-        console.log("jjjj",res);
         if(res.data.response.success === true){
             setValue("name", res.data.response.res.name);
             setValue("mobile", res.data.response.res.mobile);

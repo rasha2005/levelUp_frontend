@@ -4,48 +4,38 @@ import { payement } from "@/app/lib/api/userApi";
 import {loadStripe} from "@stripe/stripe-js"
  
 function SessionSlot({events}:any) {
-  console.log("llll" ,events);
-    // console.log("yt" , id);
+
+  
     const handlePayement = async(data:any) => {
-      console.log("payement" , data);
-console.log("process.env.STRIPE_PUBLISHABLE_KEY")
-     // Load the Stripe instance
+      
+    
     const stripe = await loadStripe("pk_test_51QNBlLHvM8RyBLKlTdnmuRb0fRXSonS9jR9Y2LSCdNvx5Ia1FMfhGJ6of1zRags6mYlsNhh3qsPq7u71HX3oWgmt00EuYxiymG");
     if (!stripe) {
       throw new Error("Stripe could not be initialized");
     }
 
     
-    // Prepare the request payload
+    
     const body = {
       session: data,
       instructorId:events.instructorId
      
-       // Ensure `events` is defined correctly
+       
     };
 
-    // Set headers
+    
     const headers = {
       "Content-Type": "application/json",
     };
 
-    // Call the payment endpoint
+    
     const response = await payement(headers, body);
-    console.log("Redirecting to:", response);
 
-    // Handle the response
+    
     if (response.data.success) {
-      console.log("Redirecting to:", response.data);
       window.location = response.data.data;
     }
-    // const session = response.data; // Axios already parses JSON
-    // const result = await stripe.redirectToCheckout({
-    //   sessionId: session.id,
-    // });
-
-    // if (result.error) {
-    //   console.error("Stripe Checkout Error:", result.error.message);
-    // }
+    
   
      }
     return (

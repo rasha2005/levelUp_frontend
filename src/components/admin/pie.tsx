@@ -3,31 +3,44 @@ import { ResponsiveContainer, PieChart, Pie } from "recharts";
 import { getInstructor, getTransaction } from '@/app/lib/api/adminApi';
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
 import { useEffect, useState } from 'react';
+interface Instructor {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    mobile: string;
+    category: string;
+    description: string;
+    experience: string;   
+    resume: string;     
+    img: string | null;  
+    rating: number | null;
+    isApproved: boolean;
+  }
+  
 
 function PieChartComp() {
 
-    const [approvedInstructor , setApprovedInstructor] = useState<any>([]);
-    const [notapprovedInstructor , setNotApprovedInstructor] = useState<any>([]);
-    const [ instructor , setInstructor] = useState<any>([]);
+    const [approvedInstructor , setApprovedInstructor] = useState<Instructor[]>([]);
+    const [notapprovedInstructor , setNotApprovedInstructor] = useState<Instructor[]>([]);
+    const [ instructor , setInstructor] = useState<Instructor[]>([]);
     const fetchTransaction = async() => {
         const res = await getInstructor();
-        console.log("ins", res.data.response.instructorData)
         setInstructor(res.data.response.instructorData)
     }
 
     useEffect(() => {
         if (instructor.length > 0) {
-            const approved:any = [];
-            const notApproved:any = [];
+            const approved:Instructor[] = [];
+            const notApproved:Instructor[] = [];
     
-            instructor.forEach((ele: any) => {
+            instructor.forEach((ele: Instructor) => {
                 if (ele.isApproved) {
                     approved.push(ele);
                 } else {
                     notApproved.push(ele);
                 }
             });
-            console.log("appr" , approved)
     
             setApprovedInstructor(approved);
             setNotApprovedInstructor(notApproved);
@@ -39,7 +52,6 @@ function PieChartComp() {
         { name: "Not Approved", value: notapprovedInstructor.length },
       ];
 
-    console.log("aproved" , approvedInstructor)
     useEffect(() => {
         fetchTransaction();
     },[])

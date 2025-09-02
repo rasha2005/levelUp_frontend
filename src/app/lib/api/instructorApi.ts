@@ -3,6 +3,7 @@ import { instructorEndPoint } from "@/app/utils/endpoints/instructorEndpoints"
 import Cookies from "js-cookie"
 import { Rss } from "lucide-react";
 import setToken from "../server/token";
+import Event from "@/app/utils/interface/Event";
 
 export const signup  = async(name:string , email:string , mobile:string , password:string) => {
     const response =  await Api.post(instructorEndPoint.createInstructor , {name , email , mobile , password});
@@ -60,7 +61,7 @@ export const upateInstructoProfile = async(img:string) => {
     return res;
 }
 
-export const resendOtpInsructor = async(token:any) => {
+export const resendOtpInsructor = async(token:string | null) => {
     const res = await Api.post(instructorEndPoint.resendOtp , {token});
     return res;
 }
@@ -70,7 +71,7 @@ export const changePasswordInstructor = async(current:string , confirm:string) =
     return res;
 }
 
-export const sessionUpdate = async(event:any) => {
+export const sessionUpdate = async(event:Event) => {
     const res = await Api.post(instructorEndPoint.updateSession , {event});
     return res;
 }
@@ -80,7 +81,7 @@ export const getSessionData = async() => {
     return res
 } 
 
-export const deleteEvent = async(id:any) => {
+export const deleteEvent = async(id:string) => {
     const res = await Api.delete(instructorEndPoint.deleteEventData , {
         data: { id },});
         return res;
@@ -91,7 +92,7 @@ export const getSlotList = async() => {
     return res
 }
 
-export const getWallet = async(token:any) => {
+export const getWallet = async(token:string | undefined) => {
     const res = await Api.get(instructorEndPoint.getWallet ,{
         params:{token}
     })
@@ -104,7 +105,7 @@ export const getImg = async() => {
        return res
     }  
     
-export const verifyInstructorRoomId = async(roomId:any , instructorId:any) => {
+export const verifyInstructorRoomId = async(roomId:string , instructorId:string) => {
     const res = await Api.get(instructorEndPoint.verifyRoom , {
         params:{roomId , instructorId}
     })

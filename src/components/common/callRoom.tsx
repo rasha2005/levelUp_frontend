@@ -21,7 +21,6 @@ function CallRoom() {
     let {slug} = params
 
     const cookies = document.cookie;
-    console.log("cookies" , cookies);
     const authToken = cookies.split('; ').find(row => row.startsWith('authToken='));
 
     
@@ -29,19 +28,14 @@ function CallRoom() {
      const decodedToken = jwtDecode<JwtPayload>(token); 
       
    
-    console.log("userId" , decodedToken);
     const containerRef = useRef(null);
 
     const verifyId = async () => {
-        console.log("dfdfdf" , decodedToken)
         if (decodedToken?.role === "User") {
             const res = await verifyRoomId(params.slug, decodedToken.id);
-            console.log("sux" , res);
             setIsVerified(res.data.response.success);
         }else if(decodedToken?.role === "Instructor") {
-            console.log("decodedToken" , decodedToken.id);
             const res = await verifyInstructorRoomId(params.slug , decodedToken.id) 
-            console.log("ress" , res);
             setIsVerified(res.data.response.success);
         }
     };

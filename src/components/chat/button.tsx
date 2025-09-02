@@ -8,7 +8,6 @@ function MessageBtn(id:any) {
 
     const handleMessage = async() => {
       const res = await accessChat(id.id);
-      console.log("resss" , res);
       if(res.data.response.success) {
         router.push(`/chat/c/${res.data.response.chat.id}`)
       }

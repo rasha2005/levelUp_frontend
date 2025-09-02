@@ -26,7 +26,6 @@ Api.interceptors.response.use(
                 const newAccessToken = refreshResponse.data?.response?.authToken;
                 
                 if (newAccessToken) {
-                    console.log("set new acess token",newAccessToken);
                     setToken(newAccessToken); 
                     error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return Api.request(error.config); 

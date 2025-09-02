@@ -28,7 +28,6 @@ function EditCategory() {
     const name = searchParams.get("name"); 
     const router = useRouter();
 
-    console.log("id , name" , id , name);
     const { register, handleSubmit, formState: { errors } } = useForm<CatData>({
         defaultValues: { categoryName: name || "" }
       });
@@ -37,7 +36,6 @@ function EditCategory() {
         const {categoryName} = data;
         const res = await editCatData(categoryName , id);
         if(res.data.response.success === true) {
-            console.log("ehhe");
             router.push('/admin/category')
         }else{
             toast.error(res.data.response.message);

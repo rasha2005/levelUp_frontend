@@ -24,7 +24,6 @@ function PasswordForm({role}:Role) {
         setResponseMessage(null);
         if(role === 'user') {
             const res = await changePasswordUser(current , confirm);
-            console.log("password" , res);
             if (res.data.response.success) {
               setResponseMessage("Password changed successfully!");
           } else {

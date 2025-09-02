@@ -37,18 +37,17 @@ function UserProfile() {
         
     }
 
-    const handleNameChange = (e:any) => {
+    const handleNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setIsChanged(true);
     }
 
-    const handleMobileChange = (e:any) => {
+    const handleMobileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setIsChanged(true);
     }
 
     const onUserEdit = async(data:User) => {
         const {name , mobile} = data
         if(isChanged) {
-            console.log("profile")
         const res = await updateUser( userId ,name , mobile);
         
         if (res?.data?.response?.user) {

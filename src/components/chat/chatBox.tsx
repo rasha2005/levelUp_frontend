@@ -41,14 +41,12 @@ function ChatBox({ chatId , id}:any) {
 
     useEffect(() => {
       socket = io(ENDPOINT);
-      console.log("why",userData)
       socket.emit("setup" , userData);
       socket.on("connection" , () => setSocketConnected(true))
     },[])
 
     const intialFetch = async() => {
         const res = await fetchChats();
-        console.log("re" , res);
         if(res.data.response.success) {
             setChats(res.data.response.chats)
             setUser(res.data.response.user)
@@ -77,7 +75,7 @@ function ChatBox({ chatId , id}:any) {
             setIsChatId(true)
             const fetchChatMessages = async () => {
                 const res = await fetchMessages(chatId);
-                console.log("hehe" , res)
+               
                 if(res.data.response.success) {
                   setMessage(res.data.response.data)
                   setChatRoom(res.data.response.chat)

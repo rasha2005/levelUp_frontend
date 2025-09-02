@@ -32,7 +32,6 @@ function Category() {
 
     const getCategoryData = async() => {
         const res = await getCatData();
-        console.log("res" ,res);
         if(res.data.response.success === true) {
             setCategoryData(res.data.response.category || []);
             setIsData(true);
@@ -48,7 +47,6 @@ function Category() {
     const handleDelete = async() => {
         if (deleteCategoryId) {
             const res = await deleteCatData(deleteCategoryId);
-            console.log("jhjh" , res);
             if(res.data.response.success === true){
                 toast.success(res.data.response.message);
             }

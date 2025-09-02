@@ -25,12 +25,10 @@ const InstructorChart = dynamic(() => import("@/components/instructor/instructor
     const authToken = Cookies.get('authToken');
    
 
-    console.log("authdd", authToken);
     
     const fetchWallet = async() => {
         
         const res = await getWallet(authToken);
-        console.log("ree" , res)
         setTransactions(res.data.response.Wallet.transactions)
         setBalance(res.data.response.Wallet.balance)
          setTotalSlots(res.data.response.slot)

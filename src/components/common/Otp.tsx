@@ -18,12 +18,14 @@ interface OtpProps {
     const [otp , setOtp] = useState(new Array(6).fill(""));
     const router = useRouter();
 
-    const handleChange = (ele:any , index:number) => {
+    const handleChange = (ele:React.ChangeEvent<HTMLInputElement> , index:number) => {
+        console.log("ele",ele);
+        const value = ele.target.value;
+        setOtp([...otp.map((data , idx) => (idx === index ? value :data))]);
 
-        setOtp([...otp.map((data , idx) => (idx === index ? ele.value :data))]);
-
-        if (ele.nextSibling) {
-            ele.nextSibling.focus();
+        const next = ele.target.nextElementSibling as HTMLInputElement | null;
+        if (next) {
+          next.focus();
         }
 
 
@@ -32,9 +34,7 @@ interface OtpProps {
     const verifyOtp = async() =>{ 
         const tempOtp = otp.join('');
         setOtp(new Array(6).fill(""));
-        console.log("tempOtp" , tempOtp);
         const token = localStorage.getItem('otpToken');
-        console.log("local" ,token);
         if(role === "user") {
             const res = await verifyUserOtp(tempOtp , token);
             if(res?.data?.success === true) {
@@ -44,7 +44,6 @@ interface OtpProps {
             }
         }else{
             const res = await verifyInsructor(tempOtp , token);
-        console.log("rewwww",res);
         if(res.data.response.success === true) {
             router.push('/instructor/validation')
         }else{
@@ -56,7 +55,6 @@ interface OtpProps {
     const handleResendOtp = async() => {
         setTimer(30);
         const token = localStorage.getItem('otpToken');
-        console.log("local" ,token);
         if(role === "user") {
             const res = await resendOtpUser(token);
             if(res?.data?.response?.success === true) {
@@ -66,7 +64,6 @@ interface OtpProps {
             }
         }else{
             const res = await resendOtpInsructor(token);
-        console.log("rewwww",res);
         if(res.data.response.success === true) {
             toast.success(res.data.response.message);
         }else{
@@ -102,7 +99,7 @@ interface OtpProps {
                             value={data}
                             maxLength={1} 
                             minLength={1} 
-                            onChange={(e) => handleChange(e.target , index)}
+                            onChange={(e) => handleChange(e , index)}
                             className="w-10 h-10 border border-gray-300 text-center rounded focus:outline-none focus:border-blue-500"
                         />
                     ))}

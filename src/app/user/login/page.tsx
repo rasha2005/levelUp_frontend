@@ -28,7 +28,6 @@ interface userData  {
     const onSubmit = async(data:userData) => {
        const {email , password} = data
         const res = await login(email , password);
-        console.log("reskl" , res);
         if(res?.data?.response?.success === true){
             router.push('/user/home');
         }else{
