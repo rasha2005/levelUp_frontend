@@ -71,7 +71,7 @@ export const cancelApprovel = async(id:string | undefined) => {
     return res;
 }
 
-export const getUserById = async(id:string) => {
+export const getUserById = async(id:string|string[] | undefined) => {
     
     const res = await Api.get(`${adminEndpoints.getUser}?id=${id}`);
     return res
