@@ -66,7 +66,7 @@ export const approveInstructor = async(id:string | undefined) => {
     return res;
 }
 
-export const cancelApprovel = async(id:string | undefined) => {
+export const cancelApprovel = async(id:string | string[] | undefined) => {
     const res = await Api.post(adminEndpoints.cancelAdminApprovel, {id});
     return res;
 }

@@ -129,7 +129,7 @@ export const getImg = async() => {
     return res
 }
 
-export const verifyRoomId = async(roomId:string , userId:string) => {
+export const verifyRoomId = async(roomId:string | string[] | undefined , userId:string) => {
     const res = await Api.get(userEndpoints.verifyRoom ,{
         params:{roomId , userId}
     })
