@@ -224,11 +224,15 @@ function ChatBox({ chatId , id}:any) {
               
   )}
             <div >
-              <p  className={`font-semibold px-4 py-2 rounded-lg shadow-sm ${
-        m.senderId === user 
-          ? "bg-green-100 text-green-900"  
-          : "bg-blue-100 text-blue-900"   
-      }`}>{m.content}</p>
+            <p
+  className={`font-semibold px-4 py-2 rounded-lg shadow-sm break-words whitespace-pre-wrap ${
+    m.senderId === user
+      ? "bg-green-100 text-green-900"
+      : "bg-blue-100 text-blue-900"
+  }`}
+>
+  {m.content}
+</p>
       <div ref={ref}></div>
             
             </div>

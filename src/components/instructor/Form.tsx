@@ -40,7 +40,6 @@ function Form({showToast}:FormProps) {
     }
 
     const onEdit = async(data:FormData) => {
-        console.log("data",data);
         const {name , mobile} = data;
         const res = await editInstructorDetails(name , mobile);
         if(res.data.response.success === true){

@@ -4,10 +4,21 @@ import { getSessionData } from "@/app/lib/api/instructorApi";
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
+export interface IBooking {
+  id: string;
+  title: string;
+  price: string;              
+  start: string;             
+  end: string;               
+  status: string;             
+  scheduledSessionId: string;  
+}
+
+
 function InstructorChart() {
-  const [events, setEvents] = useState<any[]>([]);
-  const [booked, setBooked] = useState<any[]>([]);
-  const [open, setOpen] = useState<any[]>([]);
+  const [events, setEvents] = useState<IBooking[]>([]);
+  const [booked, setBooked] = useState<IBooking[]>([]);
+  const [open, setOpen] = useState<IBooking[]>([]);
 
   const fetchEvents = async () => {
     const data = await getSessionData();
@@ -20,10 +31,10 @@ function InstructorChart() {
 
   useEffect(() => {
     if (events.length > 0) {
-      const booked: any[] = [];
-      const open: any[] = [];
+      const booked: IBooking[] = [];
+      const open: IBooking[] = [];
 
-      events.forEach((ele: any) => {
+      events.forEach((ele: IBooking) => {
         if (ele.status === "booked") {
           booked.push(ele);
         } else {

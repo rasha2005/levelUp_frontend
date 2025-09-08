@@ -46,14 +46,32 @@ if(isPublicPath && token ) {
         console.log(err)
       }
   }
-  
   if (path.startsWith('/admin') && !isPublicPath && !token) {
     console.log("Redirecting to /admin/login");
     return NextResponse.redirect(new URL('/admin/login', request.url));
 }
 
   if (!isPublicPath && !token && path !== "/user/paymentSuccess") {
+    console.log("here")
     return NextResponse.redirect(new URL('/login', request.url));
+}
+
+if (!isPublicPath && token) {
+  try {
+    const decodedToken = jwtDecode<{email :string ; role:string}>(token);
+    const role = decodedToken.role;
+    if (role === "User" &&  !path.startsWith("/user")) {
+      return NextResponse.redirect(new URL("/user/home", request.url));
+    }
+    if (  role === "Instructor" && !path.startsWith("/instructor")) {
+      return NextResponse.redirect(new URL("/instructor", request.url));
+    }
+    if (role === "Admin" && !path.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+  } catch {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 }
 
 }

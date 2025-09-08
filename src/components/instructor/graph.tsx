@@ -20,7 +20,7 @@ interface TransactionSummary {
 }
 
 function Graph({transactions}:TransactionProps) {
-  console.log("transactions",transactions);
+ 
     const formattedData = transactions.reduce<Record<string, TransactionSummary>>(
       (acc, txn: Transaction) => {
         const date = new Date(txn.createdAt).toISOString().split("T")[0]; 

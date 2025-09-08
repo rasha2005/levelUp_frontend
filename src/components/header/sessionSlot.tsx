@@ -2,6 +2,20 @@
 
 import { payement } from "@/app/lib/api/userApi";
 import {loadStripe} from "@stripe/stripe-js"
+
+interface IBooking {
+  id: string;
+  title: string;
+  price: string;              
+  start: string;              
+  end: string;                
+  status: string;             
+  scheduledSessionId: string;  
+}
+interface IEvent {
+  event:IBooking[],
+  instructorId:string
+}
  
 function SessionSlot({events}:any) {
 

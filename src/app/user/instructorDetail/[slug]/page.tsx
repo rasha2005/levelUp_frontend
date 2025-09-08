@@ -8,6 +8,20 @@ import ReviewBtn from "@/components/user/reviewBtn";
 import ReviewCarousel from "@/components/user/carousel";
 import { cookies } from 'next/headers';
 
+interface InstructorProps {
+  params: {
+      slug: string;
+  };
+}
+ interface IBooking {
+  id: string;
+  title: string;
+  price: string;              
+  start: string;              
+  end: string;                
+  status: string;             
+  scheduledSessionId: string;  
+}
 
 
 async function InstructorDetail({params}:any) {
@@ -19,6 +33,7 @@ async function InstructorDetail({params}:any) {
     const review = data.data.response.review;
     const isReview = data.data.response.isReview;
    const events =  data.data.response.instructor.scheduledSession?.events;
+   console.log("events",events)
    
 const event = {
   event:events,

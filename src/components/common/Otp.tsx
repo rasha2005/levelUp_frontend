@@ -19,7 +19,7 @@ interface OtpProps {
     const router = useRouter();
 
     const handleChange = (ele:React.ChangeEvent<HTMLInputElement> , index:number) => {
-        console.log("ele",ele);
+      
         const value = ele.target.value;
         setOtp([...otp.map((data , idx) => (idx === index ? value :data))]);
 
