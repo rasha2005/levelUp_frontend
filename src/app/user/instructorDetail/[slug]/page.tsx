@@ -33,7 +33,7 @@ async function InstructorDetail({params}:any) {
     const review = data.data.response.review;
     const isReview = data.data.response.isReview;
    const events =  data.data.response.instructor.scheduledSession?.events;
-   console.log("events",events)
+  
    
 const event = {
   event:events,

@@ -22,7 +22,7 @@ const getUser = async() => {
 
     const res = await getUserById(id);
     if(res.data.response.success === true) {
-        setUser(res.data.response.instructor);
+        setUser(res.data.response.user);
     }
 }
 

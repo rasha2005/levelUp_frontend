@@ -53,10 +53,11 @@ function UserManagement() {
         }
     }
 
-    const handleBlockClick = (id:string | undefined) => {
+    const handleOnclick = (id:string | undefined) => {
           setBlockUserId(id);
           setIsOpen(true);
     }
+  
 
     const handleBlock = async() => {
           if(blockUserId) {
@@ -144,38 +145,48 @@ function UserManagement() {
 
                     <TableCell className='flex ' >
                     <AlertDialog open={isOpen && blockUserId === user.id} onOpenChange={setIsOpen}>
-                                    <AlertDialogTrigger asChild>
-                                        <button
-                                            className={`text-red-500 ${!user.isBlocked ? "bg-red-100 rounded-full px-4 py-2 hover:bg-red-200 hover:underline" : "px-2 "}`}
-                                            onClick={!user.isBlocked ? () => handleBlockClick(user.id) : undefined}
-                                            disabled={user.isBlocked} >
-                                                {user.isBlocked ? "blocked" : "block"}
-                                        </button>
-                                    </AlertDialogTrigger>
-                                  
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Block User</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Are you sure you want to Block this user?
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <button
-                                                onClick={() => setIsOpen(false)}
-                                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                onClick={handleBlock}
-                                                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2"
-                                            >
-                                                block
-                                            </button>
+                    <AlertDialogTrigger asChild>
+  <button
+    className={` ${
+      !user.isBlocked
+        ? "text-red-500 bg-red-100 rounded-full px-4 py-2 hover:bg-red-200 hover:underline"
+        : "text-green-500 bg-green-100 rounded-full px-4 py-2 hover:bg-green-200 hover:underline"
+    }`}
+    onClick={() => handleOnclick(user.id)}
+  >
+    {user.isBlocked ? "Unblock" : "Block"}
+  </button>
+</AlertDialogTrigger>
 
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
+<AlertDialogContent>
+  <AlertDialogHeader>
+    <AlertDialogTitle>
+      {user.isBlocked ? "Unblock User" : "Block User"}
+    </AlertDialogTitle>
+    <AlertDialogDescription>
+      {user.isBlocked
+        ? "Are you sure you want to unblock this user?"
+        : "Are you sure you want to block this user?"}
+    </AlertDialogDescription>
+  </AlertDialogHeader>
+  <AlertDialogFooter>
+    <button
+      onClick={() => setIsOpen(false)}
+      className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+    >
+      Cancel
+    </button>
+    <button
+      onClick={() =>
+        handleBlock()
+      }
+      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2"
+    >
+      {user.isBlocked ? "Unblock" : "Block"}
+    </button>
+  </AlertDialogFooter>
+</AlertDialogContent>
+
                                 
                                 </AlertDialog>
                                 <Link  className="text-blue-500 px-4 py-2 " href={`/admin/userDetails/${user.id}`} passHref>

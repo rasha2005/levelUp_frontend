@@ -46,11 +46,10 @@ export const deleteCatData = async(id:string) => {
         return res;
 }
 
-export const blockUser = async(id:string) => {
+export const blockUser = async(id:string | undefined) => {
     
     const res = await Api.post(adminEndpoints.blockUser ,{
         data: { id },});
-
      return res;   
 }
 
