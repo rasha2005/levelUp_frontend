@@ -22,12 +22,10 @@ function SessionSlot({events}:any) {
   
     const handlePayement = async(data:any) => {
       
-    
     const stripe = await loadStripe("pk_test_51QNBlLHvM8RyBLKlTdnmuRb0fRXSonS9jR9Y2LSCdNvx5Ia1FMfhGJ6of1zRags6mYlsNhh3qsPq7u71HX3oWgmt00EuYxiymG");
     if (!stripe) {
       throw new Error("Stripe could not be initialized");
     }
-
     
     
     const body = {
@@ -45,9 +43,8 @@ function SessionSlot({events}:any) {
     
     const response = await payement(headers, body);
 
-    
     if (response.data.success) {
-      window.location = response.data.data;
+      window.location = response.data.data.res;
     }
     
   
