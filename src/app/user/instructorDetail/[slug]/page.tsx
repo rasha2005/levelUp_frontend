@@ -32,7 +32,13 @@ async function InstructorDetail({params}:any) {
     const instructor =  data.data.response.instructor;
     const review = data.data.response.review;
     const isReview = data.data.response.isReview;
-    const events =  data.data.response.instructor.scheduledSession?.events;
+    // const events =  data.data.response.instructor.scheduledSession?.events;
+
+    let events = data.data.response.instructor.scheduledSession?.events || [];
+
+events = events.sort((a: any, b: any) => {
+  return new Date(b.start).getTime() - new Date(a.start).getTime();
+});
     
 const event = {
   event:events,

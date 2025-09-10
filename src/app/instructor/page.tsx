@@ -59,7 +59,7 @@ const InstructorChart = dynamic(() => import("@/components/instructor/instructor
               <div className="flex items-center justify-between bg-white p-6 rounded-lg shadow-md">
                 <div>
                   <p className="text-sm text-gray-500">Revenue </p>
-                  <p className="text-2xl font-bold">₹{balance}</p>
+                  <p className="text-2xl font-bold">₹{balance ? Number(balance).toFixed(2) : 0}</p>
                 </div>
                 <div className="text-orange-500 text-4xl">
                   <i className="fas fa-users"></i>
