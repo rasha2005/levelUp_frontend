@@ -41,8 +41,8 @@ export const getCategoryData = async() => {
     return res
 }
 
-export const updateInstructor = async(description:string , experienceCategory:string ,experienceCertificate:string , resume:string) => {
-    const res = await Api.post(instructorEndPoint.updateInstructorDetails , {description , experienceCategory ,experienceCertificate , resume});
+export const updateInstructor = async(description:string , experienceCategory:string ,experienceCertificate:string , resume:string ,specialization:string[] | null) => {
+    const res = await Api.post(instructorEndPoint.updateInstructorDetails , {description , experienceCategory ,experienceCertificate , resume ,specialization});
     return res;
 }
 
@@ -108,6 +108,13 @@ export const getImg = async() => {
 export const verifyInstructorRoomId = async(roomId:string | string[] | undefined , instructorId:string) => {
     const res = await Api.get(instructorEndPoint.verifyRoom , {
         params:{roomId , instructorId}
+    })
+    return res;
+}
+
+export const markInstructorJoined = async(roomId : string | string[] | undefined) => {
+    const res = await Api.put(instructorEndPoint.instructorJoined, {
+      roomId
     })
     return res;
 }

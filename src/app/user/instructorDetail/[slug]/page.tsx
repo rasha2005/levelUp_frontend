@@ -51,6 +51,7 @@ return (
   <>
     <UserHeader />
 
+   
     <div className="bg-gray-50 min-h-screen p-6">
       {/* Top Profile Section */}
       <div className="bg-white shadow-md rounded-lg max-w-[1200px] mx-auto p-6 mb-6">
@@ -60,11 +61,25 @@ return (
             alt="Coach Profile"
             className="rounded-full w-24 h-24"
           />
-          <div>
-            <h2 className="text-xl font-bold">{instructor.name}</h2>
-            <p className="text-gray-500">{instructor.category} Coach</p>
-            <p className="text-gray-500">{instructor.description}</p>
-            <div className="flex">
+         <div>
+  {/* Name */}
+  <h2 className="text-xl font-bold">{instructor.name}</h2> <p className="text-gray-500">{instructor.category} Coach</p> <p className="text-gray-500">{instructor.description}</p>  
+
+  {/* Specializations */}
+  {instructor.specializations?.length > 0 && (
+    <div className="mt-4 flex flex-wrap gap-2">
+      {instructor.specializations.map((spec: string, idx: number) => (
+        <span
+          key={idx}
+          className="bg-indigo-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow hover:bg-indigo-600 transition"
+        >
+          {spec}
+        </span>
+      ))}
+    </div>
+  )}
+
+            <div className="mt-4 flex ">
               {[...Array(5)].map((_, index) => {
                 const currentRate = index + 1;
 
@@ -90,17 +105,6 @@ return (
               }
             </div>
 
-            <div className="flex space-x-3 mt-2">
-              <a href="#" className="text-gray-400 hover:text-black">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-black">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-black">
-                <i className="fab fa-linkedin"></i>
-              </a>
-            </div>
           </div>
         </div>
       </div>

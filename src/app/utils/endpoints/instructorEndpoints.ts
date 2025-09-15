@@ -16,5 +16,6 @@ export const instructorEndPoint = {
     getWallet:'/instructor/getWallet',
     getImg:'/instructor/getImg',
     verifyRoom:'/instructor/verifyRoom',
-    getEvent:'/'
+    getEvent:'/',
+    instructorJoined:'/instructor/joinedRoom'
 }

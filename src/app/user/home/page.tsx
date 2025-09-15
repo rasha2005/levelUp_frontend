@@ -21,6 +21,7 @@ interface InstructorData {
   resume?:string;
   category?:string;
   isApproved?:boolean;
+  specializations?:string[] 
 
 }
 interface CategoryData {
@@ -76,11 +77,11 @@ export default function Home() {
     return (
       <>
     <UserHeader />
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto mt-8">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto mt-8">
         <div className="flex justify-between items-center mb-6">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search by name or specialization"
             onChange={(e) => setSearch(e.target.value)}
             className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xs focus:outline focus:outline-2 focus:outline-blue-100 "
           />

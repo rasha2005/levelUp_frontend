@@ -117,18 +117,37 @@ function SessionList({sessions}:SessionListProps) {
                     })}
                   </td>
                   <td className="px-4 py-3">
-                    {new Date(slot.endTime) > new Date() ? (
-                      <Link href={`/user/room/${slot.roomId}`}>
-                        <span className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full">
-                          join
+                  {(() => {
+                    const endTime = new Date(slot.endTime);
+                    const now = new Date();
+                    const joinAvailableAt = new Date(endTime.getTime() - 15 * 60 * 1000);
+
+                    if (endTime <= now) {
+                     
+                      return (
+                        <span className="inline-block px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-full">
+                          Ended
                         </span>
-                      </Link>
-                    ) : (
-                      <span className="inline-block px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-full">
-                        Ended
-                      </span>
-                    )}
-                  </td>
+                      );
+                    } else if(now >= joinAvailableAt && now < endTime)  {
+                     
+                      return (
+                        <Link href={`/user/room/${slot.roomId}`}>
+                          <span className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full">
+                            Join
+                          </span>
+                        </Link>
+                      );
+                     } else {
+                    
+                      return (
+                        <span className="inline-block px-3 py-1 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-full">
+                          Upcoming
+                        </span>
+                      );
+                    }
+                  })()}
+                </td>
                   {!slot.isRated ? (
                     <td>
                       <AlertDialog>

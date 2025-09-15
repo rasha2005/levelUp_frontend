@@ -151,3 +151,8 @@ export const addReview = async(instructorId:string , value:string) => {
     const res = await Api.post(userEndpoints.addReview , {instructorId , value})
     return res;
 }
+
+export const getRoomStatus = async(roomId:string | string[] | undefined) => {
+    const res = await Api.get(userEndpoints.roomStatus,{ params:{roomId}});
+    return res;
+}

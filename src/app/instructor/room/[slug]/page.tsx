@@ -1,5 +1,9 @@
 "use client"
-import CallRoom from "@/components/common/callRoom";
+import dynamic from "next/dynamic";
+
+const CallRoom = dynamic(() => import("@/components/common/callRoom"), {
+  ssr: false, 
+});
 
 function RoomInstructor() {
     return (

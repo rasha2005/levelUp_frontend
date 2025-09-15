@@ -4,8 +4,8 @@ import {ZegoUIKitPrebuilt} from "@zegocloud/zego-uikit-prebuilt";
 import { useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
-import { verifyRoomId } from "@/app/lib/api/userApi";
-import { verifyInstructorRoomId } from "@/app/lib/api/instructorApi";
+import { getRoomStatus, verifyRoomId } from "@/app/lib/api/userApi";
+import { markInstructorJoined, verifyInstructorRoomId } from "@/app/lib/api/instructorApi";
 
 interface JwtPayload {
     id: string;
@@ -17,6 +17,7 @@ interface JwtPayload {
 
 function CallRoom() {
     const [isVerified , setIsVerified] = useState(false);
+    const [instructorJoined,setInstructorJoined] = useState<boolean>(false);
     const params = useParams();
     let {slug} = params
 
@@ -50,6 +51,8 @@ function CallRoom() {
         if(!slug) {
             throw new Error("Invalid or missing SERVER_SECRET in environment variables");
         }
+
+        
        
 
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
@@ -66,13 +69,32 @@ function CallRoom() {
             scenario: {
                 mode: ZegoUIKitPrebuilt.OneONoneCall,
             },
+            onJoinRoom : async () => {
+                if(decodedToken.role === "Instructor") {
+                    await markInstructorJoined(params.slug);
+                }
+            }
         });
     };
-
-    useEffect(() => {
-        // Verify and initialize meeting when conditions are met
+    const waitForInstructor = async () => {
+        const poll = setInterval(async () => {
+          const res = await getRoomStatus(params.slug);
+          console.log("rs",res);
+          if (res.data.response.data) {
+            setInstructorJoined(true);
+            clearInterval(poll);
+          }
+        }, 5000); // every 2 sec
+      };
+      useEffect(() => {
         const initializeMeeting = async () => {
             await verifyId();
+            if (decodedToken.role === "User") {
+                await waitForInstructor(); 
+              } else {
+                setInstructorJoined(true); 
+              }
+            
 
             if (isVerified && containerRef.current) {
                 await myMeeting(containerRef.current);
@@ -80,13 +102,26 @@ function CallRoom() {
         };
 
         initializeMeeting();
-    }, [params.slug, isVerified]);
+      },[params.slug])
+
+    useEffect(() => {
+        if (isVerified && instructorJoined && containerRef.current) {
+            myMeeting(containerRef.current);
+          }
+        }, [isVerified, instructorJoined]);
 
     return (
-        <div ref={containerRef}
-        className="w-[1315px] h-[650px] bg-gray-100"
-        />
-    )
+        <div className="w-[1315px] h-[650px] bg-gray-100">
+        {!instructorJoined && decodedToken.role === "User" ? (
+          <div className="flex h-full items-center justify-center text-xl">
+            Waiting for instructor to join…
+          </div>
+        ) : (
+          <div ref={containerRef} className="w-full h-full" />
+        )}
+      </div>
+    );
+    
 }
 
 export default CallRoom;
