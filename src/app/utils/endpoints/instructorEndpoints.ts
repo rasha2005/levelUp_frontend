@@ -17,5 +17,13 @@ export const instructorEndPoint = {
     getImg:'/instructor/getImg',
     verifyRoom:'/instructor/verifyRoom',
     getEvent:'/',
-    instructorJoined:'/instructor/joinedRoom'
+    instructorJoined:'/instructor/joinedRoom',
+    createBundle:'/instructor/createBundle',
+    BundleData:'/instructor/BundleData',
+    createQuestion:'/instructor/createQuestion',
+    getQuestions:'/instructor/getQuestions',
+    createTest:'/instructor/createTest',
+    deleteQuestion:'/instructor/deleteQuestion',
+    deleteBundle:'/instructor/deleteBundle',
+    updateBundle:'/instructor/updateBundle'
 }

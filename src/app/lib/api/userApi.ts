@@ -156,3 +156,18 @@ export const getRoomStatus = async(roomId:string | string[] | undefined) => {
     const res = await Api.get(userEndpoints.roomStatus,{ params:{roomId}});
     return res;
 }
+
+export const getTest = async(slotId:string | string[] | undefined) => {
+    const res = await Api.get(userEndpoints.getTest,{ params:{slotId}});
+    return res;
+}
+
+export const getQuestionById = async(qId:string |undefined) => {
+    const res = await Api.get(userEndpoints.getQuestion,{ params:{qId}});
+    return res;
+}
+
+export const updateTestResult = async(slotId:string |undefined | string[],score:number) => {
+    const res = await Api.put(userEndpoints.updateResult,{slotId,score});
+    return res;
+}

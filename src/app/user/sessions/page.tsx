@@ -10,6 +10,7 @@ async function Sessions() {
   
     const data = await getBookedSession(authToken);
     const sessions =  data.data.response.slot.slots;
+    console.log(sessions)
     return (
         <>
         <UserHeader/>

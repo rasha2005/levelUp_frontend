@@ -1,7 +1,12 @@
 "use client"
 
-import { getSlotList } from '@/app/lib/api/instructorApi';
+import { createNewTest, getBundleData, getSlotList } from '@/app/lib/api/instructorApi';
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { ToastContainer, toast } from "react-toastify";
 import Link from 'next/link';
 import { useDebugValue, useEffect, useState } from 'react';
 export interface IUser {
@@ -22,11 +27,34 @@ export interface ISlot {
   endTime: string;     
   createdAt: string;  
   isRated: boolean;
-  user: IUser;         
+  user: IUser;      
+  hasTest? : boolean   
+}
+export interface Question {
+  id: string;
+  bundleId: string;
+  text: string;
+  type: string;           
+  options: string[];     
+  answer: string;        
+  createdAt: string;       
+}
+
+interface Bundle {
+  id: string;
+  bundleName: string;
+  instructorId:string;
+  questions: Question[];
+  questionsCount:number;
 }
 
 function SlotList() {
     const [slots , setSlots] = useState<ISlot[]>([]);
+    const [isOpen , setIsOpen] = useState(false);
+    const [bundles, setBundles] = useState<Bundle[]>([]);
+  const [selectedBundle, setSelectedBundle] = useState<string>("");
+  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+  const [activeSlotId, setActiveSlotId] = useState<string>("");
     const [isData , setIsData] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
@@ -43,20 +71,46 @@ function SlotList() {
     const currentData = slots.slice(startIndex, startIndex + itemsPerPage);
     const totalPages = Math.ceil(slots.length / itemsPerPage);
 
+    const currentQuestions =
+  bundles.find((b) => b.id === selectedBundle)?.questions ?? [];
+
     const getSlots = async() => {
         const res = await getSlotList();
+        console.log(res.data.response.slot)
         if(res.data.response.success) {
           setSlots(res.data.response.slot)
         }
+    }
+    const getBundle = async() => {
+      const data = await getBundleData();
+      if(data.data.response.res){
+        setBundles(data.data.response.res)
+      }
+    }
+    const handleSave = async() => {
+      const data = await createNewTest(activeSlotId ,selectedBundle,selectedQuestions )
+      setActiveSlotId("");
+      setSelectedBundle("");
+      setSelectedQuestions([]);
+      setIsOpen(false);
+      if(data.data.response.data){
+        toast.success(data.data.response.message)
+      }else{
+        toast.error(data.data.response.message)
+      }
     }
 
     useEffect(() => {
         getSlots();
     }, []);
+
+    useEffect(() => {
+      getBundle()
+    },[isOpen])
     
     return (
         <>
-        
+         <ToastContainer/>
 
                 <div className="flex-1 p-10">  
         <div className='mt-10'>
@@ -110,7 +164,33 @@ function SlotList() {
   </span>
   )}
                 </TableCell>
-            
+               
+
+        {/* Add Test column */}
+        <TableCell className="text-center">
+  {new Date(slot.endTime) < new Date() ? (
+    !slot.hasTest ? (
+      <button
+        onClick={() =>  {
+
+          setIsOpen(true)
+          setActiveSlotId(slot.id);
+        }
+          
+        }
+        className="inline-block px-3 py-1 text-sm font-medium text-blue-700 bg-blue-100 rounded-full hover:shadow"
+      >
+        Add Test
+      </button>
+    ) : (
+      <span className="inline-block px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full">
+        Test Added
+      </span>
+    )
+  ) : (
+    <p></p>
+  )}
+</TableCell>
 
                 </TableRow>
               ))
@@ -154,6 +234,75 @@ function SlotList() {
     </div>
     </div>
     </div>
+
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Create Test</DialogTitle>
+          </DialogHeader>
+
+          {/* Step 1: Select a bundle */}
+          <div className="mb-4">
+            <p className="font-medium mb-2">Step 1: Select a bundle</p>
+            <Select onValueChange={setSelectedBundle} value={selectedBundle}>
+  <SelectTrigger>
+    <SelectValue placeholder="Choose bundle..." />
+  </SelectTrigger>
+
+  <SelectContent>
+    {bundles.filter((b) => b.questions && b.questions.length >= 5).length > 0 ? (
+      bundles
+        .filter((b) => b.questions && b.questions.length >= 5)
+        .map((b) => (
+          <SelectItem key={b.id} value={b.id}>
+            {b.bundleName} ({b.questions.length} questions)
+          </SelectItem>
+        ))
+    ) : (
+      <p className="px-2 py-1 text-sm text-gray-500">
+      No valid bundles — each bundle must contain at least 5 questions.
+    </p>
+    )}
+  </SelectContent>
+</Select>
+</div>
+{selectedBundle && (
+  <div className="max-h-48 overflow-y-auto border rounded p-2 space-y-2">
+    {currentQuestions.map((q) => (
+      <label key={q.id} className="flex items-center gap-2">
+        <Checkbox
+          checked={selectedQuestions.includes(q.id)}
+          onCheckedChange={() =>
+            setSelectedQuestions((prev) =>
+              prev.includes(q.id)
+                ? prev.filter((x) => x !== q.id)
+                : [...prev, q.id]
+            )
+          }
+        />
+        <span className="text-sm">{q.text}</span>
+      </label>
+    ))}
+  </div>
+)}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!selectedBundle}
+              onClick={() => {
+                if (!activeSlotId) return; 
+            
+                handleSave();
+              }}
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
    </>
     )
 }

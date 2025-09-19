@@ -4,6 +4,7 @@ import Cookies from "js-cookie"
 import { Rss } from "lucide-react";
 import setToken from "../server/token";
 import Event from "@/app/utils/interface/Event";
+import QuestionFormValues from "@/app/utils/interface/QuestionForm";
 
 export const signup  = async(name:string , email:string , mobile:string , password:string) => {
     const response =  await Api.post(instructorEndPoint.createInstructor , {name , email , mobile , password});
@@ -118,4 +119,47 @@ export const markInstructorJoined = async(roomId : string | string[] | undefined
     })
     return res;
 }
+
+export const createBundle = async(bundleName:string) => {
+    const res = await Api.post(instructorEndPoint.createBundle,{bundleName});
+    return res;
+}
+
+export const getBundleData = async() => {
+    const res = await Api.get(instructorEndPoint.BundleData);
+    return res;
+}
+
+export const createQusetion = async(data:QuestionFormValues , bundleId:string | undefined) => {
+    const res = await Api.post(instructorEndPoint.createQuestion,{data , bundleId});
+    return res
+}
+
+export const getBundleQuestions = async(slug:string | string[] | undefined) => {
+    const res = await Api.get(instructorEndPoint.getQuestions,{
+        params:{slug}
+    });
+    return res;
+}
+
+export const createNewTest = async(activeSlotId:string ,selectedBundle:string,selectedQuestions:string[]) => {
+    const res = await Api.post(instructorEndPoint.createTest, {activeSlotId ,selectedBundle,selectedQuestions});
+    return  res
+}
+
+export const deleteQuestion = async(id:string) => {
+    const res = await Api.delete(instructorEndPoint.deleteQuestion, {params:{id}});
+    return  res
+}
+
+export const deleteBundle = async(id:string) => {
+    const res = await Api.delete(instructorEndPoint.deleteBundle, {params:{id}});
+    return  res
+}
+
+export const updateBundle = async(name:string , id:string) => {
+    const res = await Api.put(instructorEndPoint.updateBundle, {name ,id});
+    return  res
+}
+
 

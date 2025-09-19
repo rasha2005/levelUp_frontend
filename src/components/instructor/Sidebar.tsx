@@ -11,7 +11,7 @@ import {
     CommandSeparator,
     CommandShortcut,
   } from "@/components/ui/command"
-  import { LayoutDashboard  , Users , GraduationCap , Boxes , Calendar , ListIcon} from 'lucide-react'
+  import { LayoutDashboard  , Users , GraduationCap , Boxes , Calendar , ListIcon , BookOpen} from 'lucide-react'
   import Link from "next/link";
   import { cn } from "@/lib/utils"; 
 import { usePathname } from "next/navigation";
@@ -49,7 +49,14 @@ const  Sidebar = () => {
                 <ListIcon className="mr-2 h-4 w-4"/>
                 <Link href="/instructor/slotsList"> Slots</Link>
             </CommandItem>
-            
+            <CommandItem
+            className={cn(
+              pathname === "/instructor/questionBank" && "bg-blue-500 text-white"
+            )}
+          >
+                <BookOpen className="mr-2 h-4 w-4"/>
+                <Link href="/instructor/questionBank"> Question Bank</Link>
+            </CommandItem>
           </CommandGroup>
           
           

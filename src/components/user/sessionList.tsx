@@ -38,6 +38,8 @@ interface Session {
   userId: string;
   instructorId: string;
   createdAt: string;  
+  hasTest:boolean;
+  isAttended:boolean;
 }
 interface SessionListProps {
   sessions: Session[];
@@ -124,7 +126,13 @@ function SessionList({sessions}:SessionListProps) {
 
                     if (endTime <= now) {
                      
-                      return (
+                      return slot.hasTest && !slot.isAttended? (
+                        <Link href={`/user/test/${slot.id}`}>
+                          <span className="inline-block px-3 py-1 text-sm font-medium text-blue-700 bg-blue-100 rounded-full hover:shadow">
+                            Take Test
+                          </span>
+                        </Link>
+                      ) : (
                         <span className="inline-block px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-full">
                           Ended
                         </span>

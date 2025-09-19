@@ -18,6 +18,9 @@ export const userEndpoints = {
     googleAuth:'/user/googleAuth',
     addReview:'/user/addReview',
     refreshToken:'/user/refreshToken',
-    roomStatus:'/user/roomStatus'
+    roomStatus:'/user/roomStatus',
+    getTest:'/user/getTest',
+    getQuestion:'/user/getQuestion',
+    updateResult:'/user/updateResult'
    
 }

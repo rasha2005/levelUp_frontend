@@ -1,5 +1,6 @@
 "use client"
 import { editInstructorDetails, getInstructorDetails } from "@/app/lib/api/instructorApi";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -97,7 +98,17 @@ function Form({showToast}:FormProps) {
                                     >
                                         Save Changes
                                     </button>
+                                    <div className="mb-4">
+                                                                            <Link
+                                                                            href="/instructor/validation"
+                                                                            className="text-blue-600 hover:underline"
+                                                                            >
+                                                                            Validation Form
+                                                                            </Link>
+                                                                        </div>
                                     </form>
+
+                                    
         </>
     )
 }

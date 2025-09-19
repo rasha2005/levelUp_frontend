@@ -12,6 +12,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import PasswordForm from "@/components/common/passwordForm";
 import ProfileImg from "@/components/common/profileImg";
+import Link from "next/link";
 
  function Profile() {
    
@@ -54,6 +55,8 @@ import ProfileImg from "@/components/common/profileImg";
                             <TabsContent value="account">
                                 <ProfileImg role="instructor"/>
                                 <Form showToast={showToast} />
+                                 {/* Link to Instructor Validation Form */}
+                                    
                             </TabsContent>
 
                             {/* Account Tab Content */}
