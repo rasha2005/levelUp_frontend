@@ -120,7 +120,7 @@ function SessionList({sessions}:SessionListProps) {
                   </td>
                   <td className="px-4 py-3">
                   {(() => {
-                    const endTime = new Date(slot.endTime);
+                    const endTime = new Date(slot.startTime);
                     const now = new Date();
                     const joinAvailableAt = new Date(endTime.getTime() - 15 * 60 * 1000);
 
