@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import PasswordForm from "@/components/common/passwordForm";
 import ProfileImg from "@/components/common/profileImg";
+import UserSidebar from "@/components/user/userSideBar";
 
 interface User {
     name:string;
@@ -68,10 +69,11 @@ function UserProfile() {
         <>
         <ToastContainer/>
     <UserHeader/>
+    <UserSidebar/>
     <div className="min-h-screen flex flex-col">
                 
                 {/* Top Section */}
-                <div className="bg-gradient-to-r from-sky-950 to-sky-900 h-60 relative flex justify-center items-center">
+                <div className="bg-[#0F0F0F] h-60 relative flex justify-center items-center">
                     {/* Placeholder div for positioning */}
                 </div>
 
@@ -127,7 +129,7 @@ function UserProfile() {
                                 </div>
                                 <button 
                                         type="submit"
-                                        className="mt-4 bg-sky-900 text-white px-4 py-2 rounded-full shadow hover:bg-sky-950"
+                                        className="mt-4 bg-[#0F0F0F] text-white px-4 py-2 rounded-full shadow hover:bg-gray-800"
                                     >
                                         Save Changes
                                     </button>

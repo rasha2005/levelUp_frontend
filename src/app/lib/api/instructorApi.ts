@@ -5,6 +5,7 @@ import { Rss } from "lucide-react";
 import setToken from "../server/token";
 import Event from "@/app/utils/interface/Event";
 import QuestionFormValues from "@/app/utils/interface/QuestionForm";
+import CourseBundle from "@/app/utils/interface/CourseBundle";
 
 export const signup  = async(name:string , email:string , mobile:string , password:string) => {
     const response =  await Api.post(instructorEndPoint.createInstructor , {name , email , mobile , password});
@@ -162,4 +163,28 @@ export const updateBundle = async(name:string , id:string) => {
     return  res
 }
 
+export const createCourseBundle = async(data:CourseBundle) => {
+    const res = await Api.post(instructorEndPoint.courseBundle,{data});
+    return res;
+}
+
+export const getCourseData = async() => {
+    const res = await Api.get(instructorEndPoint.courseData);
+    return res;
+}
+
+export const createCourseSlot = async(title:string , date:string,startTime:string , endTime:string, bundleId:string | undefined) => {
+    const res = await Api.post(instructorEndPoint.courseSlot,{title , date,startTime , endTime,bundleId});
+    return res;
+}
+
+export const getCourseSlots = async(bundleId:string | undefined) => {
+    const res = await Api.get(instructorEndPoint.getCourseSlots,{params:{bundleId}});
+    return res;
+}
+
+export const updateBundleStatus =  async(bundleId:string | undefined) => {
+    const res = await Api.put(instructorEndPoint.bundleStatus,{bundleId});
+    return res;
+}
 

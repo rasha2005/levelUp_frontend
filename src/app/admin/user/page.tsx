@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 interface UserData {
     id?:string;
     name:string;
+    img?:string;
     email:string;
     mobile:string;
     isBlocked:boolean;
@@ -44,6 +45,7 @@ function UserManagement() {
         try{
             const res = await getUsers();
             if(res.data.response.success === true) {
+              console.log(res.data.response?.userData)
                 setUserData(res.data.response?.userData || []);
                 setIsData(true);
             }
@@ -128,6 +130,7 @@ function UserManagement() {
     <Table className="w-full border border-gray-200"> 
       <TableHeader>
         <TableRow>
+        <TableHead>Profile</TableHead>
           <TableHead >Name</TableHead>
           <TableHead >Email</TableHead>
           <TableHead >Mobile</TableHead>
@@ -138,6 +141,13 @@ function UserManagement() {
             {isData && currentData.length > 0 ? (
               currentData.map((user) => (
                 <TableRow key={user.id}>
+                  <TableCell className="flex justify-center items-center">
+            <img
+              src={user.img||"/images/defaultProfile.jpg"}
+              alt={`${user.name}'s profile`}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          </TableCell>
                     <TableCell >{user.name}</TableCell>
                     <TableCell >{user.email}</TableCell>
                     <TableCell >{user.mobile}</TableCell>

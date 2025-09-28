@@ -21,6 +21,9 @@ export const userEndpoints = {
     roomStatus:'/user/roomStatus',
     getTest:'/user/getTest',
     getQuestion:'/user/getQuestion',
-    updateResult:'/user/updateResult'
+    updateResult:'/user/updateResult',
+    getCourse:'/user/getCourse',
+    coursePayment:'/user/create-course-checkout-session',
+    studentCourse:'/user/studentCourse'
    
 }

@@ -171,3 +171,18 @@ export const updateTestResult = async(slotId:string |undefined | string[],score:
     const res = await Api.put(userEndpoints.updateResult,{slotId,score});
     return res;
 }
+
+export const getCourseData = async(courseId:string |undefined ) => {
+    const res = await Api.get(userEndpoints.getCourse,{params:{courseId}});
+    return res;
+}
+
+export const coursePayement = async(headers:any , body:any) => {
+    const res = await Api.post(userEndpoints.coursePayment , body, { headers });
+    return res;
+}
+
+export const getStudentCourse = async(token:string | undefined) => {
+    const res = await Api.get(userEndpoints.studentCourse ,{ params:{token} });
+    return res;
+}

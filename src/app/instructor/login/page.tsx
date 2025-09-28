@@ -17,6 +17,8 @@ interface instructorData {
 export default function InstructorLogin() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<instructorData>();
     const [passwordVisible , setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const router = useRouter();
 
     const togglePasswordVisibility = () => {
@@ -25,10 +27,12 @@ export default function InstructorLogin() {
 
     const onSubmit = async(data:instructorData) => {
         const {email , password} = data;
+        setLoading(true)
         const res = await login(email , password);
         if(res.data.response.success === true) {
             router.push('/instructor');
         }else{
+            setLoading(false)
             toast.error(res.data.response.message);
         }
     }
@@ -102,15 +106,19 @@ export default function InstructorLogin() {
                                    
                                    {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
                                 </div>
-                                <button
+                                                                    <button
                                     type="submit"
-                                    className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition-colors"
-                                >
+                                    disabled={loading}
+                                    className={`w-full py-2 px-4 font-semibold rounded transition-colors 
+                                        ${loading
+                                        ? "bg-gray-400 text-white cursor-not-allowed"
+                                        : "bg-[#0F0F0F] text-white hover:bg-gray-800"}`}
+                                    >
                                    Log In
                                 </button>
                                 <p className="mt-4 text-sm text-gray-600">
                                    Do not have an account?{' '}
-                                    <Link href="/user/signup">
+                                    <Link href="/instructor/signup">
                                         <span className="text-blue-500 hover:underline">
                                            Sign up
                                         </span>

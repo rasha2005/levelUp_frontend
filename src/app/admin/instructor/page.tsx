@@ -10,6 +10,7 @@ import Sidebar from "@/components/admin/Sidebar";
 
 interface InstructorData {
     id?:string;
+    img?:string;
     name:string;
     email:string;
     mobile:string;
@@ -83,6 +84,8 @@ function InstructorMangement()  {
     <Table className="w-full border border-gray-200"> 
       <TableHeader>
         <TableRow>
+        <TableHead className="text-center">Profile</TableHead>
+
           <TableHead className="text-center">Name</TableHead>
           <TableHead className="text-center">Email</TableHead>
           <TableHead className="text-center">Mobile</TableHead>
@@ -93,6 +96,13 @@ function InstructorMangement()  {
       {isData && currentData.length > 0 ? (
               currentData.map((instructor) => (
                 <TableRow key={instructor.id}>
+                   <TableCell className="flex justify-center items-center">
+                              <img
+                                src={instructor.img||"/images/defaultProfile.jpg"}
+                                alt={`${instructor.name}'s profile`}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                            </TableCell>
                     <TableCell className="text-center">{instructor.name}</TableCell>
                     <TableCell className="text-center">{instructor.email}</TableCell>
                     <TableCell className="text-center">{instructor.mobile}</TableCell>

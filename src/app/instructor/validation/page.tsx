@@ -11,6 +11,14 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+  import {
+    Command,
+    CommandInput,
+    CommandList,
+    CommandEmpty,
+    CommandGroup,
+    CommandItem,
+  } from "@/components/ui/command";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,8 +41,36 @@ export default function Validation() {
   const [resumeFile , setResumeFile] = useState('');
   const [specializations, setSpecializations] = useState<string[]>([]);
   const [newSpec, setNewSpec] = useState("");
+  const [loading, setLoading] = useState(false);
+  const allSpecs = [
+    "Math",
+    "IELTS",
+    "Physics",
+    "Biology",
+    "Chemistry",
+    "English",
+    "Computer Science",
+    "Web Development",
+    "Data Science",
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Business Studies",
+    "Economics",
+    "Accounting",
+    "Marketing",
+  ]
+
   const router = useRouter();
 
+  const handleAdd = (spec: string) => {
+    if (
+      spec &&
+      !specializations.some((s) => s.toLowerCase() === spec.toLowerCase())
+    ) {
+      setSpecializations((prev) => [...prev, spec]);
+      setNewSpec("");
+    }
+  };
 
   const getCatData = async() => {
     try{
@@ -70,11 +106,12 @@ export default function Validation() {
     }
     
     const {description , experienceCategory ,experienceCertificate , resume ,specialization} = updatedData;
+    setLoading(true)
     const res = await updateInstructor(description , experienceCategory ,experienceCertificate , resume ,specialization);
     if(res.data.response.success === true) {
       router.push('/instructor');
     }
-
+    setLoading(false)
   }
 
   const postEcertificate = (file:File) => {
@@ -87,13 +124,14 @@ export default function Validation() {
       data.append("file" , file);
       data.append("upload_preset" , "levelup-full");
       data.append("cloud_name" , "levelup-full");
-
+      setLoading(true);
       fetch("https://api.cloudinary.com/v1_1/levelup-full/raw/upload",{
         method:'post',
         body:data,
       }).then((res) => res.json())
       .then(data => {
         console.log("data",data)
+        setLoading(false)
         setECertificate(data.secure_url.toString());
       })
       .catch((err) => {
@@ -114,12 +152,13 @@ export default function Validation() {
       data.append("file" , file);
       data.append("upload_preset" , "levelup-full");
       data.append("cloud_name" , "levelup-full");
-
+      setLoading(true);
       fetch("https://api.cloudinary.com/v1_1/levelup-full/raw/upload",{
         method:'post',
         body:data,
       }).then((res) => res.json())
       .then(data => {
+        setLoading(false);
         setResumeFile(data.url.toString());
       })
       .catch((err) => {
@@ -163,51 +202,67 @@ export default function Validation() {
   )}
 </div>
 <div>
-  <label className="block text-sm font-medium text-gray-700">Specializations</label>
+<label className="block text-sm font-medium text-gray-700 mb-2">
+        Specializations
+      </label>
 
-  <div className="flex space-x-2 mt-2">
-    <input
-      type="text"
-      value={newSpec}
-      onChange={(e) => setNewSpec(e.target.value)}
-      placeholder="e.g. Math, IELTS"
-      className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-    />
-    <button
-      type="button"
-      className="px-3 py-2 bg-sky-800 text-white rounded"
-      onClick={() => {
-        if (newSpec.trim()) {
-          setSpecializations((prev) => [...prev, newSpec.trim()]);
-          setNewSpec("");
-        }
-      }}
-    >
-      Add
-    </button>
-  </div>
+      <Command className="border rounded">
+        <CommandInput
+          placeholder="e.g. Math, IELTS"
+          value={newSpec}
+          onValueChange={setNewSpec}
+        />
+        {newSpec && (
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup>
+              {allSpecs
+                .filter(
+                  (s) =>
+                    s.toLowerCase().includes(newSpec.toLowerCase()) &&
+                    !specializations.includes(s)
+                )
+                .map((s) => (
+                  <CommandItem key={s} onSelect={() => handleAdd(s)}>
+                    {s}
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          </CommandList>
+        )}
+      </Command>
 
-  {/* Show added items */}
-  <div className="flex flex-wrap gap-2 mt-3">
-    {specializations.map((spec, idx) => (
-      <span
-        key={idx}
-        className="px-2 py-1 bg-gray-200 rounded-full text-sm flex items-center gap-2"
+      {/* Add button for custom value */}
+      <button
+        type="button"
+        className="px-3 py-2 bg-sky-800 text-white rounded mt-2"
+        onClick={() => handleAdd(newSpec)}
       >
-        {spec}
-        <button
-          type="button"
-          className="text-red-600 hover:text-red-800"
-          onClick={() =>
-            setSpecializations((prev) => prev.filter((_, i) => i !== idx))
-          }
-        >
-          ✕
-        </button>
-      </span>
-    ))}
-  </div>
+        Add
+      </button>
 </div>
+
+{/* Show added items */}
+<div className="flex flex-wrap gap-2 mt-3">
+  {specializations.map((spec, idx) => (
+    <span
+      key={idx}
+      className="px-2 py-1 bg-gray-200 rounded-full text-sm flex items-center gap-2"
+    >
+      {spec}
+      <button
+        type="button"
+        className="text-red-600 hover:text-red-800"
+        onClick={() =>
+          setSpecializations((prev) => prev.filter((_, i) => i !== idx))
+        }
+      >
+        ✕
+      </button>
+    </span>
+  ))}
+</div>
+
 
 {/* Category */}
 <div>
@@ -265,7 +320,11 @@ export default function Validation() {
 {/* Submit Button */}
 <button
   type="submit"
-  className="mt-4 bg-sky-900 text-white px-4 py-2 rounded-full shadow hover:bg-sky-950 w-full"
+  disabled={loading}
+  className={`w-full py-2 px-4 font-semibold rounded transition-colors 
+    ${loading
+      ? "bg-gray-400 text-white cursor-not-allowed"
+      : "bg-[#0F0F0F] text-white hover:bg-gray-800"}`}
 >
   Submit Application
 </button>

@@ -87,7 +87,7 @@ function SessionList({sessions}:SessionListProps) {
       {currentSessions && currentSessions.length > 0 ? (
         <>
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead className="bg-blue-100 text-gray-700">
+            <thead className="bg-[#EEEEEE] text-gray-700">
               <tr>
                 <th className="px-4 py-3 text-left font-semibold">No</th>
                 <th className="px-4 py-3 text-left font-semibold">Session Title</th>
@@ -162,7 +162,7 @@ function SessionList({sessions}:SessionListProps) {
                         <AlertDialogTrigger asChild>
                           <button
                             onClick={() => handleOpenDialog(sessions)}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                            className="px-4 py-2 bg-[#222831] text-white rounded-lg hover:bg-[#393E46]"
                           >
                             Rate the session
                           </button>

@@ -15,12 +15,12 @@ function MessageBtn(id:any) {
 
     return (
         <>
-         <div className="mt-3 ">
-          <button onClick={handleMessage} className=" px-3 py-1 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-          {/* <MessageCircle className="w-5 h-5 mr-2" /> */}
-            Message
-            </button>
-              </div>
+        <button
+      onClick={handleMessage}
+      className="px-6 py-2 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-700 transition cursor-pointer"
+    >
+      Message
+    </button>
         </>
     )
 }

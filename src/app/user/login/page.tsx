@@ -18,6 +18,7 @@ interface userData  {
  function UserLogin() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<userData>()
     const [passwordVisible , setPasswordVisible] = useState(false);
+      const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const togglePasswordVisibility = () => {
@@ -27,10 +28,13 @@ interface userData  {
 
     const onSubmit = async(data:userData) => {
        const {email , password} = data
+             setLoading(true);
         const res = await login(email , password);
         if(res?.data?.response?.success === true){
             router.push('/user/home');
         }else{
+             setLoading(false);
+
             toast.error(res?.data?.response?.message)
         }
 
@@ -104,10 +108,14 @@ interface userData  {
                                    
                                    {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
                                 </div>
-                                <button
-                                    type="submit"
-                                    className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition-colors"
-                                >
+                               <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className={`w-full py-2 px-4 font-semibold rounded transition-colors 
+                                            ${loading
+                                            ? "bg-gray-400 text-white cursor-not-allowed"
+                                            : "bg-[#0F0F0F] text-white hover:bg-gray-800"}`}
+                                        >
                                    Log In
                                 </button>
                                 <p className="mt-4 text-sm text-gray-600">

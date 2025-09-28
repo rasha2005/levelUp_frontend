@@ -11,7 +11,7 @@ import {
     CommandSeparator,
     CommandShortcut,
   } from "@/components/ui/command"
-  import { LayoutDashboard  , Users , GraduationCap , Boxes , Calendar , ListIcon , BookOpen} from 'lucide-react'
+  import { LayoutDashboard  , Users , GraduationCap , Boxes , Calendar , ListIcon , BookOpen ,Video} from 'lucide-react'
   import Link from "next/link";
   import { cn } from "@/lib/utils"; 
 import { usePathname } from "next/navigation";
@@ -56,6 +56,14 @@ const  Sidebar = () => {
           >
                 <BookOpen className="mr-2 h-4 w-4"/>
                 <Link href="/instructor/questionBank"> Question Bank</Link>
+            </CommandItem>
+            <CommandItem
+            className={cn(
+              pathname === "/instructor/myCourse" && "bg-blue-500 text-white"
+            )}
+          >
+                <Video className="mr-2 h-4 w-4"/>
+                <Link href="/instructor/myCourse"> My Course</Link>
             </CommandItem>
           </CommandGroup>
           

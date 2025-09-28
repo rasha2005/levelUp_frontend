@@ -1,177 +1,196 @@
-"use client"
+"use client";
 
 import { getCategoryData, getInstructorDetails } from "@/app/lib/api/userApi";
 import { useEffect, useState } from "react";
 import UserHeader from "@/components/user/userHeader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Avatar , AvatarFallback ,AvatarImage } from "@/components/ui/avatar";
-import { FaStar } from "react-icons/fa";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaStar , FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
+import UserSidebar from "@/components/user/userSideBar";
 
 interface InstructorData {
-  id?:string;
-  img?:string;
-  name:string;
-  email:string;
-  mobile:string;
-  rating:number;
-  description?:string;
-  experience?:string;
-  resume?:string;
-  category?:string;
-  isApproved?:boolean;
-  specializations?:string[] 
-
+  id?: string;
+  img?: string;
+  name: string;
+  email: string;
+  mobile: string;
+  rating: number;
+  description?: string;
+  experience?: string;
+  resume?: string;
+  category?: string;
+  isApproved?: boolean;
+  specializations?: string[];
 }
+
 interface CategoryData {
-  id?:string;
-  catName:string;
+  id?: string;
+  catName: string;
 }
 
 export default function Home() {
-  const router  = useRouter()
+  const router = useRouter();
   const [coaches, setCoaches] = useState<InstructorData[]>([]);
-  const [category , setCategory] = useState<CategoryData[]>([]);
-  const [search , setSearch] = useState(''); 
-   const [searchTerm , setSearchTerm] = useState('');
-   const [selectedCategory , setSelectedCategory] = useState('');
-  const [page, setPage] = useState(1); 
-  const [totalPages, setTotalPages] = useState(1)
-  const [limit, setLimit] = useState(5); 
+  const [category, setCategory] = useState<CategoryData[]>([]);
+  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(5);
 
-  useEffect(() => {
-  },[])
+  useEffect(() => {}, []);
 
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
       setSearchTerm(search);
       setPage(1);
-
       return () => clearTimeout(debounceTimeout);
-    },500)
-  },[search]);
+    }, 500);
+  }, [search]);
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
-  const handlePageChange = (newPage:number) => {
-      setPage(newPage)
-  }
+  const getInstructorData = async () => {
+    const res = await getInstructorDetails(page, limit, searchTerm, selectedCategory);
+    setCoaches(res?.data.response.instructor);
+    setTotalPages(Math.ceil(res?.data.response.total / limit));
+  };
 
-  const getInstructorData = async() => {
-      const res = await getInstructorDetails(page , limit , searchTerm  , selectedCategory);
-      setCoaches(res?.data.response.instructor);
-      setTotalPages(Math.ceil(res?.data.response.total / limit));
-  }
-  const getCatData = async() => {
+  const getCatData = async () => {
     const res = await getCategoryData();
     setCategory(res?.data.response.category);
-
-  }
+  };
 
   useEffect(() => {
     router.refresh();
     getInstructorData();
     getCatData();
-  },[page , limit , router , searchTerm,selectedCategory]);
- 
-    return (
-      <>
-    <UserHeader />
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto mt-8">
-        <div className="flex justify-between items-center mb-6">
-          <input
-            type="text"
-            placeholder="Search by name or specialization"
-            onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xs focus:outline focus:outline-2 focus:outline-blue-100 "
-          />
-          <select
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="ml-4 p-2 border border-gray-300 rounded-lg bg-blue-100 text-gray-700 focus:outline focus:outline-2 focus:outline-blue-100"
-          >
-            <option value="">Select Category</option>
-            {category ? (
-            category.map((category) => (
-              <option key={category.id} value={category.catName}>
-                {category.catName}
-              </option>
-            ))
-            ) : (
-              <option></option>
-            )
-            }
-          </select>
-        </div>
+  }, [page, limit, router, searchTerm, selectedCategory]);
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Coaches</h2>
-        <div className="space-y-4">
-        {coaches?.map((coach) => (
-    <div
-      key={coach.id}
-      className="flex items-center justify-between p-4 bg-blue-50 rounded-lg shadow-md"
-    >
-       <div className="flex items-center space-x-4">
-     
-        {/* Avatar */}
-        <Avatar className="w-12 h-12  border bg-white">
-          <AvatarImage
-            src={coach.img} // Ensure the `coach` object includes `profileImage` URL
-            alt={`${coach.name}'s profile`}
-          />
-          <AvatarFallback>{coach.name.charAt(0)}</AvatarFallback>
-        </Avatar>
-     <div>
-        <h3 className="text-lg font-semibold text-gray-700">{coach.name}</h3>
-        <p className="text-gray-500 mt-1">{coach.category}</p> 
-        <div className="flex">
-              {[...Array(5)].map((_, index) => {
-            const currentRate = index + 1;
-  
-            return (
-              <label key={currentRate}>
-                <FaStar
-                  size={12}
-                  color={
-                    currentRate <= Math.ceil(coach.rating / 10) ? "yellow" : "gray"
-                  }
-                  // className="cursor-pointer"
-                  // These handlers are not needed since it's readonly
-                  // onMouseEnter={() => setHover(currentRate)}
-                  // onMouseLeave={() => setHover(null)}
-                />
-              </label>
-            );
-          })}
-              </div>
-      </div>
-      </div>
-      <Link href={`/user/instructorDetail/${coach.id}`} ><div className="text-gray-600 cursor-pointer mr-3">view</div></Link>
-     
-    </div>
-    
-  ))}
-</div>
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
-            className="px-4 py-2 mx-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="px-4 py-2">{page}</span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages}
-            className="px-4 py-2 mx-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            Next
-          </button>
+  return (
+    <div className="flex min-h-screen">
+    <div className="flex-1">
+      <UserHeader />
+
+      <UserSidebar />
+
+
+      <section className="bg-[#0F0F0F] text-white py-10"> 
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Find Your Perfect Coach</h1> 
+          <p className="text-md sm:text-lg text-[#EAEFEF] mb-6">
+            Discover top instructors and level up your skills with personalized coaching.
+          </p>
+
+          {/* Search Card */}
+          <div className="bg-[#0F0F0F] p-4 sm:p-6 rounded-lg shadow-md max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3">
+            <input
+              type="text"
+              placeholder="Search by name or specialization"
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 border border-gray-700 rounded-lg px-4 py-2 bg-[#0F0F0F] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EAEFEF]"
+            />
+            <select
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="p-2 border border-gray-700 rounded-lg bg-[#0F0F0F] text-white focus:outline-none focus:ring-2 focus:ring-[#EAEFEF]"
+            >
+              <option value="">Category</option>
+              {category?.map((cat) => (
+                <option key={cat.id} value={cat.catName}>
+                  {cat.catName}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
-     
-      
-      </>
-    );
-  }
-  
+      </section>
+
+      {/* Instructor List */}
+      <section className="py-12 bg-white">
+        <div className="max-w-5xl mx-auto px-6 space-y-4">
+          <h2 className="text-2xl font-bold text-[#0F0F0F] mb-6">Coaches</h2>
+
+          {coaches && coaches.length > 0 ? (
+            coaches.map((coach) => (
+              <div
+                key={coach.id}
+                className="flex flex-col sm:flex-row items-center justify-between p-4 bg-white border border-[#EEEEEE] rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+              >
+                <div className="flex items-center space-x-4">
+                  <Avatar className="w-16 h-16 border bg-[#EEEEEE]">
+                    <AvatarImage src={coach.img} alt={`${coach.name}'s profile`} />
+                    <AvatarFallback>{coach.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#0F0F0F]">{coach.name}</h3>
+                    <p className="text-gray-500">{coach.category}</p>
+                    <div className="flex mt-1">
+                      {[...Array(5)].map((_, index) => {
+                        const currentRate = index + 1;
+                        return (
+                          <FaStar
+                            key={currentRate}
+                            size={14}
+                            color={currentRate <= Math.ceil(coach.rating / 10) ? "yellow" : "gray"}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <Link href={`/user/instructorDetail/${coach.id}`}>
+                  <div className="mt-4 sm:mt-0 text-[#0F0F0F] font-medium cursor-pointer hover:underline flex items-center gap-1">
+                    View <FaArrowRight size={16} />
+                  </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <Image
+                src="/images/empty.png"
+                alt="No instructors found"
+                width={192} 
+                height={192} 
+                className="mb-6"
+              />
+              <h3 className="text-xl font-semibold text-[#0F0F0F]">No instructors found</h3>
+              <p className="text-gray-500 mt-2">
+                Try adjusting your search or category filters.
+              </p>
+            </div>
+          )}
+
+          {coaches && coaches.length > 0 && (
+            <div className="mt-8 flex justify-center items-center gap-4">
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+                className="px-4 py-2 bg-[#0F0F0F] text-white rounded hover:bg-gray-800 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="px-4 py-2 text-[#0F0F0F]">{page}</span>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page === totalPages}
+                className="px-4 py-2 bg-[#0F0F0F] text-white rounded hover:bg-gray-800 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  </div>
+
+  );
+}

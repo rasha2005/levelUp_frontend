@@ -22,6 +22,8 @@ interface instructorData {
 export default function InstructorSignup() {
     const {register , handleSubmit , formState:{errors , isValid},watch} = useForm<instructorData>();
     const [passwordVisible , setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const router = useRouter();
 
     const togglePasswordVisibility = () => {
@@ -30,11 +32,12 @@ export default function InstructorSignup() {
 
     const onSubmit = async(data:instructorData) => {
        const { name , email , mobile , password } = data;
-
+        setLoading(false);
        const res = await signup(name , email , mobile , password);
        if(res?.success === true){
         router.push('/instructor/otp');
     }else{
+        setLoading(true);
         toast.error("email Id already exists")
     }
 
@@ -156,8 +159,12 @@ export default function InstructorSignup() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition-colors"
-                                >
+                                    disabled={loading}
+                                    className={`w-full py-2 px-4 font-semibold rounded transition-colors 
+                                        ${loading
+                                        ? "bg-gray-400 text-white cursor-not-allowed"
+                                        : "bg-[#0F0F0F] text-white hover:bg-gray-800"}`}
+                                    >
                                     Sign Up
                                 </button>
                                 <p className="mt-4 text-sm text-gray-600">

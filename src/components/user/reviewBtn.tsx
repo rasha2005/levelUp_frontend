@@ -31,13 +31,16 @@ function ReviewBtn({id}:ReviewBtnProps) {
     }
     return (
         <>
-        <div  className="mt-3 ">
+
             <AlertDialog>
 
             <AlertDialogTrigger asChild>
 
-        <button onClick={handleOpenDialog} className="p-1 border border-blue-500 text-blue-500 text-sm sm:text-base rounded hover:bg-blue-500 hover:text-white transition-colors">
-        add a review
+            <button
+          onClick={handleOpenDialog}
+          className="px-6 py-2 border border-gray-300 text-gray-800 font-medium rounded-lg hover:bg-gray-100 transition cursor-pointer"
+        >
+          Add a review
         </button>
             </AlertDialogTrigger>
 
@@ -65,7 +68,7 @@ function ReviewBtn({id}:ReviewBtnProps) {
             }
 
             </AlertDialog>
-        </div>
+       
         </>
     )
 }

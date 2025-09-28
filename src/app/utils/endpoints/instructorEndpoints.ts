@@ -25,5 +25,10 @@ export const instructorEndPoint = {
     createTest:'/instructor/createTest',
     deleteQuestion:'/instructor/deleteQuestion',
     deleteBundle:'/instructor/deleteBundle',
-    updateBundle:'/instructor/updateBundle'
+    updateBundle:'/instructor/updateBundle',
+    courseBundle:'/instructor/courseBundle',
+    courseData:'/instructor/courseData',
+    courseSlot:'/instructor/courseSlot',
+    getCourseSlots:'/instructor/getCourseSlots',
+    bundleStatus:'/instructor/bundleStatus'
 }
