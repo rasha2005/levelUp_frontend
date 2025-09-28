@@ -24,6 +24,8 @@ export const userEndpoints = {
     updateResult:'/user/updateResult',
     getCourse:'/user/getCourse',
     coursePayment:'/user/create-course-checkout-session',
-    studentCourse:'/user/studentCourse'
+    studentCourse:'/user/studentCourse',
+    getNotification:'/user/getNotification',
+    deleteNotifications:'/user/deleteNotifications'
    
 }

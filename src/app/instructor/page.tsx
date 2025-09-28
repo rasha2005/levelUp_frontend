@@ -107,6 +107,10 @@ const InstructorChart = dynamic(() => import("@/components/instructor/instructor
 </div>
           </div>
         </div>
+
+        <div className="mt-10">
+  
+  </div>
       </div>
     </>
     )

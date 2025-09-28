@@ -186,3 +186,13 @@ export const getStudentCourse = async(token:string | undefined) => {
     const res = await Api.get(userEndpoints.studentCourse ,{ params:{token} });
     return res;
 }
+
+export const getUserNotification = async() => {
+    const res = await Api.get(userEndpoints.getNotification);
+    return res;
+}
+
+export const clearAllNotifications = async() => {
+    const res = await Api.delete(userEndpoints.deleteNotifications);
+    return res;
+}

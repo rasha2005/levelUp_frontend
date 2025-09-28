@@ -22,7 +22,7 @@ export default function Login() {
                 <div className="flex flex-col sm:flex-row justify-center sm:gap-4 max-w-4xl w-full mx-auto">
                     <Link href="/instructor/login" className="block w-full sm:w-1/2"> {/* Add block and width classes here */}
                         <motion.div
-                            className="w-full p-6 bg-blue-200 rounded-lg shadow-md mb-4 sm:mb-0 hover:rotate-2 hover:shadow-2xl transition-all duration-300"
+                            className="w-full p-6 bg-[#F0F0F0] rounded-lg shadow-md mb-4 sm:mb-0 hover:rotate-2 hover:shadow-2xl transition-all duration-300"
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
@@ -45,7 +45,7 @@ export default function Login() {
                     <div className="w-full sm:w-1/2">
                         <Link href="/user/login" className="block w-full">
                             <motion.div
-                                className="p-6 bg-blue-200 rounded-lg shadow-md hover:rotate-2 hover:shadow-2xl transition-all duration-300"
+                                className="p-6 bg-[#F0F0F0] rounded-lg shadow-md hover:rotate-2 hover:shadow-2xl transition-all duration-300"
                                 initial={{ opacity: 0, y: 50 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: 0.4 }}

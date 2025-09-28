@@ -12,11 +12,27 @@ import {
 import Link from "next/link";
 import LogoutButton from "../common/logout";
 
-import { getImg } from "@/app/lib/api/userApi";
+import { clearAllNotifications, getImg, getUserNotification } from "@/app/lib/api/userApi";
 import { useEffect, useState } from "react";
+import { Bell } from "lucide-react";
+
+export interface Notification {
+  id: string;           
+  userId: string;        
+  title: string;          
+  message: string;      
+  isRead: boolean;        
+  createdAt: Date;       
+}
 
 function UserHeader() {
   const [img , setImg] = useState('');
+  const [notification , setNotification] = useState<Notification[]>([])
+
+  const clearAll = async() => {
+    await clearAllNotifications();
+    setNotification([]);
+  }
 
  const getUserProfile = async() => {
    const img = await getImg();
@@ -25,8 +41,13 @@ function UserHeader() {
   }
  }
 
+ const getNotification = async() => {
+  const data = await getUserNotification();
+  setNotification(data.data.response.data);
+ }
  useEffect(() => {
   getUserProfile();
+  getNotification()
  },[])
     return (
 
@@ -37,8 +58,43 @@ function UserHeader() {
           LevelUp
             </div>
           </Link>
-            <div className="flex justify-center sm:justify-end w-full sm:w-auto mr-7">
            
+
+            <div className="flex items-center justify-center sm:justify-end w-full sm:w-auto mr-7 space-x-4">
+    {/* Notification Icon */}
+    <DropdownMenu>
+      <DropdownMenuTrigger className="focus:outline-none relative">
+        <Bell className="w-6 h-6 text-white cursor-pointer" />
+        {notification.length > 0 && (
+          <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white text-xs font-bold flex items-center justify-center rounded-full">
+    {notification.length}
+  </span>        )}
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="w-80">
+        <div className="flex justify-between items-center px-3 py-2">
+          <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+          <button
+            className="text-sm text-blue-600 hover:underline"
+            onClick={clearAll}
+          >
+            Clear All
+          </button>
+        </div>
+        <DropdownMenuSeparator />
+
+        {notification.length === 0 ? (
+          <DropdownMenuItem className="text-gray-500">No notifications</DropdownMenuItem>
+        ) : (
+          notification.map((notif) => (
+            <DropdownMenuItem key={notif.id} className="flex flex-col text-left">
+              <span className="font-semibold">{notif.title}</span>
+              <span className="text-sm text-gray-600">{notif.message}</span>
+            </DropdownMenuItem>
+          ))
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
             <DropdownMenu>
   <DropdownMenuTrigger className="focus:outline-none">
             <Avatar>
