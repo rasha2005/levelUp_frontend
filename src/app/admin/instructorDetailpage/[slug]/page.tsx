@@ -10,9 +10,11 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
+import Image from "next/image";
 
 interface InstructorData {
     id?:string;
+    img?:string
     name:string;
     email:string;
     mobile:string;
@@ -61,6 +63,7 @@ function InstructorDetailpage() {
             const res = await getInstructorById(id);
             
             if(res.data.response.success === true) {
+                console.log("s",res.data.response.instructor)
                 setInstructor(res.data.response.instructor);
             }
 
@@ -90,7 +93,13 @@ function InstructorDetailpage() {
                         {/* Instructor Information Card */}
                         <div className="bg-gray-50 p-6 rounded-lg shadow-md mb-6">
                             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-                            <p><span className="font-semibold">Name:</span> {instructor?.name}</p>
+                            <img
+                                src={instructor?.img || "/images/defaultProfile.jpg"}
+                                alt="Instructor"
+                                className="w-32 h-32 rounded-full object-cover"
+                                />
+
+                            <p><span className="font-semibold mt-2">Name:</span> {instructor?.name}</p>
                             <p><span className="font-semibold">Email:</span> {instructor?.email}</p>
                             <p><span className="font-semibold">Phone:</span> {instructor?.mobile}</p>
                         </div>

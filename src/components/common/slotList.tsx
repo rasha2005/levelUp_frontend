@@ -94,7 +94,13 @@ function SlotList() {
       setSelectedQuestions([]);
       setIsOpen(false);
       if(data.data.response.data){
+
         toast.success(data.data.response.message)
+        setSlots((prev) =>
+          prev.map((slot) =>
+            slot.id === activeSlotId ? { ...slot, hasTest: true } : slot
+          )
+        );
       }else{
         toast.error(data.data.response.message)
       }

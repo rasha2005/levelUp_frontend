@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BookOpen, Home, LogOut, Menu, User, X } from "lucide-react";
+import { BookOpen, Home, LogOut, Menu, MessageCircle, User, X } from "lucide-react";
 import LogoutButton from "../common/logout";
 
 export default function UserSidebar() {
@@ -45,6 +45,9 @@ export default function UserSidebar() {
     <a href="/user/profile" className="flex items-center gap-2 hover:underline">
       <User size={18} /> Account
     </a>
+    <a href="/chat" className="flex items-center gap-2 hover:underline">
+    <MessageCircle size={18} /> Chat
+  </a>
   </nav>
   <div className="p-4 border-t border-gray-700">
     <div className="flex items-center gap-2 text-red-400 hover:text-red-500 cursor-pointer">

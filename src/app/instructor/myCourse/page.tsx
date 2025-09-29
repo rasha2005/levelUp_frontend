@@ -114,6 +114,7 @@ export default function MyCourse() {
   const handlePublish = async(bundleId:string | undefined) => {
     const data = await updateBundleStatus(bundleId);
     if(data.data.response.success) {
+      setIsPublish(true)
       toast.success("Published successfully");
     }else{
       toast.error(data.data.response.message);
