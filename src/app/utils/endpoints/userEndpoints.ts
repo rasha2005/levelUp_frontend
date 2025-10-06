@@ -26,6 +26,14 @@ export const userEndpoints = {
     coursePayment:'/user/create-course-checkout-session',
     studentCourse:'/user/studentCourse',
     getNotification:'/user/getNotification',
-    deleteNotifications:'/user/deleteNotifications'
+    deleteNotifications:'/user/deleteNotifications',
+    getBannerData:'/user/getBannerData',
+    getLatesetCourse:'/user/latestCourse',
+    getPopularInstructors:'/user/popularInstrcutors',
+    getSearchCourse:'/user/searchCourse',
+    raiseTicket:'/user/raiseTicket',
+    createQnA:'/user/createQnA',
+    fetchQnAData:'/user/fetchQnAData',
+    announcements:'/user/announcements'
    
 }

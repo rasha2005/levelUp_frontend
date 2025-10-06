@@ -81,7 +81,31 @@ export const fetchDetails = async() => {
     return res
 }
 
-export const getTransaction = async() => {
-    const res = await Api.get(adminEndpoints.fetchTransaction);
+export const getTransaction = async(search:string | "" , page:number , limit:number) => {
+    const res = await Api.get(adminEndpoints.fetchTransaction , {
+        params:{search,page,limit}
+    });
+    return res
+}
+
+export const getApproveInstructor = async() => {
+    const res = await Api.get(adminEndpoints.approveInstrcutors);
+    return res
+}
+
+export const fetchMonthlyRevenue = async() => {
+    const res = await Api.get(adminEndpoints.monthlyRevenue);
+    return res
+}
+
+export const getTickets = async(search:string | "" , page:number , limit:number) => {
+    const res = await Api.get(adminEndpoints.getTickets  , {
+        params:{search,page,limit}
+    });
+    return res
+}
+
+export const updateStatus = async(status:string , ticketId:string) => {
+    const res = await Api.put(adminEndpoints.updateTicket , {status , ticketId});
     return res
 }

@@ -1,3 +1,4 @@
+
 export const instructorEndPoint = {
     createInstructor :'/instructor/signup',
     verifyOtp:'/instructor/verifyOtp',
@@ -30,5 +31,9 @@ export const instructorEndPoint = {
     courseData:'/instructor/courseData',
     courseSlot:'/instructor/courseSlot',
     getCourseSlots:'/instructor/getCourseSlots',
-    bundleStatus:'/instructor/bundleStatus'
+    bundleStatus:'/instructor/bundleStatus',
+    createAnnouncement:'/instructor/announcememt',
+    deleteSlot:'/instructor/deleletSlot',
+    deleteCourse:'/instructor/deleteCourse',
+    updateCourse:'/instructor/updateCourse'
 }

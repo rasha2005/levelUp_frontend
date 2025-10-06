@@ -15,7 +15,7 @@ import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { updateRating } from "@/app/lib/api/userApi";
 import { useRouter } from "next/navigation";
-import { ArrowRight , ArrowLeft } from "lucide-react";
+import { ArrowRight , ArrowLeft, Star } from "lucide-react";
 
  interface SessionSlot {
   id?: string;
@@ -49,7 +49,7 @@ function SessionList({sessions}:SessionListProps) {
     const [rating, setRating] = useState<number | null>(null);
     const [hover, setHover] = useState<number | null>(null); 
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
     const router = useRouter()
 
     const totalPages = Math.ceil(sessions.length / itemsPerPage);
@@ -101,7 +101,7 @@ function SessionList({sessions}:SessionListProps) {
               {currentSessions.map((slot: Session, index: number) => (
                 <tr
                   key={slot.id || index}
-                  className="hover:bg-blue-50 transition-colors duration-200"
+                  className=" transition-colors duration-200"
                 >
                   <td className="px-4 py-3 text-gray-800">{startIndex + index + 1}</td>
                   <td className="px-4 py-3 text-gray-800">{slot.title}</td>
@@ -160,12 +160,19 @@ function SessionList({sessions}:SessionListProps) {
                     <td>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
+                        {new Date(slot.endTime) < new Date() && (
                           <button
-                            onClick={() => handleOpenDialog(sessions)}
-                            className="px-4 py-2 bg-[#222831] text-white rounded-lg hover:bg-[#393E46]"
-                          >
-                            Rate the session
-                          </button>
+                          onClick={() => handleOpenDialog(sessions)}
+                          // Increased size (w-10 h-10) for a square button, subtle styling
+                          className="w-10 h-10 border border-gray-400 text-gray-400 rounded-lg flex items-center justify-center 
+                                     hover:border-yellow-500 hover:text-yellow-500 hover:bg-gray-100 
+                                     transition duration-200 ease-in-out"
+                          title="Rate the Session" // Accessible tooltip
+                        >
+                          {/* 2. Use the Lucide Star component */}
+                          <Star className="w-5 h-5" />
+                        </button>
+                      )}
                         </AlertDialogTrigger>
                         {selectedSession === sessions && (
                           <AlertDialogContent>

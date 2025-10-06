@@ -9,6 +9,17 @@ import {
     DialogDescription,
     DialogFooter,
   } from "@/components/ui/dialog";
+  import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useEffect,useState } from "react";
@@ -16,9 +27,11 @@ import { Input } from "@/components/ui/input";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from "next/navigation";
-import { createCourseSlot, getCourseSlots } from "@/app/lib/api/instructorApi";
+import { createAnnouncement, createCourseSlot, delteSlotById, getCourseSlots } from "@/app/lib/api/instructorApi";
 import Slot from "@/app/utils/interface/Slot";
 import { useRouter } from "next/navigation";
+import { Edit, Trash2 } from "lucide-react";
+
 
 
 export default function Course() {
@@ -30,6 +43,11 @@ export default function Course() {
     const [slots , setSlots] = useState<Slot[]>([])
     const today = new Date().toISOString().split("T")[0]
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
+    const [announcementTitle, setAnnouncementTitle] = useState("");
+    const [announcementMessage, setAnnouncementMessage] = useState("");
+    const [isDelete , setIsDelete] = useState(false);
+    const [slotId , setSlotId] = useState("");
     const router = useRouter();
 
 
@@ -56,7 +74,6 @@ export default function Course() {
       if (Object.keys(newErrors).length > 0) return;
 
       const data = await createCourseSlot(title , date,startTime , endTime,slug);
-      console.log("dd",data)
       if(data.data.response.success){
         toast.success(data.data.response.message)
         setSlots((prevSlots) => [...prevSlots, data.data.response.data]);
@@ -66,6 +83,38 @@ export default function Course() {
      setEndTime('');
      setStartTime("");
      setTitle("")
+    }
+
+    const handleCreateAnnouncement = async() => {
+      const newErrors: { [key: string]: string } = {};
+
+      if (!announcementTitle.trim()) newErrors.title = "Title is required";
+      if (!announcementMessage.trim()) newErrors.message = "Message is required";
+    
+      setErrors(newErrors);
+    
+      if (Object.keys(newErrors).length > 0) return;
+
+      const data = await createAnnouncement(announcementTitle,announcementMessage ,slug);
+      if(data.data.response.success) {
+        toast.success(data.data.response.message);
+      }
+
+      setAnnouncementMessage("");
+      setAnnouncementTitle("");
+      setIsAnnouncementOpen(false);
+
+    }
+
+    const handleDeleteSlot = async() => {
+      const data = await delteSlotById(slotId);
+      if(data.data.response.success) {
+        toast.success(data.data.response.message);
+        setSlots((prevSlots) => prevSlots.filter((slot) => slot.id !== slotId));
+       
+      }
+      setIsDelete(false);
+      setSlotId('');
     }
 
     const getBundleSlots = async() => {
@@ -90,8 +139,10 @@ export default function Course() {
       <div className="flex-1 p-6">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-xl font-semibold text-gray-800">Course Slots</h1>
-            <Button onClick={() => setIsOpen(true)}>+  Create Slot</Button>
-          </div>
+            <div className="flex gap-3">
+            <Button onClick={() => setIsOpen(true)}>+ Create Slot</Button>
+            <Button onClick={() => setIsAnnouncementOpen(true)}>+ Add Announcement</Button>
+          </div>          </div>
           <div className="w-full border border-gray-20">
           <Table>
   <TableHeader>
@@ -137,20 +188,35 @@ export default function Course() {
             <TableCell className="text-center">{date}</TableCell>
             <TableCell className="text-center">{time}</TableCell>
             <TableCell className="text-center">
-              <button
-                className={`px-3 py-1 rounded text-white ${
-                  buttonText === "Join"
-                    ? "bg-green-600 hover:bg-green-700"
-                    : buttonText === "Upcoming"
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-red-500 cursor-not-allowed"
-                }`}
-                disabled={buttonText !== "Join"}
-                onClick={() => buttonText === "Join" && router.push(`/instructor/room/${slot.roomId}`)}
-              >
-                {buttonText}
-              </button>
-            </TableCell>
+            <div className="flex items-center justify-center gap-3">
+    <button
+      className={`px-3 py-1 rounded text-white ${
+        buttonText === "Join"
+          ? "bg-green-600 hover:bg-green-700"
+          : buttonText === "Upcoming"
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-red-500 cursor-not-allowed"
+      }`}
+      disabled={buttonText !== "Join"}
+      onClick={() =>
+        buttonText === "Join" &&
+        router.push(`/instructor/room/${slot.roomId}`)
+      }
+    >
+      {buttonText}
+    </button>
+
+    <Trash2
+      size={15}
+      className="text-red-600 cursor-pointer hover:scale-110 transition"
+      onClick={() => {
+        setIsDelete(true)
+        setSlotId(slot.id)
+      }}
+    />
+  </div>
+           
+ </TableCell>
           </TableRow>
         );
       })
@@ -234,6 +300,64 @@ export default function Course() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+
+      <Dialog open={isAnnouncementOpen} onOpenChange={setIsAnnouncementOpen}>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle>Add Announcement</DialogTitle>
+    </DialogHeader>
+    <div className="space-y-4 mt-4">
+      <Input 
+        placeholder="Title" 
+        value={announcementTitle} 
+        onChange={(e) => setAnnouncementTitle(e.target.value)} 
+      />
+       {errors.title && (
+      <p className="text-red-500 text-xs mt-1">{errors.title}</p>
+    )}
+      <textarea
+        placeholder="Message"
+        value={announcementMessage}
+        onChange={(e) => setAnnouncementMessage(e.target.value)}
+        className="w-full border border-gray-300 rounded p-2"
+      />
+       {errors.message && (
+      <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+    )}
+    </div>
+    <DialogFooter className="mt-6 flex gap-3">
+      <Button onClick={handleCreateAnnouncement}>Send</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+
+
+<AlertDialog open={isDelete} onOpenChange={setIsDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the slot.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              setIsDelete(false)
+              setSlotId("")
+              }}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleDeleteSlot()}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
         </>
     )
 } 

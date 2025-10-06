@@ -172,7 +172,7 @@ export const updateTestResult = async(slotId:string |undefined | string[],score:
     return res;
 }
 
-export const getCourseData = async(courseId:string |undefined ) => {
+export const getCourseDetails = async(courseId:string |undefined ) => {
     const res = await Api.get(userEndpoints.getCourse,{params:{courseId}});
     return res;
 }
@@ -196,3 +196,47 @@ export const clearAllNotifications = async() => {
     const res = await Api.delete(userEndpoints.deleteNotifications);
     return res;
 }
+
+export const getHighRatingCourse = async() => {
+    const res = await Api.get(userEndpoints.getBannerData);
+    return res;
+}
+
+export const getLatestCourses = async() => {
+    const res = await Api.get(userEndpoints.getLatesetCourse);
+    return res;
+}
+
+export const getPopularInstrcutors = async() => {
+    const res = await Api.get(userEndpoints.getPopularInstructors);
+    return res;
+}
+
+export const getCourseData = async(page:number , limit:number , searchTerm:String | null , selectedCategory : string, minPrice:number | "", maxPrice:number | "") => {
+    const res = await Api.get(userEndpoints.getSearchCourse , {
+        params:{page, limit, searchTerm, selectedCategory, minPrice, maxPrice}
+    });
+    return res;
+}
+
+export const raiseCourseTicket = async(thumbnail:string|null , description:string , courseId:string | undefined ,instructorId:string | undefined) => {
+    const res = await Api.post(userEndpoints.raiseTicket,{thumbnail , description ,courseId, instructorId});
+    return res;
+}
+
+export const createQnAData = async(message:string , parentId:string|undefined , courseId:string|undefined) => {
+    const res = await Api.post(userEndpoints.createQnA,{message , parentId, courseId});
+    return res;
+}
+
+export const fetchAllQnADatas = async(courseId:string|undefined) => {
+    const res = await Api.get(userEndpoints.fetchQnAData,{params:{courseId}});
+    return res;
+}
+
+export const fetchAnnouncementDatas = async() => {
+    const res = await Api.get(userEndpoints.announcements);
+    return res;
+}
+
+

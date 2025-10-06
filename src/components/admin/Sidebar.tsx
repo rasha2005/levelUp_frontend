@@ -11,7 +11,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
-import { LayoutDashboard, Users, GraduationCap, Boxes } from "lucide-react";
+import { LayoutDashboard, Users, GraduationCap, Boxes, UserCheck ,Ticket} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils"; 
 import { usePathname } from "next/navigation";
@@ -50,6 +50,22 @@ const Sidebar = () => {
             <GraduationCap className="mr-2 h-4 w-4" />
             <Link href="/admin/instructor">Instructor Management</Link>
           </CommandItem>
+          <CommandItem
+          className={cn(
+            pathname === "/admin/instructor-approval" && "bg-blue-500 text-white"
+          )}
+        >
+          <UserCheck className="mr-2 h-4 w-4" /> {/* icon from lucide-react */}
+          <Link href="/admin/instructor-approval">Instructor Approval</Link>
+        </CommandItem>
+        <CommandItem
+          className={cn(
+            pathname === "/admin/ticket-managment" && "bg-blue-500 text-white"
+          )}
+        >
+          <Ticket className="mr-2 h-4 w-4" /> 
+          <Link href="/admin/tikect-managment">Ticket</Link>
+        </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Other">

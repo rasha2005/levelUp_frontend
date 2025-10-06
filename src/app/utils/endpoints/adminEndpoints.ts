@@ -12,5 +12,9 @@ export const adminEndpoints = {
     cancelAdminApprovel:'/admin/cancelApprovel',
     getUser:'/admin/getUser',
     fetchDetails:'/admin/fetchDetails',
-    fetchTransaction:'/admin/fetchTransaction' 
+    fetchTransaction:'/admin/fetchTransaction' ,
+    approveInstrcutors:'/admin/approveInstrcutors',
+    monthlyRevenue:'/admin/revenue-summary',
+    getTickets:'/admin/getTickets',
+    updateTicket:'/admin/updateTicket'
 }

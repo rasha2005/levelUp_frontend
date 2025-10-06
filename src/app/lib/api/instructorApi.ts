@@ -188,3 +188,26 @@ export const updateBundleStatus =  async(bundleId:string | undefined) => {
     return res;
 }
 
+export const createAnnouncement =  async(announcementTitle:string,announcementMessage:string ,bundleId:string | undefined) => {
+    const res = await Api.post(instructorEndPoint.createAnnouncement,{announcementTitle,announcementMessage,bundleId});
+    return res;
+}
+
+
+export const delteSlotById = async(id:string) => {
+    const res = await Api.delete(instructorEndPoint.deleteSlot, {params:{id}});
+    return  res
+}
+
+export const deleteCourseById = async(id:string | undefined) => {
+    const res = await Api.delete(instructorEndPoint.deleteCourse, {params:{id}});
+    return  res
+}
+
+export const updateCourseById = async(bundleName:string , description:string , price:number|"",participantLimit:number|"" , thumbnail:string | null ,courseId:string | undefined) => {
+    const res = await Api.put(instructorEndPoint.updateCourse, {bundleName , description , price,participantLimit , thumbnail , courseId});
+    return  res
+}
+
+
+

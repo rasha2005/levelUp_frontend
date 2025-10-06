@@ -1,6 +1,19 @@
 "use client"
 
-import { coursePayement, getCourseData } from "@/app/lib/api/userApi";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { coursePayement, getCourseDetails, raiseCourseTicket } from "@/app/lib/api/userApi";
 import CourseBundle from "@/app/utils/interface/CourseBundle";
 import Slot from "@/app/utils/interface/Slot";
 import { useParams } from "next/navigation";
@@ -9,12 +22,21 @@ import {loadStripe} from "@stripe/stripe-js"
 import Link from "next/link";
 import UserHeader from "@/components/user/userHeader";
 import UserSidebar from "@/components/user/userSideBar";
+import { Flag } from "lucide-react";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import QnASection from "@/components/user/QnASection"
 
 export default function CourseDetails() {
     const [course , setCourse] = useState<CourseBundle>()
     const [slots , setSlots] = useState<Slot[]>([])
     const [isEnrolled ,setIsEnrolled] = useState(false);
-
+    const [issueType, setIssueType] = useState("")
+    const [description, setDescription] = useState("")
+    const [isOpen , setIsOpen] = useState(false);
+    const [thumbnail, setThumbnail] = useState<string | null>(null);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    
 
       const params = useParams()
       const slug = params.slug?.toString()
@@ -45,8 +67,29 @@ export default function CourseDetails() {
           
              }
 
-      const getCourseDetails = async() => {
-        const data = await getCourseData(slug);
+             const handleThumbnailChange = (file:File) => {
+              const data = new FormData();
+                  data.append("file" , file);
+                  data.append("upload_preset" , "levelup-full");
+                  data.append("cloud_name" , "levelup-full");
+            
+                  fetch("https://api.cloudinary.com/v1_1/levelup-full/image/upload",{
+                    method:'post',
+                    body:data,
+                  }).then((res) => res.json())
+                  .then(data => {
+                      setThumbnail(data.url);
+                   
+                   
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  } );
+          
+            };
+
+      const courseDetails = async() => {
+        const data = await getCourseDetails(slug);
         if(data.data.response?.isEnrolled){
           setIsEnrolled(true);
         }
@@ -55,6 +98,20 @@ export default function CourseDetails() {
           setCourse(data.data.response.data);
           setSlots(data.data.response.data.slots)
         }
+      }
+
+      const handleReportSubmit = async() => {
+        const newErrors: { [key: string]: string } = {};
+        if (!description.trim()) newErrors.description = "Description is required";
+        console.log("d",course?.instructorId)
+        const data = await raiseCourseTicket(thumbnail , description , slug ,course?.instructorId);
+        if(data.data.response.success){
+          setIsOpen(false) 
+          toast.success("Your report has been submitted successfully!");
+        }else{
+          toast.error(data.data.response.message);
+        }
+  
       }
 
    
@@ -74,11 +131,13 @@ export default function CourseDetails() {
 
 
     useEffect(() => {
-      getCourseDetails()
+      courseDetails()
     },[])
   
     return (
       <>
+                <ToastContainer />
+
       <UserHeader/>
       <UserSidebar/>
       <div className="min-h-screen bg-white">
@@ -131,11 +190,19 @@ export default function CourseDetails() {
     <p className="text-gray-600">Level: Beginner</p>
     <p className="text-gray-600">Duration: {durationInWeeks} Weeks</p>
     <p className="text-gray-600">Students: {course?.participantLimit}</p>
-    <p className="text-2xl font-bold my-4">${course?.price}</p>
-    {!isEnrolled && (
+    <p className="text-2xl font-bold my-4">₹{course?.price}</p>
+    {isEnrolled ? (
+  <button
+  onClick={() => setIsOpen(true)}
+  className="w-full mt-3 flex items-center justify-center gap-2 border border-gray-700 text-gray-700 py-2 rounded hover:bg-gray-100 transition"
+  >
+     <Flag size={18} className="text-red-700" />
+    Report Course
+  </button>
+) : (
   <button
     onClick={() => handlePayement(course)}
-   className="w-full bg-[#0F0F0F] text-white py-2 rounded hover:bg-gray-800 transition"
+    className="w-full bg-[#0F0F0F] text-white py-2 rounded hover:bg-gray-800 transition"
   >
     Enroll Now
   </button>
@@ -148,13 +215,12 @@ export default function CourseDetails() {
   <h2 className="text-2xl font-semibold mb-4">Live Sessions</h2>
   <div className="space-y-4">
     {slots
-      // Sort slots by createdAt ascending (oldest first)
+      
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-      // Filter based on enrollment / free trial
       .filter((slot, index) => {
-        if (isEnrolled) return true; // show all slots if enrolled
-        if (course?.isFreeTrial && index === 0) return true; // show only first slot if free trial
-        return false; // hide all other slots
+        if (isEnrolled) return true; 
+        if (course?.isFreeTrial && index === 0) return true; 
+        return false; 
       })
       .map((slot, i) => {
         const start = new Date(slot.startTime);
@@ -225,11 +291,69 @@ export default function CourseDetails() {
       })}
   </div>
 </div>
-
+<div className="mb-12">
+  <QnASection courseId={slug} endDate={course?.endDate} startDate={course?.startDate}/>
+</div>
 </div>
 
 
 </div>
+
+<Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger >
+      
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Report a Problem</DialogTitle>
+          <DialogDescription>
+            Please describe the issue you’re facing with this course or instructor.
+          </DialogDescription>
+        </DialogHeader>
+
+          <div className="space-y-2">
+            <Label htmlFor="attachment">Attachment (optional)</Label>
+            <span className="text-xs text-gray-500 block">
+            Attach a screenshot or file that helps us understand the issue better.
+            </span>
+            <Input
+              id="attachment"
+              type="file"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  handleThumbnailChange(e.target.files[0]);
+                }
+              }}
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              placeholder="Describe the issue in detail..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              
+            />
+            {errors.description && (
+        <p className="text-red-500 text-xs">{errors.description}</p>
+      )}
+
+          </div>
+
+         
+       
+
+        <DialogFooter>
+          <Button onClick={handleReportSubmit} className="bg-[#0F0F0F] hover:bg-gray-800">
+            Submit Report
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 </>
     );
   }

@@ -39,7 +39,7 @@ async function InstructorDetail({params}:any) {
     const review = data.data.response.review;
     const isReview = data.data.response.isReview;
     const course = data.data.response.course ;
-    console.log('cou',course);
+
 
     let events = data.data.response.instructor.scheduledSession?.events || [];
 

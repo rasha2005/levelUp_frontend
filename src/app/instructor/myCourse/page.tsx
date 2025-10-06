@@ -9,16 +9,26 @@ import {
     DialogDescription,
     DialogFooter,
   } from "@/components/ui/dialog"
+  import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 import Navbar from "@/components/instructor/Navbar";
 import Sidebar from "@/components/instructor/Sidebar";
-import { Plus } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { createCourseBundle, getCourseData, updateBundleStatus } from "@/app/lib/api/instructorApi";
+import { createCourseBundle, deleteCourseById, getCourseData, updateBundleStatus, updateCourseById } from "@/app/lib/api/instructorApi";
 import CourseBundle from "@/app/utils/interface/CourseBundle";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,7 +45,10 @@ export default function MyCourse() {
   const [endDate, setEndDate] = useState("");
   const [isFreeTrial, setIsFreeTrial] = useState(false);
   const [bundles , setBundles] = useState<CourseBundle[]>([]);
-  const [isPublish , setIsPublish] = useState<boolean>(false)
+  const [isPublish , setIsPublish] = useState<boolean>(false);
+  const [isDelete , setIsDelete] = useState(false);
+  const [bundelId , setBundleId] = useState<string | undefined>("");
+  const [isEdit , setIsEdit] = useState(false);
 
   const handleThumbnailChange = (file:File) => {
     const data = new FormData();
@@ -111,6 +124,55 @@ export default function MyCourse() {
      setThumbnail(null)
   };
 
+  const handleDeleteBundle = async() => {
+    const data = await deleteCourseById(bundelId);
+    if(data.data.response.success){
+      toast.success(data.data.response.message)
+      setBundles((prev) => prev.filter((bundle) => bundle.id !== bundelId));
+    }
+    setIsDelete(false);
+    setBundleId("");
+  }
+
+
+  const handleEdit = (id: string|undefined) => {
+    const bundle = bundles.find((b) => b.id === id);
+    if (!bundle) return;
+  
+    setBundleId(id);
+    setIsEdit(true);  
+    setIsOpen(true)
+    setBundleName(bundle.name);
+    setDescription(bundle.description);
+    setPrice(bundle.price);
+    setParticipantLimit(bundle.participantLimit || "");
+    setThumbnail(bundle.thumbnail || null); 
+  };
+  
+  const handleUpdateBundle = async() => {
+    const data = await updateCourseById(bundleName , description , price,participantLimit , thumbnail , bundelId);
+    if (data.data.response.success) {
+      toast.success(data.data.response.message);
+  
+      setBundles((prev) =>
+        prev.map((b) =>
+          b.id === bundelId
+            ? { ...b, name: bundleName, description, price, participantLimit,thumbnail }
+            : b
+        )
+      );
+    
+    }
+    setIsEdit(false);
+    setBundleId('');
+    setIsOpen(false);
+
+    setBundleName("");
+    setDescription("");
+    setThumbnail(null);
+    setPrice("");
+    setParticipantLimit("");
+  }
   const handlePublish = async(bundleId:string | undefined) => {
     const data = await updateBundleStatus(bundleId);
     if(data.data.response.success) {
@@ -220,6 +282,26 @@ export default function MyCourse() {
 )}
     </div>
   </div>
+  <div className="flex justify-end gap-3 ">
+      <button
+        onClick={() => handleEdit(bundle.id)}
+        className="text-gray-600 hover:text-blue-600 transition"
+      >
+        <Edit size={18} />
+      </button>
+
+      {bundle?.status !== "published" && (
+        <button
+          onClick={() => {
+            setIsDelete(true);
+            setBundleId(bundle.id)
+          }}
+          className="text-gray-600 hover:text-red-600 transition"
+        >
+          <Trash2 size={18} />
+        </button>
+      )}
+    </div>
   <Link
   href={`/instructor/course/${bundle.id}`}
   className="mt-auto w-full px-4 py-2 bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-700 text-center inline-block"
@@ -234,115 +316,180 @@ export default function MyCourse() {
         </main>
       </div>
     </div>
-
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogContent className="sm:max-w-md max-h-[97vh] overflow-y-auto custom-scroll">
-                <DialogHeader>
-                  <DialogTitle>Create a new bundle</DialogTitle>
-                  <DialogDescription>
-                    Enter a name for your question bundle.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 mt-4">
-  <Input 
-    placeholder="Bundle name" 
-    value={bundleName} 
-    onChange={(e) => setBundleName(e.target.value)} 
-  />
-  {errors.bundleName && <p className="text-red-500 text-xs">{errors.bundleName}</p>}
+    <DialogContent className="sm:max-w-md max-h-[97vh] overflow-y-auto custom-scroll [&>button]:hidden">
 
-  <div className="flex flex-col space-y-1">
-    <label className="text-gray-800 text-sm">Thumbnail</label>
-    <p className="text-gray-700 text-xs">Set a thumbnail that stands out and draws viewers' attention.</p>
-    <Input type="file" accept="image/*" onChange={(e) => {
-      if (e.target.files && e.target.files[0]) {
-        handleThumbnailChange(e.target.files[0]);
-      }
-    }} />
-  </div>
+    <DialogHeader>
+      <DialogTitle>{isEdit ? "Edit Bundle" : "Create a New Bundle"}</DialogTitle>
+      <DialogDescription>
+        {isEdit
+          ? "Update the bundle details below."
+          : "Enter details for your new question bundle."}
+      </DialogDescription>
+    </DialogHeader>
 
-  <Textarea 
-    placeholder="Short description" 
-    value={description} 
-    onChange={(e) => setDescription(e.target.value)}
-  />
-  {errors.description && <p className="text-red-500 text-xs">{errors.description}</p>}
+    <div className="space-y-4 mt-4">
+      {/* Bundle Name */}
+      <Input
+        placeholder="Bundle name"
+        value={bundleName}
+        onChange={(e) => setBundleName(e.target.value)}
+      />
+      {errors.bundleName && (
+        <p className="text-red-500 text-xs">{errors.bundleName}</p>
+      )}
 
- 
+      {/* Thumbnail */}
+      <div className="flex flex-col space-y-1">
+        <label className="text-gray-800 text-sm">Thumbnail</label>
+        <p className="text-gray-700 text-xs">
+          Set a thumbnail that stands out and draws viewers' attention.
+        </p>
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              handleThumbnailChange(e.target.files[0]);
+            }
+          }}
+        />
+      </div>
 
-  <div className="mb-4">
-  <label className="block text-gray-700 text-sm font-medium mb-1">
-    Price
-  </label>
-  <Input 
-    type="number" 
-    placeholder="Enter price" 
-    value={price} 
-    onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
-  />
-  {errors.price && (
-    <p className="text-red-500 text-xs">{errors.price}</p>
-  )}
-</div>
+      {/* Description */}
+      <Textarea
+        placeholder="Short description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      {errors.description && (
+        <p className="text-red-500 text-xs">{errors.description}</p>
+      )}
 
-<div className="mb-4">
-  <label className="block text-gray-700 text-sm font-medium mb-1">
-    Participant Limit
-  </label>
-  <Input 
-    type="number" 
-    placeholder="Enter participant limit" 
-    value={participantLimit} 
-    onChange={(e) => setParticipantLimit(e.target.value === "" ? "" : Number(e.target.value))}
-  />
-  {errors.participantLimit && (
-    <p className="text-red-500 text-xs">{errors.participantLimit}</p>
-  )}
-</div>
+      {/* Price */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-medium mb-1">
+          Price
+        </label>
+        <Input
+          type="number"
+          placeholder="Enter price"
+          value={price}
+          onChange={(e) =>
+            setPrice(e.target.value === "" ? "" : Number(e.target.value))
+          }
+        />
+        {errors.price && <p className="text-red-500 text-xs">{errors.price}</p>}
+      </div>
 
-<div className="flex gap-3">
-  <div className="flex flex-col w-full">
-    <label className="text-gray-700 text-sm font-medium mb-1">
-      Start Date
-    </label>
-    <Input 
-      type="date" 
-      value={startDate} 
-      onChange={(e) => setStartDate(e.target.value)} 
-    />
-    {errors.startDate && <p className="text-red-500 text-xs">{errors.startDate}</p>}
-  {errors.endDate && <p className="text-red-500 text-xs">{errors.endDate}</p>}
-  </div>
+      {/* Participant Limit */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-medium mb-1">
+          Participant Limit
+        </label>
+        <Input
+          type="number"
+          placeholder="Enter participant limit"
+          value={participantLimit}
+          onChange={(e) =>
+            setParticipantLimit(e.target.value === "" ? "" : Number(e.target.value))
+          }
+        />
+        {errors.participantLimit && (
+          <p className="text-red-500 text-xs">{errors.participantLimit}</p>
+        )}
+      </div>
 
-  <div className="flex flex-col w-full">
-    <label className="text-gray-700 text-sm font-medium mb-1">
-      End Date
-    </label>
-    <Input 
-      type="date" 
-      value={endDate} 
-      onChange={(e) => setEndDate(e.target.value)} 
-    />
+      {/* Start & End Date -> ONLY for Create */}
+      {!isEdit && (
+        <div className="flex gap-3">
+          <div className="flex flex-col w-full">
+            <label className="text-gray-700 text-sm font-medium mb-1">
+              Start Date
+            </label>
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            {errors.startDate && (
+              <p className="text-red-500 text-xs">{errors.startDate}</p>
+            )}
+          </div>
 
-  </div>
-</div>
+          <div className="flex flex-col w-full">
+            <label className="text-gray-700 text-sm font-medium mb-1">
+              End Date
+            </label>
+            <Input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            {errors.endDate && (
+              <p className="text-red-500 text-xs">{errors.endDate}</p>
+            )}
+          </div>
+        </div>
+      )}
 
+      {/* Free Trial Switch */}
+      {!isEdit && (
 
-  <div className="flex items-center gap-2">
-    <span className="text-gray-700 text-xs">Turn on Free Trial for first session</span>
-    <Switch checked={isFreeTrial} onCheckedChange={setIsFreeTrial} />
-  </div>
+      <div className="flex items-center gap-2">
+        <span className="text-gray-700 text-xs">
+          Turn on Free Trial for first session
+        </span>
+        <Switch checked={isFreeTrial} onCheckedChange={setIsFreeTrial} />
+      </div>
+      )}
+    </div>
 
-  <DialogFooter className="mt-6 flex gap-3">
-    <Button onClick={handleCreateBundle}>Create</Button>
-    
-  </DialogFooter>
-</div>
+    <DialogFooter className="mt-6 flex gap-3">
+    <Button
+  onClick={() => {
+    setIsEdit(false);
+    setIsOpen(false);
+    setBundleName("");
+    setDescription("");
+    setThumbnail(null);
+    setPrice("");
+    setParticipantLimit("");
+  }}
+>
+  Cancel
+</Button>
+      <Button onClick={isEdit ? handleUpdateBundle : handleCreateBundle}>
+        {isEdit ? "Update" : "Create"}
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
 
-                
-              </DialogContent>
-            </Dialog>
-
+            <AlertDialog open={isDelete} onOpenChange={setIsDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the slot.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              setIsDelete(false)
+              setBundleId("")
+              }}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleDeleteBundle()}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
             
     </>
 }

@@ -9,6 +9,7 @@ export default interface CourseBundle {
     endDate?: string;            
     isFreeTrial: boolean;        
     status?: "draft" | "published"; 
+    instructorId? : string;
     sessionCount?: number | 0;       
     createdAt?: string; 
 }

@@ -16,7 +16,7 @@ async function Sessions() {
     const sessions =  data.data.response.slot.slots;
     const response = await getStudentCourse(authToken);
     const course = response.data.response.data
-    console.log(sessions)
+    console.log(course)
     return (
         <>
         <UserHeader/>

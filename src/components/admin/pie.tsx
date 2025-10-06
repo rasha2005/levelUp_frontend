@@ -1,77 +1,47 @@
 "use client"
-import { ResponsiveContainer, PieChart, Pie } from "recharts";
-import { getInstructor, getTransaction } from '@/app/lib/api/adminApi';
-import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
-import { useEffect, useState } from 'react';
-interface Instructor {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    mobile: string;
-    category: string;
-    description: string;
-    experience: string;   
-    resume: string;     
-    img: string | null;  
-    rating: number | null;
-    isApproved: boolean;
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+
+interface PieChartCompProps {
+    totalStudents: number;
+    totalInstructors: number;
   }
-  
-
-function PieChartComp() {
-
-    const [approvedInstructor , setApprovedInstructor] = useState<Instructor[]>([]);
-    const [notapprovedInstructor , setNotApprovedInstructor] = useState<Instructor[]>([]);
-    const [ instructor , setInstructor] = useState<Instructor[]>([]);
-    const fetchTransaction = async() => {
-        const res = await getInstructor();
-        setInstructor(res.data.response.instructorData)
-    }
-
-    useEffect(() => {
-        if (instructor.length > 0) {
-            const approved:Instructor[] = [];
-            const notApproved:Instructor[] = [];
-    
-            instructor.forEach((ele: Instructor) => {
-                if (ele.isApproved) {
-                    approved.push(ele);
-                } else {
-                    notApproved.push(ele);
-                }
-            });
-    
-            setApprovedInstructor(approved);
-            setNotApprovedInstructor(notApproved);
-        }
-    }, [instructor]);
+const PieChartComp: React.FC<PieChartCompProps> = ({ totalStudents, totalInstructors }) => {
 
     const data = [
-        { name: "Approved", value: approvedInstructor.length },
-        { name: "Not Approved", value: notapprovedInstructor.length },
+        { name: 'Students', value: totalStudents, color: '#9333EA' },
+        { name: 'Instructors', value: totalInstructors, color: '#F59E0B' },  
+        
       ];
-
-    useEffect(() => {
-        fetchTransaction();
-    },[])
     return (
         <>
-<ResponsiveContainer width="100%" height={300}>
-      
-      <PieChart width={400} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={data}
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            fill="#8884d8"
-            label={({ name }) => name}
-          />
-      </PieChart>
-    </ResponsiveContainer>
+<div className="flex items-center justify-center w-full h-full">
+      {data.length > 0 ? (
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%" 
+              cy="100%" 
+              startAngle={180}
+              endAngle={0}   
+              innerRadius={70} 
+              outerRadius={100}
+              paddingAngle={2}
+              cornerRadius={5} 
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} stroke={entry.color} />
+              ))}
+            </Pie>
+            {/* Optional: Add text in the center if you want a label, but since your main text is below, we omit it. */}
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="flex items-center justify-center h-[200px] text-gray-400">Loading chart...</div>
+      )}
+    </div>
         </>
     )
 }
