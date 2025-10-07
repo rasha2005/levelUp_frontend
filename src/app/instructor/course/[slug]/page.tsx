@@ -31,6 +31,8 @@ import { createAnnouncement, createCourseSlot, delteSlotById, getCourseSlots } f
 import Slot from "@/app/utils/interface/Slot";
 import { useRouter } from "next/navigation";
 import { Edit, Trash2 } from "lucide-react";
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
 
 
 
@@ -256,11 +258,11 @@ export default function Course() {
   <div className="flex flex-col gap-2">
     <div className="flex flex-col">
       <label className="text-gray-700 text-sm">Start Time</label>
-      <Input 
-        type="time" 
-        value={startTime} 
-        onChange={(e) => setStartTime(e.target.value)} 
-      />
+      <TimePicker
+      onChange={(value) => setStartTime(value ?? "")}
+      value={startTime}
+      disableClock={true}
+    />
       {errors.startTime && (
         <p className="text-red-500 text-xs mt-1">{errors.startTime}</p>
       )}
@@ -268,11 +270,12 @@ export default function Course() {
 
     <div className="flex flex-col">
       <label className="text-gray-700 text-sm">End Time</label>
-      <Input 
-        type="time" 
-        value={endTime} 
-        onChange={(e) => setEndTime(e.target.value)} 
-      />
+      <TimePicker
+      onChange={(value) => setEndTime(value ?? "")}
+      value={endTime}
+      disableClock={true}
+    />
+     
       {errors.endTime && (
         <p className="text-red-500 text-xs mt-1">{errors.endTime}</p>
       )}

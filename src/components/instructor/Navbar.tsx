@@ -40,7 +40,6 @@ import { getImg } from "@/app/lib/api/instructorApi";
   </DropdownMenuTrigger>
   <DropdownMenuContent>
   <Link href={'/instructor/profile'}><DropdownMenuItem>My Account</DropdownMenuItem></Link>
-  <Link href={'/instructor/wallet'}><DropdownMenuItem>Wallet</DropdownMenuItem></Link>
   <Link href={'/chat'}><DropdownMenuItem>Chat</DropdownMenuItem></Link>
     <DropdownMenuSeparator />
    

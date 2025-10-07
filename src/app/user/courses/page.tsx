@@ -41,7 +41,7 @@ export default function Courses() {
   const [debouncedMaxPrice, setDebouncedMaxPrice] = useState<number | "">("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(10);
 
   // Debounce search
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function Courses() {
                   Instructor: {course.instructor.name} ({course.instructor.category})
                 </p>
                 <p className="text-sm text-gray-700 font-semibold">Price: ₹{course.price}</p>
-                <Link href={`/user/courseDetail/${course.id}`}>
+                <Link href={`/user/courseDetails/${course.id}`}>
                   <div className="mt-3 text-[#0F0F0F] font-medium cursor-pointer hover:underline flex items-center gap-1">
                     View <FaArrowRight size={14} />
                   </div>

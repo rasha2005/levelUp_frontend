@@ -25,12 +25,7 @@ const AdminHome = () => {
   const [summary ,setSummary] = useState<revenueSummary | null>();
   const [topInstructors , setTopInstructor] = useState<InstructorData[] | null>([]);
 
-  // Dummy revenue data for now
-  const revenueData = [
-    { id: 1, courseName: "Full Stack Bootcamp", instructor: "John Doe", enrollments: 45, revenue: 45000, date: "2025-10-03" },
-    { id: 2, courseName: "UI/UX Design Basics", instructor: "Sarah Lee", enrollments: 30, revenue: 27000, date: "2025-10-02" },
-    { id: 3, courseName: "Data Structures Mastery", instructor: "Alex Roy", enrollments: 25, revenue: 25000, date: "2025-10-01" },
-  ];
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,28 +43,9 @@ const AdminHome = () => {
 
     fetchData();
   }, []);
-  const dummyEarningsData = [
-    { date: 'September 15', itemCount: 40, text: '$20', earning: '$95,013' },
-    { date: 'September 16', itemCount: 50, text: '$40', earning: '$95,013' },
-    { date: 'September 17', itemCount: 35, text: '$12', earning: '$95,013' },
-    { date: 'September 18', itemCount: 25, text: '$16', earning: '$95,013' },
-    { date: 'September 19', itemCount: 21, text: '$12', earning: '$95,013' },
-  ];
-  const monthlyRevenue = [
-    { month: 'Jan', amount: 500 }, { month: 'Feb', amount: 800 }, { month: 'Mar', amount: 650 },
-    { month: 'Apr', amount: 550 }, { month: 'May', amount: 680 }, { month: 'Jun', amount: 520 },
-    { month: 'Jul', amount: 620 }, { month: 'Aug', amount: 720 }, { month: 'Sep', amount: 850 },
-    { month: 'Oct', amount: 880 }, { month: 'Nov', amount: 670 }, { month: 'Dec', amount: 700 }
-  ];
  
 
-// Dummy data for 'Most Popular Products' to match the image
-const dummyProducts = [
-    { id: 'P-1001', name: 'Wireless Earbuds Pro', price: '$210', status: 'In Stock', img: 'earbuds.png', sub: '1438' },
-    { id: 'P-1002', name: 'Smart Fitness Watch', price: '$125', status: 'Out of Stock', img: 'watch.png', sub: '2045' },
-    { id: 'P-1003', name: 'Portable Blender', price: '$256', status: 'In Stock', img: 'blender.png', sub: '1899' },
-    { id: 'P-1004', name: 'Gaming Mouse RGB', price: '$85', status: 'In Stock', img: 'mouse.png', sub: '900' },
-];
+
   return (
     <>
       <div className="h-screen bg-gray-50"> {/* Added a light background */}
@@ -100,7 +76,6 @@ const dummyProducts = [
                 </div>
                 {/* Placeholder for the small change indicator below */}
                 <p className="mt-2 text-xs text-green-500 font-medium">
-                  <i className="fas fa-arrow-up"></i> 5% New Revenue Today
                 </p>
             </div>
 
@@ -114,7 +89,6 @@ const dummyProducts = [
                     <i className="fas fa-users text-2xl text-blue-500 opacity-75"></i>
                 </div>
                 <p className="mt-2 text-xs text-red-500 font-medium">
-                  <i className="fas fa-arrow-down"></i> 8% Weekly Avg. Users
                 </p>
             </div>
 
@@ -128,7 +102,6 @@ const dummyProducts = [
                     <i className="fas fa-chalkboard-teacher text-2xl text-red-500 opacity-75"></i>
                 </div>
                 <p className="mt-2 text-xs text-red-500 font-medium">
-                  <i className="fas fa-arrow-down"></i> 10% Weekly Change
                 </p>
             </div>
 
@@ -136,13 +109,12 @@ const dummyProducts = [
             <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
                 <div className="flex justify-between items-start">
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Courses Sold</p>
-                        <p className="text-3xl font-bold text-gray-800">91,000</p>
+                        <p className="text-sm font-medium text-gray-500">Courses</p>
+                        <p className="text-3xl font-bold text-gray-800">{summary?.totalCourses}</p>
                     </div>
                     <i className="fas fa-graduation-cap text-2xl text-green-500 opacity-75"></i>
                 </div>
                 <p className="mt-2 text-xs text-green-500 font-medium">
-                  <i className="fas fa-arrow-up"></i> 6% Completions Weekly
                 </p>
             </div>
         </div>

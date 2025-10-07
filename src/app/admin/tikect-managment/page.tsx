@@ -41,7 +41,7 @@ export default function TicketManagment() {
     const fetchTicketData = async() => {
         const data = await getTickets(debouncedSearch , page , limit );
         if(data.data.response.success){
-            setTotalPages(data.data.response.total)
+          setTotalPages(Math.ceil(data.data.response.total / limit));
             setTickets(data.data.response.ticket)
         }
     }
@@ -100,7 +100,6 @@ export default function TicketManagment() {
       
             <div className="bg-white rounded-2xl shadow-md p-4">
               <Table>
-                <TableCaption>List of all user-reported tickets</TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead>User Name</TableHead>

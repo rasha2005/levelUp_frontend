@@ -104,7 +104,7 @@ const getBannerData = async() => {
   <div className="flex items-center justify-between mb-6">
   <h2 className="text-2xl font-bold">Popular Courses</h2>
 
-  {latestCourse.length === 6 && (
+  
     <Link
       href="/user/courses"
       className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-semibold transition-colors"
@@ -112,7 +112,7 @@ const getBannerData = async() => {
       View all
       <ArrowRight className="w-4 h-4 ml-1" />
     </Link>
-  )}
+
 </div>
 {isLoading ? (
       <div className="max-w-7xl mx-auto p-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -192,8 +192,10 @@ const getBannerData = async() => {
     ))}
   </div>
 ) : (
+  
   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
     {popularInstructor.map((inst) => (
+      <Link key={inst.id} href={`/user/instructorDetail/${inst.id}`}>
       <div
         key={inst.id}
         className="text-center bg-white p-5 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all"
@@ -217,6 +219,7 @@ const getBannerData = async() => {
           </span>
         </div>
       </div>
+    </Link>
     ))}
   </div>
 )}

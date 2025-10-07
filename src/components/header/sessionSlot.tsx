@@ -82,13 +82,33 @@ function SessionSlot({ events }: any) {
             </td>
             <td className="py-2 px-4">₹{event.price}</td>
             <td className="py-2 px-4">
-              {event.status === 'open' ? (
-                <button onClick={() => handlePayement(event)} className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full">
-                  Book
-                </button>
-              ) : (
-                <p className="text-red-400">Booked</p>
-              )}
+            {(() => {
+    const currentDate = new Date();
+    const eventEnd = new Date(`${event.date}T${event.endTime}`);
+
+    const isPast = eventEnd < currentDate;
+
+    if (event.status === "open" && !isPast) {
+      return (
+        <button
+          onClick={() => handlePayement(event)}
+          className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full hover:bg-green-200 transition"
+        >
+          Book
+        </button>
+      );
+      } else if (isPast) {
+        return (
+          <span className="text-gray-500 italic">
+           Ended
+          </span>
+        );
+      } else {
+        return (
+          <p className="text-red-400">Booked</p>
+        );
+      }
+    })()}
             </td>
           </tr>
         ))}

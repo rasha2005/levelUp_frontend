@@ -157,6 +157,11 @@ export default function QnASection({courseId ,endDate , startDate }:QnASectionPr
                   className="bg-white p-4 rounded-lg border border-gray-300 relative transition-all hover:bg-gray-50"
                 >
                   <div className="flex items-center mb-1">
+                  <img
+                src={r.userImg || "/images/defaultProfile.jpg"} 
+                alt={r.userName}
+                className="w-10 h-10 rounded-full mr-3 border-2 border-gray-200 object-cover"
+              />
                     <p className="font-bold text-gray-900 text-sm">{r.userName}</p>
                     {r.userName === instructorName && (
                       <span className="ml-2 px-2.5 py-0.5 text-xs font-bold bg-indigo-600 text-white rounded-full">
