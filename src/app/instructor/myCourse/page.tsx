@@ -35,6 +35,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 
 export default function MyCourse() {
+  const [isApproved , setIsApproved] = useState(false);
   const [isOpen , setIsOpen] = useState(false);
   const [bundleName, setBundleName] = useState("");
   const [thumbnail, setThumbnail] = useState<string | null>(null);
@@ -177,6 +178,11 @@ export default function MyCourse() {
     const data = await updateBundleStatus(bundleId);
     if(data.data.response.success) {
       setIsPublish(true)
+      setBundles((prevBundles) =>
+        prevBundles.map((bundle) =>
+          bundle.id === bundleId ? { ...bundle, status: "published" } : bundle
+        )
+      );
       toast.success("Published successfully");
     }else{
       toast.error(data.data.response.message);
@@ -186,7 +192,10 @@ export default function MyCourse() {
 
   const getCourses = async() => {
     const data = await getCourseData();
-    setBundles(data.data.response.data)
+    if(data.data.response.isApproved){
+      setIsApproved(true);
+      setBundles(data.data.response.data)
+    }
   }
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -204,7 +213,7 @@ export default function MyCourse() {
       <Sidebar />
 
        
-
+      {isApproved ? (
         <main className="flex-1 p-6">
           <h1 className="text-2xl font-semibold mb-6">My Courses</h1>
 
@@ -314,6 +323,13 @@ export default function MyCourse() {
 ))}
           </div>
         </main>
+        ):(
+          <div className="flex-1 p-6 flex items-center justify-center">
+          <p className="text-gray-600 text-center text-lg">
+            You are not approved by the admin
+          </p>
+        </div>
+        )}
       </div>
     </div>
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

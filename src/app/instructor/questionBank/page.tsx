@@ -39,6 +39,7 @@ interface QuestionBundle {
 }
 
 export default function QuestionBank() {
+    const [isApproved , setIsApproved] = useState(false);
     const [isOpen , setIsOpen] = useState<boolean>(false);
     const [bundleName , setBundleName] = useState("");
     const [bundleData , setBundleData] = useState<QuestionBundle[]>([]);
@@ -83,7 +84,8 @@ export default function QuestionBank() {
   const getBundle = async() => {
     try{
       const data = await getBundleData();
-      if(data.data.response.res){
+      if(data.data.response.isApproved){
+        setIsApproved(true);
         setBundleData(data.data.response.res);
       }
     }catch(err){
@@ -128,7 +130,7 @@ export default function QuestionBank() {
     {/* Sidebar + main */}
     <div className="flex">
       <Sidebar />
-  
+  {isApproved ? (
       <main className="flex-1 p-6 bg-white">
         {/* Page header */}
         <div className="flex items-center gap-2 mb-6">
@@ -259,6 +261,13 @@ export default function QuestionBank() {
                                         </AlertDialog>
         
       </main>
+  ):(
+    <div className="flex-1 p-6 flex items-center justify-center">
+          <p className="text-gray-600 text-center text-lg">
+            You are not approved by the admin
+          </p>
+        </div>
+  )}
     </div>
   </div>
   </>
