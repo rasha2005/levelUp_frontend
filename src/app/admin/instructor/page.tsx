@@ -21,7 +21,7 @@ function InstructorMangement()  {
     const [isData , setIsData] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const itemsPerPage = 7;
+    const itemsPerPage = 15;
 
     const getInstructorData = async() => {
         try{

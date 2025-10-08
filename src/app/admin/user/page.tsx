@@ -33,7 +33,7 @@ function UserManagement() {
     const [userData , setUserData] = useState<UserData[]>([]);
     const [isData , setIsData] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 7; 
+    const itemsPerPage = 15; 
     const [isOpen, setIsOpen] = useState(false);
     const [blockUserId, setBlockUserId] = useState<string | undefined | null>(null);
     const [searchTerm , setSearchTerm] = useState('');
