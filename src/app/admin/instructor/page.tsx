@@ -1,6 +1,6 @@
 "use client"
 
-import { getInstructor } from '@/app/lib/api/adminApi';
+import { getAllInstructor, getInstructor } from '@/app/lib/api/adminApi';
 import {Table , TableBody , TableCell , TableHead , TableHeader , TableRow } from '@/components/ui/table'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -25,7 +25,7 @@ function InstructorMangement()  {
 
     const getInstructorData = async() => {
         try{
-            const res = await getInstructor();
+            const res = await getAllInstructor();
             if(res.data.response.success === true){
                 setInstructorData(res.data.response.instructorData || null);
                 setIsData(true);

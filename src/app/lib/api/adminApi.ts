@@ -109,3 +109,8 @@ export const updateStatus = async(status:string , ticketId:string) => {
     const res = await Api.put(adminEndpoints.updateTicket , {status , ticketId});
     return res
 }
+
+export const getAllInstructor = async() => {
+    const res = await Api.get(adminEndpoints.allInstructor);
+    return res
+}

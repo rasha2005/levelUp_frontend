@@ -16,5 +16,6 @@ export const adminEndpoints = {
     approveInstrcutors:'/admin/approveInstrcutors',
     monthlyRevenue:'/admin/revenue-summary',
     getTickets:'/admin/getTickets',
-    updateTicket:'/admin/updateTicket'
+    updateTicket:'/admin/updateTicket',
+    allInstructor:'/admin/allInstructor'
 }
