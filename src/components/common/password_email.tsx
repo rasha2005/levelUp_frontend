@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { forgot_Password } from "@/app/lib/api/instructorApi";
+import Layout from "@/components/header/layout"
 
 interface OtpProps {
     role: 'user' | 'instructor'; 
@@ -57,8 +58,9 @@ interface OtpProps {
   return (
     <>
         <ToastContainer/>
+           <Layout>
    
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-cyan-950 to-black">
+    <div className="flex justify-center items-center min-h-screen bg-white">
       <form
         onSubmit={handleNext}
         className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
@@ -96,6 +98,7 @@ interface OtpProps {
         </button>
       </form>
     </div>
+     </Layout>
     </>
   );
 }
