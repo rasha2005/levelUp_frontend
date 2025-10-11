@@ -16,7 +16,7 @@ import Otp from "@/components/common/Otp";
     return (
         <>
          <>
-        <Otp role="instructor" />
+        <Otp role="instructor" purpose="signup" />
         </>
         </>
     )

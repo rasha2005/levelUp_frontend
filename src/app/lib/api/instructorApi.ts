@@ -209,5 +209,39 @@ export const updateCourseById = async(bundleName:string , description:string , p
     return  res
 }
 
+export const forgot_Password = async(email:string) => {
+    try {
+        const response = await Api.get(instructorEndPoint.forgotPassword , {
+            params:{email}
+        });
+        if(response.data.success === true){
+            const token = response.data?.token;
+            localStorage.setItem("otpToken",token)
+            return {success:true ,message:response.data.message}
+        }else{
+            return {success:false ,message:response.data.message}
+        }
+
+    }catch(err) {
+        console.log(err);
+    }
+}
+
+
+ export const verifyPassword_Otp = async(userOtp:string , token:string | null) => {
+        const res = await Api.get(instructorEndPoint.password_Otp,{
+            params:{userOtp , token}
+        });
+        return res;
+    }
+
+ export const resetPasswordWithOld_Instructor = async(confirm:string  ,token:string | null) => {
+        const res = await Api.put(instructorEndPoint.resetPassword,{ confirm , token});
+        if(res.data.response.authToken) {
+            setToken(res.data.response.authToken);
+        }
+        return res;
+    }
+
 
 

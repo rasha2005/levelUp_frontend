@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Layout from "../header/layout";
-import { resendOtpUser, verifyUserOtp } from "@/app/lib/api/userApi";
-import { resendOtpInsructor, verifyInsructor } from "@/app/lib/api/instructorApi";
+import { resendOtpUser, verifyPasswordOtp, verifyUserOtp } from "@/app/lib/api/userApi";
+import { resendOtpInsructor, verifyInsructor, verifyPassword_Otp } from "@/app/lib/api/instructorApi";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -11,9 +11,10 @@ import { ToastContainer, toast } from "react-toastify";
 
 interface OtpProps {
     role: 'user' | 'instructor'; 
+    purpose: 'signup' | 'forgotPassword';
   }
 
-  const Otp: React.FC<OtpProps> = ({ role }) => {
+  const Otp: React.FC<OtpProps> = ({ role ,purpose}) => {
     const [timer, setTimer] = useState(20);
     const [otp , setOtp] = useState(new Array(6).fill(""));
     const router = useRouter();
@@ -36,19 +37,39 @@ interface OtpProps {
         setOtp(new Array(6).fill(""));
         const token = localStorage.getItem('otpToken');
         if(role === "user") {
-            const res = await verifyUserOtp(tempOtp , token);
-            if(res?.data?.success === true) {
-                router.push('/user/home');
+            if(purpose ===  "signup"){
+                const res = await verifyUserOtp(tempOtp , token);
+                if(res?.data?.success === true) {
+                    router.push('/user/home');
+                }else{
+                    toast.error(res?.data?.message);
+                }
             }else{
-                toast.error(res?.data?.message);
+                const res = await verifyPasswordOtp(tempOtp ,token)
+                if(res.data.response.success) {
+                    console.log(res);
+                    router.push('/user/new_password')
+                }else{
+                    toast.error(res.data.response.message);
+                }
             }
         }else{
-            const res = await verifyInsructor(tempOtp , token);
-        if(res.data.response.success === true) {
-            router.push('/instructor/validation')
-        }else{
-            toast.error(res.data.response.message);
-        }
+            if(purpose === "signup") {
+                const res = await verifyInsructor(tempOtp , token);
+            if(res.data.response.success === true) {
+                router.push('/instructor/validation')
+            }else{
+                toast.error(res.data.response.message);
+            }
+            }else{
+                const res = await verifyPassword_Otp(tempOtp , token);
+                if(res.data.response.success) {
+                    console.log(res);
+                    router.push('/instructor/new_password')
+                }else{
+                    toast.error(res.data.response.message);
+                }
+            }
         }
     }
 

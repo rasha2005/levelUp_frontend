@@ -72,7 +72,7 @@ export default function InstructorLogin() {
                                     <input
                                         type="email"
                                         id="email"
-                                        {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
+                                        {...register('email', {required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
                                         
                                     />
@@ -80,9 +80,19 @@ export default function InstructorLogin() {
                                 </div>
                                 
                                 <div className="mb-4">
-                                    <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-                                        Password
-                                    </label>
+                                <div className="flex justify-between items-center">
+                                <label
+                                    className="block text-sm font-medium text-gray-700"
+                                    htmlFor="password"
+                                >
+                                    Password
+                                </label>
+                                <Link href="/instructor/forgot-password">
+                                    <span className="text-sm text-blue-500 hover:underline">
+                                    Forgot password?
+                                    </span>
+                                </Link>
+                                </div>
                                     <div className="relative">
                                 <input
                                     type={passwordVisible ? 'text' : 'password'}

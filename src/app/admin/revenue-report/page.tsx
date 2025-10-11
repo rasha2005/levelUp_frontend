@@ -27,7 +27,6 @@ export default function RevenueReport() {
 
   const fetchData = async () => {
     const res = await getTransaction(debouncedSearch, page, limit );
-    console.log(res)
     setInstructors(res.data.response.data);
     setTotalPages(Math.ceil(res.data.response.total / limit));
   };

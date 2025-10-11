@@ -45,7 +45,6 @@ function UserManagement() {
         try{
             const res = await getUsers();
             if(res.data.response.success === true) {
-              console.log(res.data.response?.userData)
                 setUserData(res.data.response?.userData || []);
                 setIsData(true);
             }

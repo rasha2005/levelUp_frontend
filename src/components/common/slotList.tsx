@@ -76,7 +76,6 @@ function SlotList() {
 
     const getSlots = async() => {
         const res = await getSlotList();
-        console.log(res.data.response.slot)
         if(res.data.response.success) {
           setSlots(res.data.response.slot)
         }

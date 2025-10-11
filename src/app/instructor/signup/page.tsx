@@ -89,7 +89,7 @@ export default function InstructorSignup() {
                                     <input
                                         type="email"
                                         id="email"
-                                        {...register('email', {required: true, pattern:/^[^@\s]+@gmail\.com$/})}
+                                        {...register('email', {required: true,  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/})}
                                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
                                         
                                     />

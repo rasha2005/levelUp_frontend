@@ -48,6 +48,7 @@ function ChatBox({ chatId , id}:any) {
     const intialFetch = async() => {
         const res = await fetchChats();
         if(res.data.response.success) {
+          console.log("c",res.data.response.chats)
             setChats(res.data.response.chats)
             setUser(res.data.response.user)
         }
@@ -77,7 +78,9 @@ function ChatBox({ chatId , id}:any) {
                 const res = await fetchMessages(chatId);
                
                 if(res.data.response.success) {
+                  console.log("m",res.data.response.data)
                   setMessage(res.data.response.data)
+
                   setChatRoom(res.data.response.chat)
                 }
                 socket.emit('join chat' , chatId)
@@ -204,41 +207,55 @@ function ChatBox({ chatId , id}:any) {
   
   <div className="space-y-4">
    
-    {message.map((m: any, i: any) => (
-      <div
-        key={i}
-        className={`flex items-center space-x-4 ${
-          m.senderId === user ? "justify-end" : ""
-        }`}
-      >
-        {m.senderId !== user && (
-          <img
-            src={
-              chatRoom?.userId === user
-                ? chatRoom?.instructor?.img
-                : chatRoom?.user?.img
-            }
-            alt="User"
-            className="rounded-full w-7 h-7"
-          />
-              
-  )}
-            <div >
-            <p
-  className={`font-semibold px-4 py-2 rounded-lg shadow-sm break-words whitespace-pre-wrap ${
-    m.senderId === user
-      ? "bg-green-100 text-green-900"
-      : "bg-blue-100 text-blue-900"
-  }`}
->
-  {m.content}
-</p>
-      <div ref={ref}></div>
-            
-            </div>
-          </div>
-              ))
-            }
+  {message.map((m: any, i: any) => (
+  <div
+    key={i}
+    className={`flex items-end space-x-2 ${
+      m.senderId === user ? "justify-end" : ""
+    }`}
+  >
+    {/* Avatar */}
+    {m.senderId !== user && (
+      <img
+        src={
+          chatRoom?.userId === user
+            ? chatRoom?.instructor?.img
+            : chatRoom?.user?.img
+        }
+        alt="User"
+        className="rounded-full w-7 h-7"
+      />
+    )}
+
+    {/* Message bubble */}
+    <div className="flex flex-col items-start">
+    <div className="flex flex-col">
+  <p
+    className={`font-semibold px-4 py-2 rounded-lg shadow-sm break-words whitespace-pre-wrap ${
+      m.senderId === user
+        ? "bg-green-100 text-green-900"
+        : "bg-blue-100 text-blue-900"
+    }`}
+  >
+    {m.content}
+  </p>
+
+  <span className="text-xs text-gray-500 mt-1 self-end">
+    {new Date(m.createdAt).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })}
+  </span>
+</div>
+
+
+     
+     
+    </div>
+  </div>
+))}
+
          
         </div>
       </div>

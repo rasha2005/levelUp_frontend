@@ -27,16 +27,13 @@ function CallRoom() {
     
       const token = authToken?.split('=')[1] || ""; 
      const decodedToken = jwtDecode<JwtPayload>(token); 
-      console.log("slug",slug);
       const now = Math.floor(Date.now() / 1000);
-      console.log("Current time:", now, "Token exp:", decodedToken.exp);
    
     const containerRef = useRef(null);
 
     const verifyId = async () => {
         if (decodedToken?.role === "User") {
             const res = await verifyRoomId(params.slug, decodedToken.id);
-            console.log("roo",res);
             setIsVerified(res.data.response.success);
         }else if(decodedToken?.role === "Instructor") {
             const res = await verifyInstructorRoomId(params.slug , decodedToken.id) 
@@ -74,9 +71,7 @@ function CallRoom() {
             },
             onJoinRoom : async () => {
                 if(decodedToken.role === "Instructor") {
-                  console.log("hehe")
                     await markInstructorJoined(params.slug);
-                    console.log("yahooo")
                 }
             }
         });
@@ -84,7 +79,6 @@ function CallRoom() {
     const waitForInstructor = async () => {
         const poll = setInterval(async () => {
           const res = await getRoomStatus(params.slug);
-          console.log("rs",res);
           if (res.data.response.data) {
             setInstructorJoined(true);
             clearInterval(poll);

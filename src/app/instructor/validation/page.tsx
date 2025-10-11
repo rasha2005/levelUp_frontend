@@ -130,7 +130,6 @@ export default function Validation() {
         body:data,
       }).then((res) => res.json())
       .then(data => {
-        console.log("data",data)
         setLoading(false)
         setECertificate(data.secure_url.toString());
       })

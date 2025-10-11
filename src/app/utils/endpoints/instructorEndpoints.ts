@@ -35,5 +35,9 @@ export const instructorEndPoint = {
     createAnnouncement:'/instructor/announcememt',
     deleteSlot:'/instructor/deleletSlot',
     deleteCourse:'/instructor/deleteCourse',
-    updateCourse:'/instructor/updateCourse'
+    updateCourse:'/instructor/updateCourse',
+    forgotPassword:'/instructor/forgotPassword',
+    password_Otp:'/instructor/passwordOtp',
+    resetPassword:'/instructor/resetPassword'
+
 }

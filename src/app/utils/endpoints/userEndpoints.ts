@@ -34,6 +34,9 @@ export const userEndpoints = {
     raiseTicket:'/user/raiseTicket',
     createQnA:'/user/createQnA',
     fetchQnAData:'/user/fetchQnAData',
-    announcements:'/user/announcements'
+    announcements:'/user/announcements',
+    forgotPassword:'/user/forgotPassword',
+    passwordOtp:'/user/passwordOtp',
+    resetPassword:'/user/resetPassword'
    
 }

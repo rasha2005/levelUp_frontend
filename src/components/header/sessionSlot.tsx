@@ -74,41 +74,63 @@ function SessionSlot({ events }: any) {
               {new Date(event.end).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
             </td>
             <td className="py-2 px-4">
-              <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
-                event.status === "open" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
-              }`}>
-                {event.status}
+            {(() => {
+            const currentDate = new Date();
+            const eventEnd = new Date(event.end);
+            const isPast = eventEnd < currentDate;
+
+            // Determine the display status
+            const displayStatus =
+              event.status === "open" && isPast ? "Ended" : event.status;
+
+            // Determine the badge colors
+            const badgeClasses =
+              displayStatus === "Ended"
+                ? "text-gray-500 bg-gray-100"
+                : displayStatus === "open"
+                ? "text-green-700 bg-green-100"
+                : "text-red-700 bg-red-100";
+
+            return (
+              <span
+                className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${badgeClasses}`}
+              >
+                {displayStatus}
               </span>
+            );
+          })()}
+
+
             </td>
             <td className="py-2 px-4">₹{event.price}</td>
             <td className="py-2 px-4">
             {(() => {
-    const currentDate = new Date();
-    const eventEnd = new Date(`${event.date}T${event.endTime}`);
+            if (!event?.start || !event?.end) {
+              return <span className="text-gray-400 italic">Invalid event data</span>;
+            }
 
-    const isPast = eventEnd < currentDate;
+            const currentDate = new Date();
+            const eventEnd = new Date(event.end);
 
-    if (event.status === "open" && !isPast) {
-      return (
-        <button
-          onClick={() => handlePayement(event)}
-          className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full hover:bg-green-200 transition"
-        >
-          Book
-        </button>
-      );
-      } else if (isPast) {
-        return (
-          <span className="text-gray-500 italic">
-           Ended
-          </span>
-        );
-      } else {
-        return (
-          <p className="text-red-400">Booked</p>
-        );
-      }
-    })()}
+            const isPast = event.status === "open" && eventEnd < currentDate;
+
+            if (event.status === "open" && !isPast) {
+              return (
+                <button
+                  onClick={() => handlePayement(event)}
+                  className="inline-block px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full hover:bg-green-200 transition"
+                >
+                  Book
+                </button>
+              );
+            } else if (event.status === "open" && isPast) {
+              return <span className="text-gray-500 italic">Ended</span>;
+            } else {
+              return <p className="text-red-400">Booked</p>;
+            }
+          })()}
+
+
             </td>
           </tr>
         ))}

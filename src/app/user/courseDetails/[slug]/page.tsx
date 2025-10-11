@@ -26,6 +26,11 @@ import { Flag } from "lucide-react";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import QnASection from "@/components/user/QnASection"
+interface Instructor {
+  id:string;
+  name:string;
+  img:string | null
+}
 
 export default function CourseDetails() {
     const [course , setCourse] = useState<CourseBundle>()
@@ -36,6 +41,7 @@ export default function CourseDetails() {
     const [isOpen , setIsOpen] = useState(false);
     const [thumbnail, setThumbnail] = useState<string | null>(null);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [instructor , setInstructor] = useState<Instructor>();
     
 
       const params = useParams()
@@ -90,6 +96,7 @@ export default function CourseDetails() {
 
       const courseDetails = async() => {
         const data = await getCourseDetails(slug);
+        console.log("ds",data)
         if(data.data.response?.isEnrolled){
           setIsEnrolled(true);
         }
@@ -97,13 +104,13 @@ export default function CourseDetails() {
     
           setCourse(data.data.response.data);
           setSlots(data.data.response.data.slots)
+          setInstructor(data.data.response.data.instructor)
         }
       }
 
       const handleReportSubmit = async() => {
         const newErrors: { [key: string]: string } = {};
         if (!description.trim()) newErrors.description = "Description is required";
-        console.log("d",course?.instructorId)
         const data = await raiseCourseTicket(thumbnail , description , slug ,course?.instructorId);
         if(data.data.response.success){
           setIsOpen(false) 
@@ -142,26 +149,41 @@ export default function CourseDetails() {
       <UserSidebar/>
       <div className="min-h-screen bg-white">
        
-  <div className="bg-[#0F0F0F] h-80 flex items-center">
-    <div className="max-w-6xl mx-auto px-8 flex justify-between items-center w-full">
-     
-      <div className="w-1/2 text-white text-left">
-        <h1 className="text-4xl font-bold mb-2">{course?.name}</h1>
-        <p className="text-lg">"Learn, grow, and achieve — start now"</p>
-      </div>
-
+      <div className="bg-[#0F0F0F] h-80 flex items-center">
+  <div className="max-w-6xl mx-auto px-8 flex justify-between items-center w-full">
     
-      <div className="w-1/2">
-        <div className="bg-white rounded-xl h-64 w-full shadow-lg flex items-center justify-center text-gray-400">
-      <img
-        src={course?.thumbnail || "/images/default-thumbnail.png"}
-        alt={`${course?.name} template`}
-        className="w-full h-full object-cover rounded-xl"
-      />
-        </div>
+    {/* Left side: Course info */}
+    <div className="w-1/2 text-white text-left">
+      <h1 className="text-4xl font-bold mb-2">{course?.name}</h1>
+
+      {instructor && (
+        <p className="text-gray-300 mb-2 flex items-center gap-2">
+        By
+        <a
+          href={`/user/instructorDetail/${instructor?.id}`}
+          className="flex items-center gap-2 text-blue-400 hover:underline decoration-blue-400 underline-offset-4"
+        >
+          <span>{instructor?.name}</span>
+        </a>
+
+      </p>
+      )}
+
+    </div>
+
+    {/* Right side: Course thumbnail */}
+    <div className="w-1/2">
+      <div className="bg-white rounded-xl h-64 w-full shadow-lg flex items-center justify-center text-gray-400">
+        <img
+          src={course?.thumbnail || "/images/default-thumbnail.png"}
+          alt={`${course?.name} template`}
+          className="w-full h-full object-cover rounded-xl"
+        />
       </div>
     </div>
   </div>
+</div>
+
   
   
         {/* Bottom White Section */}

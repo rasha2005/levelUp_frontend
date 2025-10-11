@@ -29,6 +29,7 @@ export default function Home() {
   const [latestCourse , setLatestCourse] = useState<CourseBundle[]>([])
   const [popularInstructor , setPopularInstructor] = useState<InstructorData[]>([])
   const [isLoading , setIsLoading] = useState(false);
+  const router = useRouter()
 
 const getBannerData = async() => {
   const data = await getHighRatingCourse();
@@ -40,8 +41,10 @@ const getBannerData = async() => {
   setIsLoading(false);
 }
  useEffect(() => {
-  setIsLoading(true)
-  getBannerData();
+    router.refresh();
+    setIsLoading(true);
+    getBannerData();
+  
  },[])
 
   return (

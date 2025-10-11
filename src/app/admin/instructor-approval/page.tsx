@@ -27,7 +27,6 @@ export default function InstructorApproval() {
         const getInstructorData = async() => {
             try{
                 const res = await getApproveInstructor();
-                console.log("d",res);
                 if(res.data.response.success === true){
                     setInstructorData(res.data.response.instructorData || null);
                     setIsData(true);

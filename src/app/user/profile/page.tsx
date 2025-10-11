@@ -140,7 +140,7 @@ function UserProfile() {
                             
                             {/* Password Tab Content */}
                             <TabsContent value="password">
-                                <PasswordForm role={"user"} />
+                                <PasswordForm role={"user"} type="normal"/>
                             </TabsContent>
                         </Tabs>
                     </div>

@@ -7,10 +7,16 @@ const publicPaths = [
     '/user/signup',
     '/instructor/signup',
     '/instructor/login',
+    '/instructor/forgot-password',
+    '/instructor/password_otp',
+    '/instructor/new_password',
     '/signup',
     '/login',
     '/instructor/otp',
     '/user/otp',
+    '/user/forgot-password',
+    '/user/password_otp',
+    '/user/new_password',
     '/admin/login',
     '/'
   ];
@@ -47,12 +53,10 @@ if(isPublicPath && token ) {
       }
   }
   if (path.startsWith('/admin') && !isPublicPath && !token) {
-    console.log("Redirecting to /admin/login");
     return NextResponse.redirect(new URL('/admin/login', request.url));
 }
 
   if (!isPublicPath && !token && path !== "/user/paymentSuccess") {
-    console.log("here")
     return NextResponse.redirect(new URL('/login', request.url));
 }
 

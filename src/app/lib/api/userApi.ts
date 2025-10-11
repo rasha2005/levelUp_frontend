@@ -49,6 +49,7 @@ export const login = async(email:string , password:string) => {
 export const getCategoryData = async() => {
     try{
         const response = await Api.get(userEndpoints.getCategory);
+        localStorage.removeItem('otpToken');
         return response; 
     }catch(error) {
         console.log(error);
@@ -238,5 +239,41 @@ export const fetchAnnouncementDatas = async() => {
     const res = await Api.get(userEndpoints.announcements);
     return res;
 }
+
+export const forgotPassword = async(email:string) => {
+    try {
+        const response = await Api.get(userEndpoints.forgotPassword , {
+            params:{email}
+        });
+        if(response.data.success === true){
+            const token = response.data?.token;
+            localStorage.setItem("otpToken",token)
+            return {success:true ,message:response.data.message}
+        }else{
+            return {success:false ,message:response.data.message}
+        }
+
+    }catch(err) {
+        console.log(err);
+    }
+}
+
+    export const verifyPasswordOtp = async(userOtp:string , token:string | null) => {
+        const res = await Api.get(userEndpoints.passwordOtp,{
+            params:{userOtp , token}
+        });
+        return res;
+    }
+
+    export const resetPasswordWithOld_user = async(confirm:string  ,token:string | null) => {
+        const res = await Api.put(userEndpoints.resetPassword,{confirm , token});
+        if(res.data.response.authToken) {
+            setToken(res.data.response.authToken);
+        }
+        return res;
+    }
+
+
+
 
 

@@ -63,7 +63,7 @@ import Link from "next/link";
                             
                             {/* Password Tab Content */}
                             <TabsContent value="password">
-                           <PasswordForm role={"instructor"}/>
+                           <PasswordForm role={"instructor"} type="normal"/>
                             </TabsContent>
                         </Tabs>
                     </div>

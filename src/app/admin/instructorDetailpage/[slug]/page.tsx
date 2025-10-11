@@ -63,7 +63,6 @@ function InstructorDetailpage() {
             const res = await getInstructorById(id);
             
             if(res.data.response.success === true) {
-                console.log("s",res.data.response.instructor)
                 setInstructor(res.data.response.instructor);
             }
 
