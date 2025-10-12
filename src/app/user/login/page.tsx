@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
+import GoogleAuth from "@/components/user/googleAuth";
 
 
 interface userData  {
@@ -137,6 +138,13 @@ interface userData  {
                                     </Link>
                                     </p>
                             </form>
+                            <div className="mt-4 text-sm text-gray-600 flex items-center justify-center">
+
+                                    <hr className="flex-grow border-t border-gray-300" />
+                                    <span className="mx-4 text-gray-500">or</span>
+                                    <hr className="flex-grow border-t border-gray-300" />
+                                    </div><br />
+                    <GoogleAuth  />
                         </div>
                     </div>
                 </div>

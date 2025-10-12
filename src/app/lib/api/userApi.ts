@@ -1,6 +1,8 @@
 import { Api } from "@/app/utils/apiconfig";
 import { userEndpoints } from "@/app/utils/endpoints/userEndpoints";
 import setToken from "../server/token";
+import Cookies from "js-cookie";
+
 
 export const signup = async(name:string , email:string , mobile:string , password:string) => {
     try {
@@ -143,7 +145,6 @@ export const updateRating = async(rating:number|null , id:string) => {
 }
 
 export const googleAuthCallback = async(email:string , name:string , img:string) => {
-
     const res = await Api.post(userEndpoints.googleAuth, { email, name, img });
     return res  
 }
