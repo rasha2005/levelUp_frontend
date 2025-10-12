@@ -81,9 +81,9 @@ export const fetchDetails = async() => {
     return res
 }
 
-export const getTransaction = async(search:string | "" , page:number , limit:number) => {
+export const getTransaction = async(search:string | "" , page:number , limit:number , start:string | "" , end:string | "") => {
     const res = await Api.get(adminEndpoints.fetchTransaction , {
-        params:{search,page,limit}
+        params:{search,page,limit,start , end}
     });
     return res
 }

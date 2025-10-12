@@ -33,8 +33,10 @@ import Navbar from "@/components/instructor/Navbar";
 import Sidebar from "@/components/instructor/Sidebar";
 import QuestionFormValues from "@/app/utils/interface/QuestionForm";
 import { useParams } from "next/navigation";
-import { createQusetion, deleteQuestion, getBundleQuestions } from "@/app/lib/api/instructorApi";
+import { createQusetion, deleteQuestion, edit_Question, getBundleQuestions } from "@/app/lib/api/instructorApi";
 import Question from "@/app/utils/interface/Question";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -60,24 +62,68 @@ export default  function QuestionPage() {
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [openDelete , SetOpenDelete] = useState(false)
-  const [deleteQuestionId, setDeleteQuestionId] = useState("")
+  const [deleteQuestionId, setDeleteQuestionId] = useState("");
+  const [isEdit , setIsEdit] = useState(false)
+  const [text, setText] = useState("");
+  const [ansOptions, setAnsOptions] = useState<string[]>(["", "", "", ""]);
+  const [answer, setAnswer] = useState("");
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+
 
   const getQusetions = async() => {
     const data = await getBundleQuestions(slug)
     if(data.data.response.data) {
-      setQuestions(data.data.response.data)
+      setQuestions(data.data.response.data);
     }
   }
+  const handleEditClick = (q: Question) => {
+  setSelectedQuestion(q);
+  setAnsOptions(q.options || ["", "", "", ""]);
+  setAnswer(q.answer);
+  setText(q.text)
+  setIsEdit(true);
+};
   const handleDelete = (id:string) => {
     SetOpenDelete(true)
     setDeleteQuestionId(id)
   }
   const handleDeleteQuestion = async() => {
-    await deleteQuestion(deleteQuestionId);
+    const data = await deleteQuestion(deleteQuestionId);
+    if(data.data.response.success){
+      toast.success(data.data.response.message);
+    }else{
+      toast.error(data.data.response.message);
+    }
     setQuestions(prev => prev.filter(q => q.id !== deleteQuestionId));
     setDeleteQuestionId("");
     SetOpenDelete(false)
 
+  }
+
+  const handleSave = async() => {
+    const data = await edit_Question(selectedQuestion?.id , ansOptions,answer,text);
+    if(data.data.response.success) {
+      toast.success(data.data.response.message);
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) =>
+          q.id === selectedQuestion?.id
+            ? {
+                ...q,
+                text,
+                answer,
+                options: ansOptions,
+              }
+            : q
+        )
+      );
+    }else{
+      toast.error(data.data.response.message);
+    }
+    setSelectedQuestion(null)
+    setAnsOptions(["" , "" , "" , ""]);
+    setAnswer("");
+    setText("");
+    setIsEdit(false)
   }
 
   const onSubmit = async(data: QuestionFormValues) => {
@@ -97,6 +143,9 @@ export default  function QuestionPage() {
    getQusetions()
   },[])
   return (
+    <>
+      <ToastContainer/>
+
     <div className="min-h-screen bg-white">
       <Navbar />
 
@@ -128,10 +177,21 @@ export default  function QuestionPage() {
                       </span>
                   </div>
                   <div className="flex justify-end gap-3 mt-4">
-                    <button onClick= {() => handleDelete(q.id)} className="text-red-500 hover:text-red-700">
-                      <Trash2 className="w-4 h-4" />
+                  <button
+                    onClick={() => handleDelete(q.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+
+                 
+                    <button
+                      onClick={() => handleEditClick(q)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <Edit className="w-4 h-4" />
                     </button>
-                  </div>
+                </div>
                 </div>
               ))}
             </div>
@@ -188,7 +248,7 @@ export default  function QuestionPage() {
                 {/* Options (only if MCQ) */}
                 {type === "mcq" && (
                   <div className="grid gap-2">
-                    {options.map((opt, idx) => (
+                    {(options || ["", "", "", ""]).map((opt, idx) => (
                       <div key={idx} className="flex flex-col gap-1">
                         <Input
                           placeholder={`Option ${idx + 1}`}
@@ -283,10 +343,67 @@ export default  function QuestionPage() {
                                                   </AlertDialogFooter>
                                               </AlertDialogContent>
                                           </AlertDialog>
+                                          
+                                          <Dialog open={isEdit} onOpenChange={setIsEdit}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Edit Question</DialogTitle>
+          <DialogDescription>Update the details below and save changes.</DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          {/* Question text */}
+          <div className="flex flex-col gap-1">
+            <Label>Question</Label>
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Enter your question"
+            />
+          </div>
+
+       
+            <>
+             
+
+              {/* Options for MCQ */}
+              {ansOptions.map((opt, idx) => (
+              <Input
+                key={idx}
+                value={opt}
+                onChange={(e) => {
+                  const newOptions = [...ansOptions]; 
+                  newOptions[idx] = e.target.value;
+                  setAnsOptions(newOptions);
+                }}
+                placeholder={`Option ${idx + 1}`}
+              />
+            ))}
+
+
+              {/* Correct answer */}
+              <div className="flex flex-col gap-1">
+                <Label>Correct Answer</Label>
+                <Input
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  placeholder="Enter correct answer"
+                />
+              </div>
+            </>
           
+
+          <DialogFooter className="mt-6 flex gap-3">
+            <Button onClick={handleSave}>Save Changes</Button>
+          </DialogFooter>
+        </div>
+      </DialogContent>
+    </Dialog>
                   
         </main>
       </div>
     </div>
+    </>
+
   );
 }

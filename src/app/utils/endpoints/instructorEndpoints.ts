@@ -38,6 +38,7 @@ export const instructorEndPoint = {
     updateCourse:'/instructor/updateCourse',
     forgotPassword:'/instructor/forgotPassword',
     password_Otp:'/instructor/passwordOtp',
-    resetPassword:'/instructor/resetPassword'
+    resetPassword:'/instructor/resetPassword',
+    editQuestion:'/instructor/editQuestion'
 
 }

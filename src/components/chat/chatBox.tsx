@@ -12,14 +12,18 @@ const ENDPOINT = process.env.NEXT_PUBLIC_BASE_URL_BACKEND as string;
 let socket: Socket;
 let selectedChatCompare: any;
 
-
+interface Chat {
+  id:string,
+  userId:string,
+  instructorId:string
+}
 function ChatBox({ chatId , id}:any) {
     
     const userData = jwtDecode<{email :string ; role:string}>(id);
     
    
     const [isChatId , setIsChatId] = useState(false);
-    const [chats , setChats] = useState<any>([]);
+    const [chats , setChats] = useState<Chat[]>([]);
     const [newMessage , setNewMessage] = useState("");
     const [message , setMessage] = useState<any>([]);
     const [user , setUser] = useState("");
@@ -33,8 +37,22 @@ function ChatBox({ chatId , id}:any) {
     const handleSumbit = async() => {
         const res = await createMessage(newMessage , chatId)
         if(res.data.response.success) {
-          socket.emit('new message' , res.data.response.res)
-          setMessage([...message , res.data.response.res])
+          const newMsg = res.data.response.res;
+          socket.emit('new message' , newMsg)
+          setMessage([...message , newMsg])
+          setChats((prevChats) => {
+            const existingChat = prevChats.find((chat) => chat.id === chatId);
+            if (!existingChat) return prevChats;
+            
+            const updatedChat = {
+              ...existingChat,
+              latestMessage: newMsg,
+              latestMessageAt: new Date().toISOString(),
+            };
+          
+            const remainingChats = prevChats.filter((chat) => chat.id !== chatId);
+            return [updatedChat, ...remainingChats];
+          });
         }
         setNewMessage("");
     }
@@ -61,6 +79,8 @@ function ChatBox({ chatId , id}:any) {
 
     useEffect(() => {
       socket.on('message recived' , (newMessageRecived) => {
+
+        
         if(!selectedChatCompare || selectedChatCompare !==  newMessageRecived.chat.id){
           //something
         }else{
@@ -80,7 +100,8 @@ function ChatBox({ chatId , id}:any) {
                 if(res.data.response.success) {
                   console.log("m",res.data.response.data)
                   setMessage(res.data.response.data)
-
+                  
+                  
                   setChatRoom(res.data.response.chat)
                 }
                 socket.emit('join chat' , chatId)
@@ -140,24 +161,45 @@ function ChatBox({ chatId , id}:any) {
         <div className="space-y-2">
             {/* Mapping over filtered chats */}
             {filtered.map((chat: any) => (
-              <div key={chat.id}  className={` p-2  w-full rounded ${
-                chat.id === chatId ? "bg-gray-300 " : "bg-gray-200 "
-              }`} >
-                  <Link href={`/chat/c/${chat.id}`} >
-                    <div className="flex items-center space-x-4">
+  <div
+    key={chat.id}
+    className={`p-2 w-full rounded cursor-pointer ${
+      chat.id === chatId ? "bg-gray-300" : "bg-gray-200"
+    }`}
+  >
+    <Link href={`/chat/c/${chat.id}`}>
+      <div className="flex items-center space-x-3">
+        <img
+          src={chat?.instructor?.img || chat?.user?.img || "/images/defaultProfile.jpg"}
+          alt="Profile"
+          className="rounded-full w-9 h-9"
+        />
+        <div className="flex-1">
+          {/* Name */}
+          <h6 className="text-sm font-semibold">
+            {chat?.instructor?.name || chat?.user?.name}
+          </h6>
 
-                    <img
-                        src={chat?.instructor?.img || chat?.user?.img || '/images/defaultProfile.jpg'}
-                        alt="Coach Profile"
-                        className="rounded-full w-7 h-7"
-                        />
-                    <div>
-                        <h6 className="text-base font-bold">{chat?.instructor?.name || chat?.user?.name}</h6>
-                    </div>
-                        </div>
-                </Link>
-                </div>
-            ))}
+          {/* Latest Message + Time */}
+          <div className="flex justify-between items-center">
+            <p className="text-xs text-gray-600 truncate w-40">
+              {chat.latestMessage?.content || "No messages yet"}
+            </p>
+            {chat.latestMessageAt && (
+              <p className="text-[10px] text-gray-500">
+                {new Date(chat.latestMessageAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </Link>
+  </div>
+))}
+
         </div>
     </div>
 </div>

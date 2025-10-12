@@ -5,5 +5,8 @@ export default interface Event {
     start: string;
     end?: string;
     allDay?: boolean;
+    isRecurring?: boolean;          
+    recurrenceRule?: string | null;         
+    recurringExceptions?: string[];
   }
 

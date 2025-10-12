@@ -243,5 +243,9 @@ export const forgot_Password = async(email:string) => {
         return res;
     }
 
+    export const edit_Question = async(questionId:string|undefined, ansOptions:string[],answer:string,text:string) => {
+        const res = await Api.put(instructorEndPoint.editQuestion,{questionId, ansOptions,answer,text});
+        return res;
+    }
 
 

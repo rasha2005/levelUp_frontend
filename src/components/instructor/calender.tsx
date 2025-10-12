@@ -32,6 +32,7 @@ import {
 import { deleteEvent, getSessionData, sessionUpdate } from "@/app/lib/api/instructorApi";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Switch } from "../ui/switch";
 
 interface InstructorData {
   id?:string;
@@ -60,7 +61,11 @@ function CalenderEvent() {
   const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [eventToDelete, setEventToDelete] = useState<EventApi | null>(null);
-  const [instructor , setInstructor] = useState<InstructorData>()
+  const [instructor , setInstructor] = useState<InstructorData>();
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurrenceFrequency, setRecurrenceFrequency] = useState<"daily"|"weekly" | "monthly">("daily");
+  const [recurrenceEndDate, setRecurrenceEndDate] = useState<string>(""); 
+
 const router = useRouter()
 
 
@@ -106,6 +111,12 @@ const getEvents = async()=> {
       getEvents();
     }
   }
+  function formatUntilDate(dateString: string) {
+    const date = new Date(dateString);
+    const iso = date.toISOString();
+    return iso.replace(/[-:]/g, "").split(".")[0] + "Z";
+  }
+  
 
   const handleAddEvent = async(e:React.FormEvent) => {
     e.preventDefault();
@@ -121,6 +132,11 @@ const getEvents = async()=> {
         start: selectedDate.start.toISOString(),
         end: selectedDate.end?.toISOString(),
         allDay: selectedDate?.allDay,
+        isRecurring,
+        recurrenceRule: isRecurring
+        ? `FREQ=${recurrenceFrequency.toUpperCase()};UNTIL=${formatUntilDate(recurrenceEndDate)}`
+        : null,
+
         
       };
   
@@ -143,6 +159,8 @@ const getEvents = async()=> {
     setIsDialogOpen(false);
     setNewEventTitle('');
     setNewEventPrice('');
+    setRecurrenceEndDate('');
+    setRecurrenceFrequency('daily');
     router.refresh()
   }
     return (
@@ -226,6 +244,45 @@ const getEvents = async()=> {
     <p className="text-red-500 text-sm">Price cannot exceed 3000.</p>
   )}
       </div>
+      <div className="flex items-center space-x-2">
+  <Switch
+    checked={isRecurring}
+    onCheckedChange={(checked) => setIsRecurring(checked as boolean)}
+  />
+  <label className="text-sm font-medium">Repeat this event?</label>
+</div>
+
+{isRecurring && (
+  <div className="space-y-4 mt-4 border p-3 rounded-md bg-gray-50">
+    {/* Frequency selector */}
+    <div>
+      <label className="block text-sm font-medium mb-1">Frequency</label>
+      <select
+        value={recurrenceFrequency}
+        onChange={(e) => setRecurrenceFrequency(e.target.value as "weekly" | "monthly")}
+        className="border border-gray-200 p-2 rounded w-full"
+      >
+        <option value="weekly">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+    </div>
+
+    {/* End date picker */}
+    <div>
+  <label className="block text-sm font-medium mb-1">End Date</label>
+  <input
+    type="date"
+    value={recurrenceEndDate}
+    onChange={(e) => setRecurrenceEndDate(e.target.value)}
+    min={new Date().toISOString().split("T")[0]} // disables past dates
+    className="border border-gray-200 p-2 rounded w-full"
+  />
+</div>
+
+  </div>
+)}
+
       <button
         className="bg-green-500 text-white p-3 mt-5 rounded-md w-full disabled:opacity-50"
         type="submit"
