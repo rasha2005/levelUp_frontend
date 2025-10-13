@@ -5,6 +5,8 @@ import { googleAuthCallback } from '@/app/lib/api/userApi';
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google'
 
+const isProduction:boolean = process.env.NODE_ENV === "production"
+
  const authOptions:AuthOptions = {
     providers: [
         
@@ -58,9 +60,9 @@ import GoogleProvider from 'next-auth/providers/google'
                       sessionToken: {
                         name: "authToken", 
                         options: {
-                          httpOnly: true,
-                          sameSite: "strict",
-                          secure: process.env.NODE_ENV === "production",
+                          domain:'.levelup.icu',
+                          sameSite: isProduction ?'none' : 'lax',
+                          secure: true,
                           path: "/",
                         },
                       },
