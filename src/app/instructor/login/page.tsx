@@ -33,7 +33,7 @@ export default function InstructorLogin() {
             router.push('/instructor');
         }else{
             setLoading(false)
-            toast.error(res.data.response.message);
+            toast.error("Email or password is invalid");
         }
     }
 
@@ -80,42 +80,49 @@ export default function InstructorLogin() {
                                 </div>
                                 
                                 <div className="mb-4">
-                                <div className="flex justify-between items-center">
-                                <label
-                                    className="block text-sm font-medium text-gray-700"
-                                    htmlFor="password"
-                                >
-                                    Password
-                                </label>
-                                <Link href="/instructor/forgot-password">
-                                    <span className="text-sm text-blue-500 hover:underline">
-                                    Forgot password?
-                                    </span>
-                                </Link>
-                                </div>
-                                    <div className="relative">
-                                <input
-                                    type={passwordVisible ? 'text' : 'password'}
-                                    id="password"
-                                    {...register('password', {
-                                        required: true,
-                                        minLength: { value: 6, message: 'Password must be at least 6 characters long' },
-                                        validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
-                                    })}
-                                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
-                                    
-                                />
-                                <button
-                                    type="button"
-                                    onClick={togglePasswordVisibility}
-                                    className="absolute right-3 top-3 text-gray-500"
-                                >
-                                    {passwordVisible ? 'hide' : 'show'}
-                                </button>
-                            </div>
-                                   
-                                   {errors.password && <span className="text-red-600">Password must be at least 6 characters long</span>}
-                                </div>
+  <label
+    className="block text-sm font-medium text-gray-700"
+    htmlFor="password"
+  >
+    Password
+  </label>
+
+  <div className="relative">
+    <input
+      type={passwordVisible ? 'text' : 'password'}
+      id="password"
+      {...register('password', {
+        required: true,
+        minLength: { value: 6, message: 'Password must be at least 6 characters long' },
+        validate: (value) => value.trim().length > 0 || 'Password cannot be only spaces'
+      })}
+      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-500"
+    />
+    <button
+      type="button"
+      onClick={togglePasswordVisibility}
+      className="absolute right-3 top-3 text-gray-500"
+    >
+      {passwordVisible ? 'hide' : 'show'}
+    </button>
+  </div>
+
+  {/* Forgot password below input, aligned right */}
+  <div className="mt-1 text-right">
+    <Link href="/instructor/forgot-password">
+      <span className="text-sm text-blue-500 hover:underline">
+        Forgot password?
+      </span>
+    </Link>
+  </div>
+
+  {errors.password && (
+    <span className="text-red-600 block mt-1">
+      Password must be at least 6 characters long
+    </span>
+  )}
+</div>
+
                                                                     <button
                                     type="submit"
                                     disabled={loading}
